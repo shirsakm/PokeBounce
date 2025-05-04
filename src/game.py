@@ -1,23 +1,21 @@
-import pygame
-import sys
-import random
+import pygame, sys, random
 import pygame.freetype
-import pygame.locals
+from pygame.locals import *
 import requests
-from pygame.locals import QUIT
 from src.debug import overrideBattlers, battlerOverride
 from src.constants import WINDOW_HEIGHT, WINDOW_WIDTH, BACKGROUND, API, startTimer
 from src.globals import g
 from src.poke import chooseChars
 from src.sprite_loader import INSTANCE as sprites
 from src.sets import Sets
+from src.resource_path import resource_path
 from src import physics
 
 
 class Game:
     def __init__(self):
-        self.fontStart = pygame.freetype.SysFont('vcr osd mono', 50)
-        self.font = pygame.freetype.SysFont('vcr osd mono', 25)
+        self.fontStart = pygame.freetype.Font(resource_path('assets/font/PixeloidSans.ttf'), 50)
+        self.font = pygame.freetype.Font(resource_path('assets/font/PixeloidSans.ttf'), 25)
         self.url = "http://127.0.0.1:5000"
         self.gameStart = False
         self.startCountdown = startTimer
@@ -44,6 +42,9 @@ class Game:
         else:
             self.charList = chooseChars(self.charList, random.randint(3, 10))
 
+        for char in self.charList:
+            char.restart()
+        
         self.id = random.randint(10000, 99999)
 
         if API:
@@ -115,9 +116,6 @@ class Game:
 
             self.result = ""
             self.winner = ""
-
-            for char in self.charList:
-                char.restart()
 
         else:
             if self.gambling:

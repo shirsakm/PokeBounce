@@ -37,6 +37,7 @@ class Sprites:
         if (self.arena is None):
             self.arena = self._load_img(f"{Sprites.base_dir}/arena.png", WINDOW_WIDTH, WINDOW_HEIGHT)
         return self.arena
+    
 
     def _load_img(self, file_path: str, x_scale: int, y_scale: int) -> pygame.Surface:
         img = pygame.image.load(file_path).convert_alpha()
