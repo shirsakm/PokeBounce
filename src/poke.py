@@ -1,5 +1,4 @@
 import random
-import math
 from src.moves import Moves
 
 charSpeed = 4
@@ -26,7 +25,6 @@ class HealthBox:
 
 
 class DetectBox:
-
 	def __init__(self, xOffset, yOffset, width, height):
 		self.xOffset = xOffset
 		self.yOffset = yOffset

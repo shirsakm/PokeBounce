@@ -1,3 +1,5 @@
 .vscode
 .venv
 *.code-workspace
+*.pyc
+venv
