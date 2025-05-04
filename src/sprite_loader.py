@@ -7,7 +7,7 @@ class Sprites:
     battler_dir = base_dir+"/battlers"
     move_dir = base_dir+"/moves"
 
-    battlers = {}
+    battlers: dict[str, pygame.Surface] = {}
     moves: dict[str, pygame.Surface] = {}
     arena = None
     _WINDOW_WIDTH = None
@@ -24,21 +24,21 @@ class Sprites:
         self._load_moves(move_sprites)
 
 
-    def get_battler(self,battler_id):
+    def get_battler(self,battler_id) -> pygame.Surface:
         if (battler_id not in self.battlers.keys()):
             self.battlers[battler_id] = self._load_battler(battler_id)
 
         return self.battlers[battler_id]
 
 
-    def get_move(self,move_id):
+    def get_move(self,move_id) -> pygame.Surface:
         if (move_id not in self.moves.keys()):
             self._load_move(move_id)
 
         return self.moves[move_id]
 
 
-    def get_arena(self):
+    def get_arena(self) -> pygame.Surface:
         if (self.arena == None):
             self.arena = self._load_img(Sprites.base_dir+"/arena.png",WINDOW_WIDTH, WINDOW_HEIGHT)
 
