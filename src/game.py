@@ -161,27 +161,42 @@ class Game:
                     for nestedChar in self.charList:
                         if nestedChar.alive:
                             if nestedChar != char:
-                                otherChars.append(pygame.Rect((nestedChar.x, nestedChar.y,
-                                    nestedChar.size, nestedChar.size)))
+                                otherChars.append(pygame.Rect((nestedChar.x, nestedChar.y, nestedChar.size, nestedChar.size)))
 
                     obstacleList = self.walls + otherChars
 
-                    charLeftBox = pygame.Rect((char.x + char.leftDetectBox.xOffset,
-                        char.y + char.leftDetectBox.yOffset,
-                        char.leftDetectBox.width,
-                        char.leftDetectBox.height))
-                    charRightBox = pygame.Rect((char.x + char.rightDetectBox.xOffset,
-                        char.y + char.rightDetectBox.yOffset,
-                        char.rightDetectBox.width,
-                        char.rightDetectBox.height))
-                    charUpBox = pygame.Rect((char.x + char.upDetectBox.xOffset,
-                        char.y + char.upDetectBox.yOffset,
-                        char.upDetectBox.width,
-                        char.upDetectBox.height))
-                    charDownBox = pygame.Rect((char.x + char.downDetectBox.xOffset,
-                        char.y + char.downDetectBox.yOffset,
-                        char.downDetectBox.width,
-                        char.downDetectBox.height))
+                    charLeftBox = pygame.Rect(
+                        (
+                            char.x + char.leftDetectBox.xOffset,
+                            char.y + char.leftDetectBox.yOffset,
+                            char.leftDetectBox.width,
+                            char.leftDetectBox.height
+                        )
+                    )
+                    charRightBox = pygame.Rect(
+                        (
+                            char.x + char.rightDetectBox.xOffset,
+                            char.y + char.rightDetectBox.yOffset,
+                            char.rightDetectBox.width,
+                            char.rightDetectBox.height
+                        )
+                    )
+                    charUpBox = pygame.Rect(
+                        (
+                            char.x + char.upDetectBox.xOffset,
+                            char.y + char.upDetectBox.yOffset,
+                            char.upDetectBox.width,
+                            char.upDetectBox.height
+                        )
+                    )
+                    charDownBox = pygame.Rect(
+                        (
+                            char.x + char.downDetectBox.xOffset,
+                            char.y + char.downDetectBox.yOffset,
+                            char.downDetectBox.width,
+                            char.downDetectBox.height
+                        )
+                    )
 
                     if showCollisionBoxes:
                         pygame.draw.rect(g.window, (255, 0, 0), charLeftBox)
@@ -200,10 +215,14 @@ class Game:
 
                     char.useMove()
 
-                    healthRectRed = pygame.Rect((char.healthBox.xOffset + char.x,
-                        char.y - char.healthBox.yOffset,
-                        char.healthBox.width,
-                        char.healthBox.height))
+                    healthRectRed = pygame.Rect(
+                        (
+                            char.healthBox.xOffset + char.x,
+                            char.y - char.healthBox.yOffset,
+                            char.healthBox.width,
+                            char.healthBox.height
+                        )
+                    )
 
                     healthPercentWidth = (char.health / 300) * char.healthBox.width
 
@@ -254,7 +273,14 @@ class Game:
 
                     rotatedImage = pygame.transform.rotate(moveImage, moveRect[1].rotate)
 
-                    new_rect = rotatedImage.get_rect(center = moveImage.get_rect(center=(moveRect[1].x + moveRect[1].size/2, moveRect[1].y + moveRect[1].size/2)).center)
+                    new_rect = rotatedImage.get_rect(
+                        center = moveImage.get_rect(
+                            center=(
+                                moveRect[1].x + moveRect[1].size/2,
+                                moveRect[1].y + moveRect[1].size/2
+                            )
+                        ).center
+                    )
 
                     g.window.blit(rotatedImage, new_rect)
                 elif moveRect[1].graphic == "rect":
