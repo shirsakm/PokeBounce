@@ -111,11 +111,11 @@ class Poke:
 
 
     def setMoveTimer(self) -> int:
-        return 130 + random.randint(1,200)
+        return 130 + random.randint(1, 200)
 
     def velStart(self) -> None:
-        self.xVel = round(random.uniform(-1,1),3)
-        self.yVel = round(1 - abs(self.xVel), 3) * random.choice([-1,1])
+        self.xVel = round(random.uniform(-1, 1), 3)
+        self.yVel = round(1 - abs(self.xVel), 3) * random.choice([-1, 1])
 
     def move(self, speed = 2) -> None:
         self.x += self.xVel * speed
@@ -125,57 +125,57 @@ class Poke:
             self.iFrames -= 1
 
     def collideBottom(self) -> None:
-        if random.choice(["normal","normal","random"]) == "normal":
+        if random.choice(["normal", "normal", "random"]) == "normal":
             self.yVel = self.yVel * -1
             if self.xVel < 0:
                 self.xVel = round(1 - abs(self.yVel), 3) * -1
             else:
                 self.xVel = round(1 - abs(self.yVel), 3)
         else:
-            self.yVel = round(random.uniform(-1,0),3)
-            self.xVel = round(1 - abs(self.yVel), 3) * random.choice([-1,1])
+            self.yVel = round(random.uniform(-1, 0), 3)
+            self.xVel = round(1 - abs(self.yVel), 3) * random.choice([-1, 1])
         if self.usingMove == "U Turn":
             self.xVel = self.xVel * -1
             self.yVel = self.yVel * -1
 
     def collideTop(self) -> None:
-        if random.choice(["normal","normal","random"]) == "normal":
+        if random.choice(["normal", "normal", "random"]) == "normal":
             self.yVel = self.yVel * -1
             if self.xVel < 0:
                 self.xVel = round(1 - abs(self.yVel), 3) * -1
             else:
                 self.xVel = round(1 - abs(self.yVel), 3)
         else:
-            self.yVel = round(random.uniform(0,1),3)
-            self.xVel = round(1 - abs(self.yVel), 3) * random.choice([-1,1])
+            self.yVel = round(random.uniform(0, 1), 3)
+            self.xVel = round(1 - abs(self.yVel), 3) * random.choice([-1, 1])
         if self.usingMove == "U Turn":
             self.xVel = self.xVel * -1
             self.yVel = self.yVel * -1
 
     def collideLeft(self) -> None:
-        if random.choice(["normal","normal","random"]) == "normal":
+        if random.choice(["normal", "normal", "random"]) == "normal":
             self.xVel = self.xVel * -1
             if self.yVel < 0:
                 self.yVel = round(1 - abs(self.xVel), 3) * -1
             else:
                 self.yVel = round(1 - abs(self.xVel), 3)
         else:
-            self.xVel = round(random.uniform(0,1),3)
-            self.yVel = round(1 - abs(self.xVel), 3) * random.choice([-1,1])
+            self.xVel = round(random.uniform(0, 1), 3)
+            self.yVel = round(1 - abs(self.xVel), 3) * random.choice([-1, 1])
         if self.usingMove == "U Turn":
             self.xVel = self.xVel * -1
             self.yVel = self.yVel * -1
 
     def collideRight(self) -> None:
-        if random.choice(["normal","normal","random"]) == "normal":
+        if random.choice(["normal", "normal", "random"]) == "normal":
             self.xVel = self.xVel * -1
             if self.yVel < 0:
                 self.yVel = round(1 - abs(self.xVel), 3) * -1
             else:
                 self.yVel = round(1 - abs(self.xVel), 3)
         else:
-            self.xVel = round(random.uniform(-1,0),3)
-            self.yVel = round(1 - abs(self.xVel), 3) * random.choice([-1,1])
+            self.xVel = round(random.uniform(-1, 0), 3)
+            self.yVel = round(1 - abs(self.xVel), 3) * random.choice([-1, 1])
         if self.usingMove == "U Turn":
             self.xVel = self.xVel * -1
             self.yVel = self.yVel * -1

@@ -44,7 +44,7 @@ class Game:
             for set_id in battlerOverride:
                 self.charList.append(Sets.get(set_id))
         else:
-            self.charList = chooseChars(self.charList, random.randint(3,10))
+            self.charList = chooseChars(self.charList, random.randint(3, 10))
 
         print([char.name for char in self.charList])
 
@@ -81,7 +81,7 @@ class Game:
         self.walls = [wallleft, wallright, walltop, walldown]
 
         for wall in self.walls:
-            pygame.draw.rect(g.window, (20,10,20), wall)
+            pygame.draw.rect(g.window, (20, 10, 20), wall)
 
     # The main game loop
     def update(self):
@@ -184,10 +184,10 @@ class Game:
                         char.downDetectBox.height))
 
                     if showCollisionBoxes:
-                        pygame.draw.rect(g.window, (255,0,0), charLeftBox)
-                        pygame.draw.rect(g.window, (255,0,0), charRightBox)
-                        pygame.draw.rect(g.window, (255,0,0), charUpBox)
-                        pygame.draw.rect(g.window, (255,0,0), charDownBox)
+                        pygame.draw.rect(g.window, (255, 0, 0), charLeftBox)
+                        pygame.draw.rect(g.window, (255, 0, 0), charRightBox)
+                        pygame.draw.rect(g.window, (255, 0, 0), charUpBox)
+                        pygame.draw.rect(g.window, (255, 0, 0), charDownBox)
 
                     if charLeftBox.collidelist(obstacleList) != -1:
                         char.collideLeft()
@@ -210,8 +210,8 @@ class Game:
                     healthRectGreen = pygame.Rect((char.healthBox.xOffset + char.x,
                         char.y - char.healthBox.yOffset, healthPercentWidth,
                         char.healthBox.height))
-                    pygame.draw.rect(g.window, (175,0,0), healthRectRed)
-                    pygame.draw.rect(g.window, (0,175,0), healthRectGreen)
+                    pygame.draw.rect(g.window, (175, 0, 0), healthRectRed)
+                    pygame.draw.rect(g.window, (0, 175, 0), healthRectGreen)
 
             if len(self.alivelist) <= 1 and self.gameOverCountdown == 30:
                 self.gameOver = True
@@ -248,7 +248,7 @@ class Game:
                     moveImage = sprites.moves.get(moveRect[1].image)
                     if moveImage is None:
                         raise Exception("Move image is <None>! "+moveRect[1].image)
-                    moveImage = pygame.transform.scale(moveImage,(moveRect[1].size,moveRect[1].size))
+                    moveImage = pygame.transform.scale(moveImage, (moveRect[1].size, moveRect[1].size))
                     if moveImage is None:
                         print("Move image is <None>! "+moveRect[1].image)
 

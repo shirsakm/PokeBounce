@@ -40,7 +40,7 @@ class Sprites:
 
     def get_arena(self) -> pygame.Surface:
         if (self.arena == None):
-            self.arena = self._load_img(Sprites.base_dir+"/arena.png",WINDOW_WIDTH, WINDOW_HEIGHT)
+            self.arena = self._load_img(Sprites.base_dir+"/arena.png", WINDOW_WIDTH, WINDOW_HEIGHT)
 
         return self.arena
 
@@ -54,13 +54,13 @@ class Sprites:
 
 
     def _load_battler(self, battler_id) -> pygame.Surface:
-        return self._load_img(self.battler_dir+"/"+battler_id+".png",204,168)
+        return self._load_img(self.battler_dir+"/"+battler_id+".png", 204, 168)
 
     def _load_move(self, move_id) -> pygame.Surface:
         scale = 100
         if move_id == "poison":
             scale = 10
-        return self._load_img(self.move_dir+"/"+move_id+".png",scale,scale)
+        return self._load_img(self.move_dir+"/"+move_id+".png", scale, scale)
 
 
     def _load_battlers(self, arr) -> None:

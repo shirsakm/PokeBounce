@@ -564,7 +564,7 @@ class Bolt(Move):
         size = 40
         ttl = 90 - (60 - poke.usingMoveTimer)
         if poke.boltShift == 0 and poke.boltShiftCooldown == 0:
-            poke.boltShift = random.choice([0,0,0,0,4])
+            poke.boltShift = random.choice([0, 0, 0, 0, 4])
 
         if poke.usingMoveTimer == 60:
             bolt = Bolt(poke.x, poke.y, poke.xVel, poke.yVel, poke.size, size, ttl, True)
@@ -738,7 +738,7 @@ class IceBeam(Move):
         size = 40
         ttl = 90  - (60 - poke.usingMoveTimer)
         if poke.boltShift == 0 and poke.boltShiftCooldown == 0:
-            poke.boltShift = random.choice([0,0,0,0,0,3,-3])
+            poke.boltShift = random.choice([0, 0, 0, 0, 0, 3,-3])
 
         if poke.usingMoveTimer == 60:
             bolt = IceBeam(poke.x, poke.y, poke.xVel, poke.yVel, poke.size, size, ttl, True)
@@ -837,8 +837,8 @@ class StoneEdge(Move):
     def __init__(self, x, y, xVel, yVel, pokeSize, speed =2, size = 40):
         self.x = x + pokeSize // 2 - size//2
         self.y = y + pokeSize // 2 - size//2
-        self.xVel = xVel + round(random.uniform(0 - self.spread, self.spread),3)
-        self.yVel = yVel + round(random.uniform(0 - self.spread, self.spread),3)
+        self.xVel = xVel + round(random.uniform(0 - self.spread, self.spread), 3)
+        self.yVel = yVel + round(random.uniform(0 - self.spread, self.spread), 3)
         self.size = size
         self.speed = speed
         self.rotate = math.atan2(xVel, yVel) * 180/3.14 + 180
@@ -889,8 +889,8 @@ class PoisonSting(Move):
     def __init__(self, x, y, xVel, yVel, pokeSize, speed =2, size = 20):
         self.x = x + pokeSize // 2 - size//2
         self.y = y + pokeSize // 2 - size//2
-        self.xVel = xVel + round(random.uniform(0 - self.spread, self.spread),3)
-        self.yVel = yVel + round(random.uniform(0 - self.spread, self.spread),3)
+        self.xVel = xVel + round(random.uniform(0 - self.spread, self.spread), 3)
+        self.yVel = yVel + round(random.uniform(0 - self.spread, self.spread), 3)
         self.size = size
         self.speed = speed
         self.rotate = math.atan2(xVel, yVel) * 180/3.14 + 180
@@ -939,8 +939,8 @@ class Flame(Move):
     def __init__(self, x, y, xVel, yVel, pokeSize, speed =2, size = 20):
         self.x = x + pokeSize // 2 - size//2
         self.y = y + pokeSize // 2 - size//2
-        self.xVel = xVel + round(random.uniform(0 - self.spread, self.spread),3)
-        self.yVel = yVel + round(random.uniform(0 - self.spread, self.spread),3)
+        self.xVel = xVel + round(random.uniform(0 - self.spread, self.spread), 3)
+        self.yVel = yVel + round(random.uniform(0 - self.spread, self.spread), 3)
         self.size = size
         self.speed = speed
 
@@ -992,8 +992,8 @@ class Bubble(Move):
     def __init__(self, x, y, xVel, yVel, pokeSize, speed =2, size = 20):
         self.x = x + pokeSize // 2 - size//2
         self.y = y + pokeSize // 2 - size//2
-        self.xVel = xVel + round(random.uniform(0 - self.spread, self.spread),3)
-        self.yVel = yVel + round(random.uniform(0 - self.spread, self.spread),3)
+        self.xVel = xVel + round(random.uniform(0 - self.spread, self.spread), 3)
+        self.yVel = yVel + round(random.uniform(0 - self.spread, self.spread), 3)
         self.size = size
         self.speed = speed
 
@@ -1037,8 +1037,8 @@ class RazorLeaf(Move):
     def __init__(self, x, y, xVel, yVel, pokeSize, speed =2, size = 30):
         self.x = x + pokeSize // 2 - size//2
         self.y = y + pokeSize // 2 - size//2
-        self.xVel = xVel + round(random.uniform(0 - self.spread, self.spread),3)
-        self.yVel = yVel + round(random.uniform(0 - self.spread, self.spread),3)
+        self.xVel = xVel + round(random.uniform(0 - self.spread, self.spread), 3)
+        self.yVel = yVel + round(random.uniform(0 - self.spread, self.spread), 3)
         self.size = size
         self.speed = speed
 
