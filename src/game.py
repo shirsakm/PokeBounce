@@ -1,8 +1,10 @@
 import pygame, sys, random
-from pygame.locals import *
+import pygame.freetype
+import pygame.locals
 import requests
-from src.debug import *
-from src.constants import *
+from pygame.locals import QUIT
+from src.debug import showHitboxes, showCollisionBoxes, overrideBattlers, battlerOverride
+from src.constants import WINDOW_HEIGHT, WINDOW_WIDTH, BACKGROUND, API, startTimer
 from src.globals import g
 from src.poke import chooseChars
 from src.sprite_loader import INSTANCE as sprites
@@ -36,11 +38,11 @@ class Game:
 
         if overrideBattlers:
             self.charList = []
-            for set in battlerOverride:
-                self.charList.append(Sets.get(set))
-        else: 
+            for set_id in battlerOverride:
+                self.charList.append(Sets.get(set_id))
+        else:
             self.charList = chooseChars(self.charList, random.randint(3,10))
-        
+
         print([char.name for char in self.charList])
 
         self.id = random.randint(10000, 99999)
@@ -52,7 +54,6 @@ class Game:
         if API: requests.post(self.url + "/setgambling", json = {"openGambling" : self.gambling})
         self.initialized = True
 
-
     def displayResult(self):
         if self.result == "draw":
             text_surf2, text_rect2 = self.fontStart.render("DRAW!", (0, 0, 0))
@@ -60,7 +61,7 @@ class Game:
         elif self.result == "win":
             text_surf2, text_rect2 = self.fontStart.render(self.winner.upper() + " WINS!", (0, 0, 0))
             g.window.blit(text_surf2, (WINDOW_WIDTH/2 - 450, WINDOW_HEIGHT/2 - 75))
-        
+
     def render(self):
         # Render elements of the game
         g.window.fill(BACKGROUND)
@@ -172,7 +173,6 @@ class Game:
                         pygame.draw.rect(g.window, (255,0,0), charUpBox)
                         pygame.draw.rect(g.window, (255,0,0), charDownBox)
 
-
                     if charLeftBox.collidelist(obstacleList) != -1:
                         char.collideLeft()
                     if charRightBox.collidelist(obstacleList) != -1:
@@ -203,7 +203,6 @@ class Game:
                     moveRects.append([pygame.Rect((move.x, move.y, move.size, move.size)), move])
                     if move.ttl > 0:
                         stillAliveHitboxes.append(move)
-                    
 
                 char.activeHitboxList = stillAliveHitboxes
 
@@ -221,16 +220,17 @@ class Game:
                             char.iFrames = 180
                             char.takeDamage(otherCharsValues[charrect.collidelist(otherCharsHitboxes)].damage)
 
-
             for moveRect in moveRects:
                 if showHitboxes:
                     pygame.draw.rect(g.window, moveRect[1].colour, moveRect[0])
                 if moveRect[1].graphic == "image":
                     moveImage = sprites.moves.get(moveRect[1].image)
+                    if moveImage is None:
+                        raise Exception("Move image is <None>! "+moveRect[1].image)
                     moveImage = pygame.transform.scale(moveImage,(moveRect[1].size,moveRect[1].size))
                     if moveImage is None:
                         print("Move image is <None>! "+moveRect[1].image)
-                            
+
                     rotatedImage = pygame.transform.rotate(moveImage, moveRect[1].rotate)
 
                     new_rect = rotatedImage.get_rect(center = moveImage.get_rect(center = (moveRect[1].x + moveRect[1].size/2, moveRect[1].y + moveRect[1].size/2)).center)
@@ -239,10 +239,8 @@ class Game:
                 elif moveRect[1].graphic == "rect":
                     pygame.draw.rect(g.window, moveRect[1].colour, moveRect[0])
 
-
                 elif moveRect[1].graphic == "circle":
                     pygame.draw.circle(g.window, moveRect[1].colour, moveRect[0].center, moveRect[1].size/2)
-
 
             for char in self.charList:
                 if char.moveText:

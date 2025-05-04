@@ -21,12 +21,12 @@ class Sets:
         "metagross": Poke(850, 100, sprites.get_battler("metagross"), ["Earthquake", "Zen Headbutt", "Iron Head"], "Metagross"),
     }
 
-    def get(set_id):
+    @staticmethod
+    def get(set_id) -> Poke:
         if (set_id not in Sets.sets.keys()):
-            print("Invalid set id '"+set_id+"' referenced!")
-            return None
+            raise ValueError(f"Invalid set id '{set_id}' referenced!")
 
         if (Sets.sets[set_id] == None):
-            print("Found set was None?? Id:'"+set_id+"'")
+            raise ValueError(f"Found set was None?? Id:'{set_id}'")
 
         return Sets.sets[set_id]

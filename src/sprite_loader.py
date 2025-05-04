@@ -1,6 +1,6 @@
 import pygame
-from pygame.locals import *
-from src.constants import *
+import pygame.locals
+from src.constants import WINDOW_HEIGHT, WINDOW_WIDTH, battler_sprites, move_sprites
 
 class Sprites:
     base_dir = "img"
@@ -8,7 +8,7 @@ class Sprites:
     move_dir = base_dir+"/moves"
 
     battlers = {}
-    moves = {}
+    moves: dict[str, pygame.Surface] = {}
     arena = None
     _WINDOW_WIDTH = None
     _WINDOW_HEIGHT = None
@@ -44,30 +44,30 @@ class Sprites:
 
         return self.arena
 
-    def _load_img(self,file_path,x_scale,y_scale):
+    def _load_img(self,file_path,x_scale,y_scale) -> pygame.Surface:
         img = pygame.image.load(file_path).convert_alpha()
         if (x_scale == None):
             x_scale = img.get_width()
         if (y_scale == None):
             y_scale = img.get_height()
         return pygame.transform.scale(img, (x_scale, y_scale))
-    
 
-    def _load_battler(self,battler_id):
+
+    def _load_battler(self,battler_id) -> pygame.Surface:
         return self._load_img(self.battler_dir+"/"+battler_id+".png",204,168)
 
-    def _load_move(self,move_id):
+    def _load_move(self,move_id) -> pygame.Surface:
         scale = 100
         if move_id == "poison":
             scale = 10
         return self._load_img(self.move_dir+"/"+move_id+".png",scale,scale)
-    
 
-    def _load_battlers(self,arr):
+
+    def _load_battlers(self,arr) -> None:
         for img in arr:
             self.battlers[img] = self._load_battler(img)
-    
-    def _load_moves(self,arr):
+
+    def _load_moves(self,arr) -> None:
         for img in arr:
             self.moves[img] = self._load_move(img)
 
