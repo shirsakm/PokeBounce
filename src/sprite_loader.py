@@ -1,9 +1,10 @@
 import pygame
 from pygame.locals import *
 from src.constants import *
+from src.resource_path import resource_path
 
 class Sprites:
-    base_dir = "img"
+    base_dir = "assets/img"
     battler_dir = base_dir+"/battlers"
     move_dir = base_dir+"/moves"
 
@@ -40,9 +41,10 @@ class Sprites:
 
     def get_arena(self):
         if (self.arena == None):
-            self.arena = self._load_img(Sprites.base_dir+"/arena.png",WINDOW_WIDTH, WINDOW_HEIGHT)
+            self.arena = self._load_img(resource_path(Sprites.base_dir+"/arena.png"),WINDOW_WIDTH, WINDOW_HEIGHT)
 
         return self.arena
+    
 
     def _load_img(self,file_path,x_scale,y_scale):
         img = pygame.image.load(file_path).convert_alpha()
@@ -54,13 +56,13 @@ class Sprites:
     
 
     def _load_battler(self,battler_id):
-        return self._load_img(self.battler_dir+"/"+battler_id+".png",204,168)
+        return self._load_img(resource_path(self.battler_dir+"/"+battler_id+".png"),204,168)
 
     def _load_move(self,move_id):
         scale = 100
         if move_id == "poison":
             scale = 10
-        return self._load_img(self.move_dir+"/"+move_id+".png",scale,scale)
+        return self._load_img(resource_path(self.move_dir+"/"+move_id+".png"),scale,scale)
     
 
     def _load_battlers(self,arr):
