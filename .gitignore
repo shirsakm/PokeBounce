@@ -1,3 +1,10 @@
-.vscode
-.venv
+build/
+dist/
+venv/
+.venv/
+.vscode/
+__pycache__/
+*.egg-info
+*.egg
 *.code-workspace
+*.pyc
