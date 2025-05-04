@@ -7,6 +7,7 @@ charSpeed = 4
 detectBoxWidth = 6
 detectBoxheight = 24
 
+
 class HealthBox:
     def __init__(self, xOffset: float, yOffset: float, width: int, height: int):
         self.xOffset = xOffset
@@ -26,6 +27,7 @@ class DetectBox:
 class DamageIndicator:
     ttl = 120
     alpha = 0
+
     def __init__(self, x: float, y: float, damage: int):
         self.x = x
         self.y = y
@@ -93,7 +95,6 @@ class Poke:
 
         self.velStart()
 
-
         self.moveTimer = self.setMoveTimer()
 
     def restart(self) -> None:
@@ -108,7 +109,6 @@ class Poke:
         self.x = self.startingX
         self.y = self.startingY
         self.activeHitboxList = []
-
 
     def setMoveTimer(self) -> int:
         return 130 + random.randint(1, 200)
@@ -202,6 +202,7 @@ class Poke:
                 if self.usingMoveTimer <= 0:
                     self.usingMoveTimer = move.usingTime
                 move.use(self)
+
 
 def chooseChars(charList: list[Poke], charNum: int) -> list[Poke]:
     chars = []
