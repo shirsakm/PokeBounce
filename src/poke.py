@@ -1,23 +1,14 @@
 import random
 from src.moves import MOVES
+import pygame
 
 charSpeed = 4
 
 detectBoxWidth = 6
 detectBoxheight = 24
 
-def chooseChars(charList, charNum):
-    chars = []
-    charList = charList + []
-    while charNum > 0:
-        pick = random.randint(0, len(charList) - 1)
-        chars.append(charList[pick])
-        charList.pop(pick)
-        charNum -= 1
-    return chars
-
 class HealthBox:
-    def __init__(self, xOffset, yOffset, width, height):
+    def __init__(self, xOffset: float, yOffset: float, width: int, height: int):
         self.xOffset = xOffset
         self.yOffset = yOffset
         self.height = height
@@ -25,7 +16,7 @@ class HealthBox:
 
 
 class DetectBox:
-    def __init__(self, xOffset, yOffset, width, height):
+    def __init__(self, xOffset: float, yOffset: float, width: int, height: int):
         self.xOffset = xOffset
         self.yOffset = yOffset
         self.width = width
@@ -35,12 +26,12 @@ class DetectBox:
 class DamageIndicator:
     ttl = 120
     alpha = 0
-    def __init__(self, x, y, damage):
+    def __init__(self, x: float, y: float, damage: int):
         self.x = x
         self.y = y
         self.damage = "-"+str(damage)
 
-    def move(self):
+    def move(self) -> None:
         self.y -= 0.25
         self.ttl -= 1
 
@@ -73,10 +64,10 @@ class Poke:
 
     ironTailRotation = 0
 
-    moveText = ""
+    moveText = None
     damageIndicators = []
 
-    def __init__(self, x, y, image = "", moveset = [], name = "",  size = 60, health = 300):
+    def __init__(self, x: float, y: float, image: pygame.Surface, moveset = [], name = "",  size = 60, health = 300):
         self.x = x
         self.y = y
         self.startingX = x
@@ -105,7 +96,7 @@ class Poke:
 
         self.moveTimer = self.setMoveTimer()
 
-    def restart(self):
+    def restart(self) -> None:
         self.health = self.maxHealth
         self.velStart()
         self.alive = True
@@ -119,21 +110,21 @@ class Poke:
         self.activeHitboxList = []
 
 
-    def setMoveTimer(self):
+    def setMoveTimer(self) -> int:
         return 130 + random.randint(1,200)
 
-    def velStart(self):
+    def velStart(self) -> None:
         self.xVel = round(random.uniform(-1,1),3)
         self.yVel = round(1 - abs(self.xVel), 3) * random.choice([-1,1])
 
-    def move(self, speed = 2):
+    def move(self, speed = 2) -> None:
         self.x += self.xVel * speed
         self.y += self.yVel * speed
 
         if self.iFrames > 0:
             self.iFrames -= 1
 
-    def collideBottom(self):
+    def collideBottom(self) -> None:
         if random.choice(["normal","normal","random"]) == "normal":
             self.yVel = self.yVel * -1
             if self.xVel < 0:
@@ -147,7 +138,7 @@ class Poke:
             self.xVel = self.xVel * -1
             self.yVel = self.yVel * -1
 
-    def collideTop(self):
+    def collideTop(self) -> None:
         if random.choice(["normal","normal","random"]) == "normal":
             self.yVel = self.yVel * -1
             if self.xVel < 0:
@@ -161,7 +152,7 @@ class Poke:
             self.xVel = self.xVel * -1
             self.yVel = self.yVel * -1
 
-    def collideLeft(self):
+    def collideLeft(self) -> None:
         if random.choice(["normal","normal","random"]) == "normal":
             self.xVel = self.xVel * -1
             if self.yVel < 0:
@@ -175,7 +166,7 @@ class Poke:
             self.xVel = self.xVel * -1
             self.yVel = self.yVel * -1
 
-    def collideRight(self):
+    def collideRight(self) -> None:
         if random.choice(["normal","normal","random"]) == "normal":
             self.xVel = self.xVel * -1
             if self.yVel < 0:
@@ -190,14 +181,14 @@ class Poke:
             self.yVel = self.yVel * -1
 
 
-    def takeDamage(self, damage):
+    def takeDamage(self, damage) -> None:
         self.health -= damage
         self.damageIndicators.append(DamageIndicator(self.x, self.y, damage))
 
         if self.health <= 0:
             self.alive = False
 
-    def useMove(self):
+    def useMove(self) -> None:
         if self.moveTimer <= 0:
             self.moveTimer = self.setMoveTimer()
             self.usingMove = random.choice(self.moveset)
@@ -211,3 +202,13 @@ class Poke:
                 if self.usingMoveTimer <= 0:
                     self.usingMoveTimer = move.usingTime
                 move.use(self)
+
+def chooseChars(charList: list[Poke], charNum: int) -> list[Poke]:
+    chars = []
+    charList = charList + []
+    while charNum > 0:
+        pick = random.randint(0, len(charList) - 1)
+        chars.append(charList[pick])
+        charList.pop(pick)
+        charNum -= 1
+    return chars
