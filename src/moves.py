@@ -6,9 +6,11 @@ from src.debug import showHitboxes
 from src.globals import g
 from src.sprite_loader import INSTANCE as sprites
 
+
 class MoveText:
     ttl = 60
     alpha = 0
+
     def __init__(self, x, y, text):
         self.x = x
         self.y = y
@@ -22,6 +24,7 @@ class MoveText:
             self.alpha += 20
         elif self.ttl <= 20 and self.alpha > 15:
             self.alpha -= 10
+
 
 class Move(physics.PhysicsObject):
     type = "bird"
@@ -131,6 +134,7 @@ class BraveBird(Move):
     usingTime = 90
 
     image = "bravebird"
+
     def __init__(self, poke):
         self.size = poke.size + 80
         super().__init__(poke)
@@ -165,6 +169,7 @@ class IronHead(Move):
     usingTime = 30
 
     image = "ironhead"
+
     def __init__(self, poke):
         self.size = poke.size + 45
         super().__init__(poke)
@@ -197,6 +202,7 @@ class ZenHeadbutt(Move):
     usingTime = 60
 
     image = "zenheadbutt"
+
     def __init__(self, poke):
         self.size = poke.size + 45
         super().__init__(poke)
@@ -220,6 +226,7 @@ class ZenHeadbutt(Move):
         if poke.usingMoveTimer == 0:
             poke.usingMove = ""
 
+
 class Waterfall(Move):
     type = "water"
     colour = (185, 224, 239)
@@ -228,6 +235,7 @@ class Waterfall(Move):
     usingTime = 60
 
     image = "waterfall"
+
     def __init__(self, poke):
         self.size = poke.size + 45
         super().__init__(poke)
@@ -260,6 +268,7 @@ class CloseCombat(Move):
     usingTime = 45
 
     image = "fist"
+
     def __init__(self, poke):
         self.size = poke.size + 15
         super().__init__(poke)
@@ -297,6 +306,7 @@ class DarkPulse(Move):
     usingTime = 60
 
     image = "dark"
+
     def __init__(self, poke):
         self.size = 25
         super().__init__(poke)
@@ -319,7 +329,6 @@ class DarkPulse(Move):
             poke.usingMove = ""
 
 
-
 class Sandstorm(Move):
     type = "rock"
     colour = (185, 224, 239)
@@ -328,6 +337,7 @@ class Sandstorm(Move):
     usingTime = 20
 
     image = "sandstorm"
+
     def __init__(self, poke):
         self.size = 25
         super().__init__(poke)
@@ -357,6 +367,7 @@ class Earthquake(Move):
     usingTime = 60
 
     image = "earthquake"
+
     def __init__(self, poke):
         self.size = 25
         super().__init__(poke)
@@ -393,6 +404,7 @@ class DazzlingGleam(Move):
     usingTime = 90
 
     image = "dazzling"
+
     def __init__(self, poke):
         self.size = 30
         super().__init__(poke)
@@ -417,6 +429,7 @@ class DazzlingGleam(Move):
         poke.usingMoveTimer -= 1
         if poke.usingMoveTimer == 0:
             poke.usingMove = ""
+
 
 class IronTail(Move):
     type = "steel"
@@ -446,12 +459,14 @@ class IronTail(Move):
         if poke.usingMoveTimer == 0:
             poke.usingMove = ""
 
+
 class UTurn(Move):
     type = "bug"
     colour = (30, 175, 30)
     damage = 15
     graphic = "circle"
     usingTime = 120
+
     def __init__(self, poke):
         self.size = poke.size + 25
         super().__init__(poke)
@@ -474,6 +489,7 @@ class UTurn(Move):
         poke.usingMoveTimer -= 1
         if poke.usingMoveTimer == 0:
             poke.usingMove = ""
+
 
 class Bolt(Move):
     type = "electric"
@@ -512,6 +528,7 @@ class Bolt(Move):
             Bolt(poke)
         if poke.usingMoveTimer == 0:
             poke.usingMove = ""
+
 
 class DragonPulse(Move):
     type = "dragon"
@@ -635,7 +652,6 @@ class IceBeam(Move):
             poke.usingMove = ""
 
 
-
 class ShadowBall(Move):
     type = "ghost"
     spread = 0.0
@@ -739,8 +755,6 @@ class Flame(Move):
     imageCounter = 0
     imagePointer = 0
 
-
-
     def __init__(self, poke):
         self.size = 20
         super().__init__(poke)
@@ -769,6 +783,7 @@ class Flame(Move):
         if poke.usingMoveTimer == 0:
             poke.usingMove = ""
 
+
 class Bubble(Move):
     type = "water"
     spread = 0.15
@@ -781,7 +796,6 @@ class Bubble(Move):
     usingTime = 45
 
     image = "bubble"
-
 
     def __init__(self, poke):
         self.size = 20
@@ -799,6 +813,7 @@ class Bubble(Move):
             Bubble(poke)
         if poke.usingMoveTimer == 0:
             poke.usingMove = ""
+
 
 class RazorLeaf(Move):
     type = "grass"
@@ -858,6 +873,7 @@ class Bonemerang(Move):
             Bonemerang(poke)
         if poke.usingMoveTimer == 0:
             poke.usingMove = ""
+
 
 MOVES: dict[str, type[Move]] = {
         "Thunderbolt": Bolt,

@@ -160,5 +160,6 @@ class Game:
                 if len(self.alivelist) == 1:
                     self.result = "win"
                     self.winner = self.alivelist[0].name
-                    if API: requests.post(self.url + "/setwinner", json = {"winner" : self.winner})
+                    if API:
+                        requests.post(self.url + "/setwinner", json = {"winner" : self.winner})
                 self.endScreenCountdown = 240

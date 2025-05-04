@@ -27,6 +27,7 @@ class DetectBox:
         self.width = width
         self.height = height
 
+
 class DamageIndicator:
     ttl = 120
     alpha = 0
