@@ -39,16 +39,16 @@ class Sprites:
 
 
     def get_arena(self) -> pygame.Surface:
-        if (self.arena == None):
+        if (self.arena is None):
             self.arena = self._load_img(Sprites.base_dir+"/arena.png", WINDOW_WIDTH, WINDOW_HEIGHT)
 
         return self.arena
 
     def _load_img(self, file_path, x_scale, y_scale) -> pygame.Surface:
         img = pygame.image.load(file_path).convert_alpha()
-        if (x_scale == None):
+        if (x_scale is None):
             x_scale = img.get_width()
-        if (y_scale == None):
+        if (y_scale is None):
             y_scale = img.get_height()
         return pygame.transform.scale(img, (x_scale, y_scale))
 

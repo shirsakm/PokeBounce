@@ -26,7 +26,7 @@ class Sets:
         if (set_id not in Sets.sets.keys()):
             raise ValueError(f"Invalid set id '{set_id}' referenced!")
 
-        if (Sets.sets[set_id] == None):
+        if (Sets.sets[set_id] is None):
             raise ValueError(f"Found set was None?? Id:'{set_id}'")
 
         return Sets.sets[set_id]
