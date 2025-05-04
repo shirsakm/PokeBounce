@@ -7,6 +7,7 @@ from src.globals import g
 from src.poke import chooseChars
 from src.sprite_loader import INSTANCE as sprites
 from src.sets import Sets
+from src import physics
 
 class Game:
     def __init__(self):
@@ -24,10 +25,7 @@ class Game:
         self.gambling = False
         self.id = 0
         self.timer = 0
-        self.wallModifier = 0
-        self.wallGrowth = 0.01
-        self.wallMaxSize = 300
-        self.walls = []
+        self.walls = [physics.Wall("right"), physics.Wall("left"), physics.Wall("top"), physics.Wall("bottom")]
 
     def newGame(self):
         self.charList = []
@@ -41,8 +39,6 @@ class Game:
         else: 
             self.charList = chooseChars(self.charList, random.randint(3,10))
         
-        print([char.name for char in self.charList])
-
         self.id = random.randint(10000, 99999)
 
         if API: requests.post(self.url + "/setfighters", json = {"fighters" : [char.name for char in self.charList]})
@@ -68,16 +64,6 @@ class Game:
         bgrect = pygame.Rect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT)
 
         g.window.blit(sprites.get_arena(), bgrect)
-
-        wallleft = pygame.Rect((0, 0, 50 + self.wallModifier, 800))
-        wallright = pygame.Rect((1400 - self.wallModifier, 0, 51 + self.wallModifier, 800))
-        walltop = pygame.Rect((0, 0, 1450, 50 + self.wallModifier))
-        walldown = pygame.Rect((0, 750 - self.wallModifier, 1450, 51 + self.wallModifier))
-
-        self.walls = [wallleft, wallright, walltop, walldown]
-
-        for wall in self.walls:
-            pygame.draw.rect(g.window, (20,10,20), wall)
 
     # The main game loop
     def update(self):
@@ -129,121 +115,11 @@ class Game:
                 self.gambling = False
                 if API: requests.post(self.url + "/setgambling", json = {"openGambling" : self.gambling})
 
-            if self.wallModifier < self.wallMaxSize:
-                self.wallModifier += self.wallGrowth
-
-            self.alivelist = []
-            for char in self.charList:
-                char.move(char.speed)
-                if char.alive:
-                    self.alivelist.append(char.name)
-
-                    if char.x > WINDOW_WIDTH or char.x < 0:
-                        print(char.name, "had a woopsie on the x axis")
-                        char.x = WINDOW_WIDTH//2
-                    if char.y > WINDOW_HEIGHT or char.y < 0:
-                        print(char.name, "had a woopsie on the y axis")
-                        char.y = WINDOW_HEIGHT//2
-
-                    charrect = pygame.Rect((char.x, char.y, char.size, char.size))
-                    charrectImage = pygame.Rect((char.x-60, char.y-85, char.size, char.size))
-
-                    if char.xVel < 0:
-                        g.window.blit(pygame.transform.flip(char.image, False, False), charrectImage)
-                    elif char.xVel > 0:
-                        g.window.blit(pygame.transform.flip(char.image, True, False), charrectImage)
-
-                    otherChars = []
-                    for nestedChar in self.charList:
-                        if nestedChar.alive:
-                            if nestedChar != char:
-                                otherChars.append(pygame.Rect((nestedChar.x, nestedChar.y, nestedChar.size, nestedChar.size)))
-
-                    obstacleList = self.walls + otherChars
-
-                    charLeftBox = pygame.Rect((char.x + char.leftDetectBox.xOffset, char.y + char.leftDetectBox.yOffset, char.leftDetectBox.width, char.leftDetectBox.height))
-                    charRightBox = pygame.Rect((char.x + char.rightDetectBox.xOffset, char.y + char.rightDetectBox.yOffset, char.rightDetectBox.width, char.rightDetectBox.height))
-                    charUpBox = pygame.Rect((char.x + char.upDetectBox.xOffset, char.y + char.upDetectBox.yOffset, char.upDetectBox.width, char.upDetectBox.height))
-                    charDownBox = pygame.Rect((char.x + char.downDetectBox.xOffset, char.y + char.downDetectBox.yOffset, char.downDetectBox.width, char.downDetectBox.height))
-
-                    if showCollisionBoxes:
-                        pygame.draw.rect(g.window, (255,0,0), charLeftBox)
-                        pygame.draw.rect(g.window, (255,0,0), charRightBox)
-                        pygame.draw.rect(g.window, (255,0,0), charUpBox)
-                        pygame.draw.rect(g.window, (255,0,0), charDownBox)
-
-
-                    if charLeftBox.collidelist(obstacleList) != -1:
-                        char.collideLeft()
-                    if charRightBox.collidelist(obstacleList) != -1:
-                        char.collideRight()
-                    if charUpBox.collidelist(obstacleList) != -1:
-                        char.collideTop()
-                    if charDownBox.collidelist(obstacleList) != -1:
-                        char.collideBottom()
-
-                    char.useMove()
-
-                    healthRectRed = pygame.Rect((char.healthBox.xOffset + char.x, char.y - char.healthBox.yOffset, char.healthBox.width, char.healthBox.height))
-
-                    healthPercentWidth = (char.health / 300) * char.healthBox.width
-
-                    healthRectGreen = pygame.Rect((char.healthBox.xOffset + char.x, char.y - char.healthBox.yOffset, healthPercentWidth, char.healthBox.height))
-                    pygame.draw.rect(g.window, (175,0,0), healthRectRed)
-                    pygame.draw.rect(g.window, (0,175,0), healthRectGreen)
+            physics.physicsUpdate()
+            self.alivelist = [poke for poke in self.charList if poke.alive]
 
             if len(self.alivelist) <= 1 and self.gameOverCountdown == 30:
                 self.gameOver = True
-
-            moveRects = []
-            for char in self.charList:
-                stillAliveHitboxes = []
-                for move in char.activeHitboxList:
-                    move.move()
-                    moveRects.append([pygame.Rect((move.x, move.y, move.size, move.size)), move])
-                    if move.ttl > 0:
-                        stillAliveHitboxes.append(move)
-                    
-
-                char.activeHitboxList = stillAliveHitboxes
-
-                for char in self.charList:
-                    otherCharsHitboxes = []
-                    otherCharsValues = []
-                    for nestedChar in self.charList:
-                        if nestedChar != char:
-                            for hitbox in nestedChar.activeHitboxList:
-                                otherCharsHitboxes.append(pygame.Rect((hitbox.x, hitbox.y, hitbox.size, hitbox.size)))
-                                otherCharsValues.append(hitbox)
-                    if char.iFrames == 0:
-                        charrect = pygame.Rect((char.x, char.y, char.size, char.size))
-                        if charrect.collidelist(otherCharsHitboxes) != -1:
-                            char.iFrames = 180
-                            char.takeDamage(otherCharsValues[charrect.collidelist(otherCharsHitboxes)].damage)
-
-
-            for moveRect in moveRects:
-                if showHitboxes:
-                    pygame.draw.rect(g.window, moveRect[1].colour, moveRect[0])
-                if moveRect[1].graphic == "image":
-                    moveImage = sprites.moves.get(moveRect[1].image)
-                    moveImage = pygame.transform.scale(moveImage,(moveRect[1].size,moveRect[1].size))
-                    if moveImage is None:
-                        print("Move image is <None>! "+moveRect[1].image)
-                            
-                    rotatedImage = pygame.transform.rotate(moveImage, moveRect[1].rotate)
-
-                    new_rect = rotatedImage.get_rect(center = moveImage.get_rect(center = (moveRect[1].x + moveRect[1].size/2, moveRect[1].y + moveRect[1].size/2)).center)
-
-                    g.window.blit(rotatedImage, new_rect)
-                elif moveRect[1].graphic == "rect":
-                    pygame.draw.rect(g.window, moveRect[1].colour, moveRect[0])
-
-
-                elif moveRect[1].graphic == "circle":
-                    pygame.draw.circle(g.window, moveRect[1].colour, moveRect[0].center, moveRect[1].size/2)
-
-
             for char in self.charList:
                 if char.moveText:
                     if char.moveText.ttl > 0:
@@ -270,6 +146,6 @@ class Game:
                     if API: requests.post(self.url + "/setwinner", json = {"winner" : "Nobody"})
                 if len(self.alivelist) == 1:
                     self.result = "win"
-                    self.winner = self.alivelist[0]
+                    self.winner = self.alivelist[0].name
                     if API: requests.post(self.url + "/setwinner", json = {"winner" : self.winner})
                 self.endScreenCountdown = 240
