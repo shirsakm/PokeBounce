@@ -1,9 +1,12 @@
-import math, random
+import math
+import random
 from abc import ABC, abstractmethod
+
 
 class MoveText:
     ttl = 60
     alpha = 0
+
     def __init__(self, x, y, text):
         self.x = x
         self.y = y
@@ -17,6 +20,7 @@ class MoveText:
             self.alpha += 20
         elif self.ttl <= 20 and self.alpha > 15:
             self.alpha -= 10
+
 
 class Move(ABC):
     type: str
@@ -34,6 +38,7 @@ class Move(ABC):
     @abstractmethod
     def use(poke):
         pass
+
 
 class QuickAttack(Move):
     type = "normal"
@@ -74,6 +79,7 @@ class QuickAttack(Move):
         if poke.usingMoveTimer == 0:
             poke.usingMove = ""
 
+
 class BraveBird(Move):
     type = "flying"
     colour = (185, 224, 239)
@@ -83,6 +89,7 @@ class BraveBird(Move):
     usingTime = 90
 
     image = "bravebird"
+
     def __init__(self, x, y, pokeSize, size, xVel, yVel, ttl):
         self.x = x - (size - pokeSize) / 2 + xVel * 4
         self.y = y - (size - pokeSize) / 2 + yVel * 4
@@ -114,6 +121,7 @@ class BraveBird(Move):
         if poke.usingMoveTimer == 0:
             poke.usingMove = ""
 
+
 class IronHead(Move):
     type = "steel"
     colour = (185, 224, 239)
@@ -123,6 +131,7 @@ class IronHead(Move):
     usingTime = 30
 
     image = "ironhead"
+
     def __init__(self, x, y, pokeSize, size, xVel, yVel, ttl):
         self.x = x - (size - pokeSize) / 2
         self.y = y - (size - pokeSize) / 2
@@ -165,6 +174,7 @@ class ZenHeadbutt(Move):
     usingTime = 60
 
     image = "zenheadbutt"
+
     def __init__(self, x, y, pokeSize, size, xVel, yVel, ttl):
         self.x = x - (size - pokeSize) / 2
         self.y = y - (size - pokeSize) / 2
@@ -197,6 +207,7 @@ class ZenHeadbutt(Move):
         if poke.usingMoveTimer == 0:
             poke.usingMove = ""
 
+
 class Waterfall(Move):
     type = "water"
     colour = (185, 224, 239)
@@ -206,6 +217,7 @@ class Waterfall(Move):
     usingTime = 60
 
     image = "waterfall"
+
     def __init__(self, x, y, pokeSize, size, xVel, yVel, ttl):
         self.x = x - (size - pokeSize) / 2
         self.y = y - (size - pokeSize) / 2
@@ -238,6 +250,7 @@ class Waterfall(Move):
         if poke.usingMoveTimer == 0:
             poke.usingMove = ""
 
+
 class CloseCombat(Move):
     type = "fighting"
     colour = (185, 224, 239)
@@ -247,6 +260,7 @@ class CloseCombat(Move):
     usingTime = 45
 
     image = "fist"
+
     def __init__(self, x, y, pokeSize, size, ttl):
         self.x = x - (size - pokeSize) / 2
         self.y = y - (size - pokeSize) / 2
@@ -274,10 +288,18 @@ class CloseCombat(Move):
         if poke.usingMoveTimer % 5 == 0:
             xOffset = random.randint(-80, 80)
             yOffset = random.randint(-80, 80)
-            poke.activeHitboxList.append(CloseCombat(poke.x + xOffset + poke.xVel * 70, poke.y + yOffset + poke.yVel * 70, poke.size, poke.size + 15, ttl))
+            poke.activeHitboxList.append(
+                CloseCombat(
+                    poke.x + xOffset + poke.xVel * 70,
+                    poke.y + yOffset + poke.yVel * 70,
+                    poke.size, poke.size + 15,
+                    ttl
+                )
+            )
         poke.usingMoveTimer -= 1
         if poke.usingMoveTimer == 0:
             poke.usingMove = ""
+
 
 class DarkPulse(Move):
     type = "dark"
@@ -289,6 +311,7 @@ class DarkPulse(Move):
     usingTime = 60
 
     image = "dark"
+
     def __init__(self, x, y, pokeSize, size, ttl):
         self.x = x - (size - pokeSize) / 2
         self.y = y - (size - pokeSize) / 2
@@ -331,6 +354,7 @@ class Sandstorm(Move):
     usingTime = 20
 
     image = "sandstorm"
+
     def __init__(self, x, y, pokeSize, size, ttl):
         self.x = x - (size - pokeSize) / 2
         self.y = y - (size - pokeSize) / 2
@@ -366,6 +390,7 @@ class Sandstorm(Move):
         if poke.usingMoveTimer == 0:
             poke.usingMove = ""
 
+
 class Earthquake(Move):
     type = "ground"
     colour = (185, 224, 239)
@@ -376,6 +401,7 @@ class Earthquake(Move):
     usingTime = 60
 
     image = "earthquake"
+
     def __init__(self, x, y, pokeSize, size, ttl):
         self.x = x - (size - pokeSize) / 2
         self.y = y - (size - pokeSize) / 2
@@ -408,6 +434,7 @@ class Earthquake(Move):
         if poke.usingMoveTimer == 0:
             poke.usingMove = ""
 
+
 class DazzlingGleam(Move):
     type = "fairy"
     colour = (185, 224, 239)
@@ -418,6 +445,7 @@ class DazzlingGleam(Move):
     usingTime = 90
 
     image = "dazzling"
+
     def __init__(self, x, y, pokeSize, size, ttl):
         self.x = x - (size - pokeSize) / 2
         self.y = y - (size - pokeSize) / 2
@@ -450,6 +478,7 @@ class DazzlingGleam(Move):
         poke.usingMoveTimer -= 1
         if poke.usingMoveTimer == 0:
             poke.usingMove = ""
+
 
 class IronTail(Move):
     type = "steel"
@@ -489,6 +518,7 @@ class IronTail(Move):
         if poke.usingMoveTimer == 0:
             poke.usingMove = ""
 
+
 class UTurn(Move):
     type = "bug"
     colour = (30, 175, 30)
@@ -496,6 +526,7 @@ class UTurn(Move):
     rotate = 0
     graphic = "circle"
     usingTime = 120
+
     def __init__(self, x, y, pokeSize, size, ttl):
         self.x = x - (size - pokeSize) / 2
         self.y = y - (size - pokeSize) / 2
@@ -527,6 +558,7 @@ class UTurn(Move):
         poke.usingMoveTimer -= 1
         if poke.usingMoveTimer == 0:
             poke.usingMove = ""
+
 
 class Bolt(Move):
     type = "electric"
@@ -598,6 +630,7 @@ class Bolt(Move):
         if poke.boltShiftCooldown:
             poke.boltShiftCooldown -= 1
 
+
 class DragonPulse(Move):
     type = "dragon"
     graphic = "circle"
@@ -634,7 +667,12 @@ class DragonPulse(Move):
         poke.dragonPulseColour = (poke.dragonPulseColour + 1) % 2
 
         if poke.usingMoveTimer == 60:
-            bolt = DragonPulse(poke.x, poke.y, poke.xVel, poke.yVel, poke.size, size, ttl, True, poke.dragonPulseColour)
+            bolt = DragonPulse(
+                poke.x, poke.y,
+                poke.xVel, poke.yVel,
+                poke.size, size, ttl, True,
+                poke.dragonPulseColour
+            )
             poke.activeHitboxList.append(bolt)
             poke.xVelUnshift = poke.xVel
             poke.yVelUnshift = poke.yVel
@@ -642,11 +680,17 @@ class DragonPulse(Move):
             lastHitbox = poke.activeHitboxList[-1]
             boltX = lastHitbox.x + lastHitbox.xVel * speed
             boltY = lastHitbox.y + lastHitbox.yVel * speed
-            bolt = DragonPulse(boltX, boltY, lastHitbox.xVel, lastHitbox.yVel, poke.size, size, ttl, False, poke.dragonPulseColour)
+            bolt = DragonPulse(
+                boltX, boltY,
+                lastHitbox.xVel, lastHitbox.yVel,
+                poke.size, size, ttl, False,
+                poke.dragonPulseColour
+            )
             poke.activeHitboxList.append(bolt)
         poke.usingMoveTimer -= 1
         if poke.usingMoveTimer == 0:
             poke.usingMove = ""
+
 
 class HyperBeam(Move):
     type = "normal"
@@ -686,7 +730,12 @@ class HyperBeam(Move):
         poke.dragonPulseColour = (poke.dragonPulseColour + 1) % 2
 
         if poke.usingMoveTimer == 60:
-            bolt = HyperBeam(poke.x, poke.y, poke.xVel, poke.yVel, poke.size, size, ttl, True, poke.dragonPulseColour)
+            bolt = HyperBeam(
+                poke.x, poke.y,
+                poke.xVel, poke.yVel,
+                poke.size, size, ttl, True,
+                poke.dragonPulseColour
+            )
             poke.activeHitboxList.append(bolt)
             poke.xVelUnshift = poke.xVel
             poke.yVelUnshift = poke.yVel
@@ -696,13 +745,19 @@ class HyperBeam(Move):
             lastHitbox = poke.activeHitboxList[-1]
             boltX = lastHitbox.x + lastHitbox.xVel * speed
             boltY = lastHitbox.y + lastHitbox.yVel * speed
-            bolt = HyperBeam(boltX, boltY, lastHitbox.xVel, lastHitbox.yVel, poke.size, size, ttl, False, poke.dragonPulseColour)
+            bolt = HyperBeam(
+                boltX, boltY,
+                lastHitbox.xVel, lastHitbox.yVel,
+                poke.size, size, ttl, False,
+                poke.dragonPulseColour
+            )
             poke.activeHitboxList.append(bolt)
         poke.usingMoveTimer -= 1
         if poke.usingMoveTimer == 0:
             poke.moveTimer = 300
             poke.speed = poke.previousSpeed
             poke.usingMove = ""
+
 
 class IceBeam(Move):
     type = "ice"
@@ -821,6 +876,7 @@ class ShadowBall(Move):
         if poke.usingMoveTimer == 0:
             poke.usingMove = ""
 
+
 class StoneEdge(Move):
     type = "rock"
     ttl = 300
@@ -873,6 +929,7 @@ class StoneEdge(Move):
         if poke.usingMoveTimer == 0:
             poke.usingMove = ""
 
+
 class PoisonSting(Move):
     type = "poison"
     ttl = 300
@@ -916,6 +973,7 @@ class PoisonSting(Move):
             poke.activeHitboxList.append(ball)
         if poke.usingMoveTimer == 0:
             poke.usingMove = ""
+
 
 class Flame(Move):
     type = "fire"
@@ -974,6 +1032,7 @@ class Flame(Move):
         if poke.usingMoveTimer == 0:
             poke.usingMove = ""
 
+
 class Bubble(Move):
     type = "water"
     ttl = 120
@@ -1018,6 +1077,7 @@ class Bubble(Move):
             poke.activeHitboxList.append(bubble)
         if poke.usingMoveTimer == 0:
             poke.usingMove = ""
+
 
 class RazorLeaf(Move):
     type = "grass"
@@ -1114,6 +1174,7 @@ class Bonemerang(Move):
             poke.activeHitboxList.append(ball)
         if poke.usingMoveTimer == 0:
             poke.usingMove = ""
+
 
 MOVES: dict[str, type[Move]] = {
     "Thunderbolt": Bolt,
