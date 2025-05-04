@@ -44,8 +44,6 @@ class Game:
         else:
             self.charList = chooseChars(self.charList, random.randint(3, 10))
 
-        print([char.name for char in self.charList])
-
         self.id = random.randint(10000, 99999)
 
         if API:
