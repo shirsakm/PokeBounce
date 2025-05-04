@@ -4,7 +4,7 @@ from src.constants import WINDOW_HEIGHT, WINDOW_WIDTH, battler_sprites, move_spr
 
 
 class Sprites:
-    base_dir = "img"
+    base_dir = "assets/img"
     battler_dir = f"{base_dir}/battlers"
     move_dir = f"{base_dir}/moves"
 
