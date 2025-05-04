@@ -3,7 +3,7 @@ from pygame.locals import *
 from src.constants import *
 
 class Sprites:
-    base_dir = "img"
+    base_dir = "assets/img"
     battler_dir = base_dir+"/battlers"
     move_dir = base_dir+"/moves"
 

@@ -10,8 +10,8 @@ from src.sets import Sets
 
 class Game:
     def __init__(self):
-        self.fontStart = pygame.freetype.Font('assets/PixeloidSans.ttf', 50)
-        self.font = pygame.freetype.Font('assets/PixeloidSans.ttf', 25)
+        self.fontStart = pygame.freetype.Font('assets/font/PixeloidSans.ttf', 50)
+        self.font = pygame.freetype.Font('assets/font/PixeloidSans.ttf', 25)
         self.url = "http://127.0.0.1:5000"
         self.gameStart = False
         self.startCountdown = startTimer
