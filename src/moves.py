@@ -34,9 +34,9 @@ class Move(physics.PhysicsObject):
 	linearGrowth = 0
 
 	def __init__(self, poke):
-		self.x = poke.x
-		self.y = poke.y
-		super().__init__(self.x, self.y, self.size, self.size, False)
+		self.x = poke.x + poke.size / 2
+		self.y = poke.y + poke.size / 2
+		super().__init__(self.x, self.y, self.size, self.size, True)
 		self.ttl = 0
 		self.rotate = 0
 		self.rotSpeed = 0
@@ -57,9 +57,11 @@ class Move(physics.PhysicsObject):
 
 		self.size += self.linearGrowth
 		self.size *= self.growth
+
 		if self.size < 1:
 			self.size = 1
 
+		self.resize(self.size, self.size)
 		self.rotate += self.rotSpeed
 
 		self.ttl -= 1
@@ -100,8 +102,8 @@ class QuickAttack(Move):
 		self.size = poke.size + 25
 		super().__init__(poke)
 		self.ttl = 15
-		self.xVel = 4
-		self.yVel = 4
+		self.xVel = poke.xVel * -4
+		self.yVel = poke.yVel * -4
 		self.linearGrowth = -8
 		
 	@staticmethod
@@ -130,8 +132,8 @@ class BraveBird(Move):
 	def __init__(self, poke):
 		self.size = poke.size + 80
 		super().__init__(poke)
-		self.x += poke.xVel * 4
-		self.y += poke.yVel * 4
+		self.x += poke.xVel * -4
+		self.y += poke.yVel * -4
 		self.rotate = math.atan2(poke.xVel, poke.yVel) * 180/3.14 + 180
 		self.ttl = 25
 		self.xVel = 2
@@ -166,8 +168,8 @@ class IronHead(Move):
 		super().__init__(poke)
 		self.rotate = math.atan2(poke.xVel, poke.yVel) * 180/3.14
 		self.ttl = 2
-		self.xVel = 2
-		self.yVel = 2
+		self.xVel = poke.xVel
+		self.yVel = poke.yVel
 		self.linearGrowth = -3
 	
 	@staticmethod
@@ -198,8 +200,8 @@ class ZenHeadbutt(Move):
 		super().__init__(poke)
 		self.rotate = math.atan2(poke.xVel, poke.yVel) * 180/3.14
 		self.ttl = 4
-		self.xVel = 2
-		self.yVel = 2
+		self.xVel = poke.xVel * 2
+		self.yVel = poke.yVel * 2
 		self.linearGrowth = -3
 
 	@staticmethod
@@ -229,8 +231,8 @@ class Waterfall(Move):
 		super().__init__(poke)
 		self.rotate = math.atan2(poke.xVel, poke.yVel) * 180/3.14
 		self.ttl = 4
-		self.xVel = 2
-		self.yVel = 2
+		self.xVel = poke.xVel * 2
+		self.yVel = poke.yVel * 2
 		self.linearGrowth = -3
 
 	@staticmethod
@@ -262,7 +264,7 @@ class CloseCombat(Move):
 		self.x = poke.x + random.randint(-80, 80) + poke.xVel * 70
 		self.y = poke.y + random.randint(-80, 80) + poke.yVel * 70
 		self.ttl = 45
-		self.linearGrowth = 10
+		self.linearGrowth = 5
 
 	def move(self):
 		super().move()
@@ -270,7 +272,7 @@ class CloseCombat(Move):
 			self.size = 3
 			self.linearGrowth = 0
 		if self.ttl == 20:
-			self.linearGrowth = -3
+			self.linearGrowth = -1.5
 			self.xVel = 1.5
 			self.yVel = 1.5
 
@@ -297,7 +299,7 @@ class DarkPulse(Move):
 		self.size = 25
 		super().__init__(poke)
 		self.ttl = 45
-		self.linearGrowth = 5
+		self.linearGrowth = 2.5
 	
 	@staticmethod
 	def use(poke):
@@ -328,8 +330,6 @@ class Sandstorm(Move):
 		self.size = 25
 		super().__init__(poke)
 		self.ttl = 200
-		self.xVel = -0.05
-		self.yVel = -0.05
 
 	@staticmethod
 	def use(poke):
@@ -357,9 +357,7 @@ class Earthquake(Move):
 		self.size = 25
 		super().__init__(poke)
 		self.ttl = 60
-		self.xVel = -1.5
-		self.yVel = -1.5
-		self.linearGrowth = 5
+		self.linearGrowth = 2.5
 
 	def move(self, speed = 1):
 		super().move()
@@ -395,9 +393,7 @@ class DazzlingGleam(Move):
 		self.ttl = 60
 		self.rotate = 0
 		self.rotSpeed = 4
-		self.xVel = -1.5
-		self.yVel = -1.5
-		self.linearGrowth = 4.5
+		self.linearGrowth = 2
 
 	@staticmethod
 	def use(poke):
@@ -452,8 +448,8 @@ class UTurn(Move):
 		self.size = poke.size + 25
 		super().__init__(poke)
 		self.ttl = 20
-		self.xVel = 2
-		self.yVel = 2
+		self.xVel = 2 * poke.xVel
+		self.yVel = 2 * poke.yVel
 		self.growth = 0.95
 
 	@staticmethod
@@ -463,7 +459,9 @@ class UTurn(Move):
 		if poke.usingMoveTimer == 120:
 			poke.iFrames = 120
 			poke.previousSpeed = poke.speed
-			poke.speed = -12
+			poke.speed *= 3
+			poke.xVel *= -1
+			poke.yVel *= -1
 		elif poke.usingMoveTimer == 1:
 			poke.speed = poke.previousSpeed
 		UTurn(poke)
@@ -478,21 +476,20 @@ class Bolt(Move):
 	colour = (251, 225, 13, 10)
 
 	usingTime = 60
-	prev_beam = None
 
 	def __init__(self, poke):
 		self.size = 40
 		super().__init__(poke)
 		self.ttl = 90 - (60 - poke.usingMoveTimer)
 
-		if poke.usingMoveTimer == 60 or self.prev_beam is None:
+		if poke.usingMoveTimer == 60 or poke.prevBeam is None:
 			poke.beamXVel = poke.xVel
 			poke.beamYVel = poke.yVel
 		else:
-			lastHitbox = self.prev_beam
+			lastHitbox = poke.prevBeam
 			self.x = lastHitbox.x + poke.beamXVel * 40
 			self.y = lastHitbox.y + poke.beamYVel * 40
-		self.prev_beam = self
+		poke.prevBeam = self
 
 	def move(self):
 		super().move()
@@ -515,20 +512,19 @@ class DragonPulse(Move):
 	damage = 40
 	colours = [(251, 20, 250), (129, 10, 250)]
 	usingTime = 60
-	prev_beam = None
 
 	def __init__(self, poke):
 		self.size = 40 + (60 - poke.usingMoveTimer)
 		super().__init__(poke)
 		self.ttl = 90 - (60 - poke.usingMoveTimer)
-		if poke.usingMoveTimer == 60 or self.prev_beam is None:
+		if poke.usingMoveTimer == 60 or poke.prevBeam is None:
 			poke.beamXVel = poke.xVel
 			poke.beamYVel = poke.yVel
-		elif poke.usingMoveTimer > 0:
-			lastHitbox = self.prev_beam
+		else:
+			lastHitbox = poke.prevBeam
 			self.x = lastHitbox.x + poke.beamXVel * 25
 			self.y = lastHitbox.y + poke.beamYVel * 25
-		self.prev_beam = self
+		poke.prevBeam = self
 		self.colour = self.colours[poke.dragonPulseColour]
 
 	def move(self):
@@ -555,20 +551,19 @@ class HyperBeam(Move):
 	colours = [(255, 183, 0), (255, 221, 0)]
 
 	usingTime = 60
-	prev_beam = None
 
 	def __init__(self, poke):
 		self.size = 40 + ((60 - poke.usingMoveTimer) * 2)
 		super().__init__(poke)
 		self.ttl = 90 - (60 - poke.usingMoveTimer)
-		if poke.usingMoveTimer == 60 or self.prev_beam is None:
+		if poke.usingMoveTimer == 60 or poke.prevBeam is None:
 			poke.beamXVel = poke.xVel
 			poke.beamYVel = poke.yVel
-		elif poke.usingMoveTimer > 0:
-			lastHitbox = self.prev_beam
-			self.x = lastHitbox.x + poke.beamXVel * 25
-			self.y = lastHitbox.y + poke.beamYVel * 25
-		self.prev_beam = self
+		else:
+			lastHitbox = poke.prevBeam
+			self.x = lastHitbox.x + poke.beamXVel * 40
+			self.y = lastHitbox.y + poke.beamYVel * 40
+		poke.prevBeam = self
 		self.colour = self.colours[poke.dragonPulseColour]
 
 	def move(self):
@@ -599,21 +594,20 @@ class IceBeam(Move):
 	colour = (125, 205, 236)
 
 	usingTime = 60
-	prev_beam = None
 
 	def __init__(self, poke):
 		self.size = 40
 		super().__init__(poke)
 		self.ttl = 90 - (60 - poke.usingMoveTimer)
 
-		if poke.usingMoveTimer == 60 or self.prev_beam is None:
+		if poke.usingMoveTimer == 60 or poke.prevBeam is None:
 			poke.beamXVel = poke.xVel
 			poke.beamYVel = poke.yVel
 		else:
-			lastHitbox = self.prev_beam
-			self.x = lastHitbox.x + poke.beamXVel * 40
-			self.y = lastHitbox.y + poke.beamYVel * 40
-		self.prev_beam = self
+			lastHitbox = poke.prevBeam
+			self.x = lastHitbox.x + poke.beamXVel * 25
+			self.y = lastHitbox.y + poke.beamYVel * 25
+		poke.prevBeam = self
 
 	def move(self):
 		super().move()
@@ -635,7 +629,7 @@ class IceBeam(Move):
 class ShadowBall(Move):
 	type = "ghost"
 	spread = 0.0
-	growth = 1.01
+	linearGrowth = 1
 	acceleration = 1.005
 	damage = 55
 	colour = (255, 20, 200, 30)

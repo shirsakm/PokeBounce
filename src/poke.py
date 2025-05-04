@@ -24,8 +24,8 @@ class DamageIndicator:
 	ttl = 120
 	alpha = 0
 	def __init__(self, x, y, damage):
-		self.x = x 
-		self.y = y 
+		self.x = x
+		self.y = y
 		self.damage = "-"+str(damage)
 
 	def move(self):
@@ -54,6 +54,7 @@ class Poke(physics.PhysicsObject):
 
 	def __init__(self, x, y, image = "", moveset = [], name = "", size = 60, health = 300):
 		super().__init__(x, y, size, size)
+		self.prevBeam = None
 		self.startingX = x
 		self.startingY = y
 		self.size = size

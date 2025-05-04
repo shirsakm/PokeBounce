@@ -19,13 +19,20 @@ class PhysicsObject:
         self.width = width
         self.height = height
         if self.centered:
-            self.x += self.width / 2
-            self.y += self.height / 2
+            self.x -= self.width / 2
+            self.y -= self.height / 2
         allObjects.append(self)
     
     def update(self):
         self.x += self.xVel
         self.y += self.yVel
+    
+    def resize(self, width, height):
+        if self.centered:
+            self.x -= (width - self.width) / 2
+            self.y -= (height - self.height) / 2
+        self.width = width
+        self.height = height
     
     def draw(self):
         pass
