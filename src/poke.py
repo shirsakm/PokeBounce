@@ -67,7 +67,7 @@ class Poke:
     moveText = None
     damageIndicators = []
 
-    def __init__(self, x: float, y: float, image: pygame.Surface, moveset = [], name = "",  size = 60, health = 300):
+    def __init__(self, x: float, y: float, image: pygame.Surface, moveset=[], name="",  size=60, health=300):
         self.x = x
         self.y = y
         self.startingX = x
@@ -117,7 +117,7 @@ class Poke:
         self.xVel = round(random.uniform(-1, 1), 3)
         self.yVel = round(1 - abs(self.xVel), 3) * random.choice([-1, 1])
 
-    def move(self, speed = 2) -> None:
+    def move(self, speed=2) -> None:
         self.x += self.xVel * speed
         self.y += self.yVel * speed
 

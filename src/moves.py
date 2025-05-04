@@ -53,7 +53,7 @@ class QuickAttack(Move):
         self.startingTtl = ttl
         self.sizeOffset = 0
 
-    def move(self, speed = 1):
+    def move(self, speed=1):
         self.ttl -= 1
         self.size -= 8
         self.x += 4
@@ -93,7 +93,7 @@ class BraveBird(Move):
         self.sizeOffset = 0
         self.rotate = math.atan2(xVel, yVel) * 180/3.14 + 180
 
-    def move(self, speed = 1):
+    def move(self, speed=1):
         self.ttl -= 1
         self.size -= 3
         self.x += 2
@@ -134,7 +134,7 @@ class IronHead(Move):
         self.rotate = math.atan2(xVel, yVel) * 180/3.14
         self.ttl = ttl
 
-    def move(self, speed = 1):
+    def move(self, speed=1):
         self.ttl -= 1
         self.size -= 3
         self.x += 2
@@ -176,7 +176,7 @@ class ZenHeadbutt(Move):
         self.rotate = math.atan2(xVel, yVel) * 180/3.14
         self.ttl = ttl
 
-    def move(self, speed = 1):
+    def move(self, speed=1):
         self.ttl -= 1
         self.size -= 3
         self.x += 2
@@ -217,7 +217,7 @@ class Waterfall(Move):
         self.rotate = math.atan2(xVel, yVel) * 180/3.14
         self.ttl = ttl
 
-    def move(self, speed = 1):
+    def move(self, speed=1):
         self.ttl -= 1
         self.size -= 3
         self.x += 2
@@ -256,7 +256,7 @@ class CloseCombat(Move):
         self.sizeOffset = 0
         self.ttl = ttl
 
-    def move(self, speed = 1):
+    def move(self, speed=1):
         self.ttl -= 1
         if self.ttl >= 35:
             self.size += 10
@@ -298,7 +298,7 @@ class DarkPulse(Move):
         self.ttl = ttl
         self.sizeOffset = 0
 
-    def move(self, speed = 1):
+    def move(self, speed=1):
         self.ttl -= 1
         self.size += 5
         self.x -= 1.5
@@ -340,7 +340,7 @@ class Sandstorm(Move):
         self.ttl = ttl
         self.sizeOffset = 0
 
-    def move(self, speed = 1):
+    def move(self, speed=1):
         self.ttl -= 1
         if self.ttl > 270:
             self.size += 5
@@ -385,7 +385,7 @@ class Earthquake(Move):
         self.ttl = ttl
         self.sizeOffset = 0
 
-    def move(self, speed = 1):
+    def move(self, speed=1):
         self.ttl -= 1
         self.size += 5
         self.x -= 1.5
@@ -428,7 +428,7 @@ class DazzlingGleam(Move):
         self.sizeOffset = 0
         self.ttl = ttl
 
-    def move(self, speed = 1):
+    def move(self, speed=1):
         self.ttl -= 1
         self.size += 4.5
         self.x -= 1.5
@@ -472,7 +472,7 @@ class IronTail(Move):
         self.ttl = ttl
         self.rotate = rotate
 
-    def move(self, speed = 1):
+    def move(self, speed=1):
         self.ttl -= 1
 
     @staticmethod
@@ -506,7 +506,7 @@ class UTurn(Move):
         self.startingTtl = ttl
         self.sizeOffset = 0
 
-    def move(self, speed = 1):
+    def move(self, speed=1):
         self.ttl -= 1
         self.size -= 4
         self.x += 2
@@ -537,7 +537,7 @@ class Bolt(Move):
 
     usingTime = 60
 
-    def __init__(self, x, y, xVel, yVel, pokeSize, size, ttl = 60, isFirst = False):
+    def __init__(self, x, y, xVel, yVel, pokeSize, size, ttl=60, isFirst=False):
         if isFirst:
             self.x = x + pokeSize // 2 - size//2
             self.y = y + pokeSize // 2 - size//2
@@ -606,7 +606,7 @@ class DragonPulse(Move):
     colours = [(251, 20, 250), (129, 10, 250)]
     usingTime = 60
 
-    def __init__(self, x, y, xVel, yVel, pokeSize, size, ttl = 60, isFirst = False, colourPick = 0):
+    def __init__(self, x, y, xVel, yVel, pokeSize, size, ttl=60, isFirst=False, colourPick=0):
         if isFirst:
             self.x = x + pokeSize // 2 - size//2
             self.y = y + pokeSize // 2 - size//2
@@ -657,7 +657,7 @@ class HyperBeam(Move):
 
     usingTime = 60
 
-    def __init__(self, x, y, xVel, yVel, pokeSize, size, ttl = 60, isFirst = False, colourPick = 0):
+    def __init__(self, x, y, xVel, yVel, pokeSize, size, ttl=60, isFirst=False, colourPick=0):
         if isFirst:
             self.x = x + pokeSize // 2 - size//2
             self.y = y + pokeSize // 2 - size//2
@@ -713,7 +713,7 @@ class IceBeam(Move):
 
     usingTime = 60
 
-    def __init__(self, x, y, xVel, yVel, pokeSize, size, ttl = 60, isFirst = False):
+    def __init__(self, x, y, xVel, yVel, pokeSize, size, ttl=60, isFirst=False):
         if isFirst:
             self.x = x + pokeSize // 2 - size//2
             self.y = y + pokeSize // 2 - size//2
@@ -789,7 +789,7 @@ class ShadowBall(Move):
 
     usingTime = 30
 
-    def __init__(self, x, y, xVel, yVel, pokeSize, speed =2, size = 40):
+    def __init__(self, x, y, xVel, yVel, pokeSize, speed=2, size=40):
         self.x = x + pokeSize // 2 - size//2
         self.y = y + pokeSize // 2 - size//2
         self.xVel = xVel
@@ -834,7 +834,7 @@ class StoneEdge(Move):
 
     usingTime = 30
 
-    def __init__(self, x, y, xVel, yVel, pokeSize, speed =2, size = 40):
+    def __init__(self, x, y, xVel, yVel, pokeSize, speed=2, size=40):
         self.x = x + pokeSize // 2 - size//2
         self.y = y + pokeSize // 2 - size//2
         self.xVel = xVel + round(random.uniform(0 - self.spread, self.spread), 3)
@@ -886,7 +886,7 @@ class PoisonSting(Move):
 
     usingTime = 30
 
-    def __init__(self, x, y, xVel, yVel, pokeSize, speed =2, size = 20):
+    def __init__(self, x, y, xVel, yVel, pokeSize, speed=2, size=20):
         self.x = x + pokeSize // 2 - size//2
         self.y = y + pokeSize // 2 - size//2
         self.xVel = xVel + round(random.uniform(0 - self.spread, self.spread), 3)
@@ -936,7 +936,7 @@ class Flame(Move):
     imageCounter = 0
     imagePointer = 0
 
-    def __init__(self, x, y, xVel, yVel, pokeSize, speed =2, size = 20):
+    def __init__(self, x, y, xVel, yVel, pokeSize, speed=2, size=20):
         self.x = x + pokeSize // 2 - size//2
         self.y = y + pokeSize // 2 - size//2
         self.xVel = xVel + round(random.uniform(0 - self.spread, self.spread), 3)
@@ -989,7 +989,7 @@ class Bubble(Move):
     image = "bubble"
     rotate = 0
 
-    def __init__(self, x, y, xVel, yVel, pokeSize, speed =2, size = 20):
+    def __init__(self, x, y, xVel, yVel, pokeSize, speed=2, size=20):
         self.x = x + pokeSize // 2 - size//2
         self.y = y + pokeSize // 2 - size//2
         self.xVel = xVel + round(random.uniform(0 - self.spread, self.spread), 3)
@@ -1034,7 +1034,7 @@ class RazorLeaf(Move):
 
     image = "leaf"
 
-    def __init__(self, x, y, xVel, yVel, pokeSize, speed =2, size = 30):
+    def __init__(self, x, y, xVel, yVel, pokeSize, speed=2, size=30):
         self.x = x + pokeSize // 2 - size//2
         self.y = y + pokeSize // 2 - size//2
         self.xVel = xVel + round(random.uniform(0 - self.spread, self.spread), 3)
@@ -1082,7 +1082,7 @@ class Bonemerang(Move):
 
     usingTime = 120
 
-    def __init__(self, x, y, xVel, yVel, pokeSize, speed =2, size = 60):
+    def __init__(self, x, y, xVel, yVel, pokeSize, speed=2, size=60):
         self.x = x + pokeSize // 2 - size//2
         self.y = y + pokeSize // 2 - size//2
         self.xVel = xVel
