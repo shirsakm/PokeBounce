@@ -8,25 +8,6 @@ from src.globals import g
 
 charSpeed = 4
 
-detectBoxWidth = 6
-detectBoxheight = 24
-
-
-class HealthBox:
-    def __init__(self, xOffset: float, yOffset: float, width: int, height: int):
-        self.xOffset = xOffset
-        self.yOffset = yOffset
-        self.height = height
-        self.width = width
-
-
-class DetectBox:
-    def __init__(self, xOffset: float, yOffset: float, width: int, height: int):
-        self.xOffset = xOffset
-        self.yOffset = yOffset
-        self.width = width
-        self.height = height
-
 
 class DamageIndicator:
     ttl = 120
