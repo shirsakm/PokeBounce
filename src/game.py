@@ -50,11 +50,11 @@ class Game:
 
         self.id = random.randint(10000, 99999)
 
-        if API: requests.post(self.url + "/setfighters", json = {"fighters": [char.name for char in self.charList]})
-        if API: requests.post(self.url + "/setgameid", json = {"id": self.id})
+        if API: requests.post(self.url + "/setfighters", json={"fighters": [char.name for char in self.charList]})
+        if API: requests.post(self.url + "/setgameid", json={"id": self.id})
 
         self.gambling = True
-        if API: requests.post(self.url + "/setgambling", json = {"openGambling": self.gambling})
+        if API: requests.post(self.url + "/setgambling", json={"openGambling": self.gambling})
         self.initialized = True
 
     def displayResult(self):
@@ -131,7 +131,7 @@ class Game:
         else:
             if self.gambling:
                 self.gambling = False
-                if API: requests.post(self.url + "/setgambling", json = {"openGambling": self.gambling})
+                if API: requests.post(self.url + "/setgambling", json={"openGambling": self.gambling})
 
             if self.wallModifier < self.wallMaxSize:
                 self.wallModifier += self.wallGrowth
@@ -254,7 +254,7 @@ class Game:
 
                     rotatedImage = pygame.transform.rotate(moveImage, moveRect[1].rotate)
 
-                    new_rect = rotatedImage.get_rect(center = moveImage.get_rect(center = (moveRect[1].x + moveRect[1].size/2, moveRect[1].y + moveRect[1].size/2)).center)
+                    new_rect = rotatedImage.get_rect(center = moveImage.get_rect(center=(moveRect[1].x + moveRect[1].size/2, moveRect[1].y + moveRect[1].size/2)).center)
 
                     g.window.blit(rotatedImage, new_rect)
                 elif moveRect[1].graphic == "rect":
@@ -286,9 +286,9 @@ class Game:
             if self.gameOverCountdown == 0:
                 if len(self.alivelist) == 0:
                     self.result = "draw"
-                    if API: requests.post(self.url + "/setwinner", json = {"winner": "Nobody"})
+                    if API: requests.post(self.url + "/setwinner", json={"winner": "Nobody"})
                 if len(self.alivelist) == 1:
                     self.result = "win"
                     self.winner = self.alivelist[0]
-                    if API: requests.post(self.url + "/setwinner", json = {"winner": self.winner})
+                    if API: requests.post(self.url + "/setwinner", json={"winner": self.winner})
                 self.endScreenCountdown = 240
