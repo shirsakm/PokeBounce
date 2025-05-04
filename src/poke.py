@@ -1,6 +1,10 @@
 import random
-from src.moves import MOVES
-import pygame
+import pygame.transform
+from pygame import Rect
+from src.moves import MOVES, Move
+from src import physics
+from src.constants import WINDOW_HEIGHT, WINDOW_WIDTH
+from src.globals import g
 
 charSpeed = 4
 
@@ -23,7 +27,6 @@ class DetectBox:
         self.width = width
         self.height = height
 
-
 class DamageIndicator:
     ttl = 120
     alpha = 0
@@ -43,61 +46,64 @@ class DamageIndicator:
             self.alpha -= 5
 
 
-class Poke:
-    xVel = 0
-    yVel = 0
-
+class Poke(physics.PhysicsObject):
     alive = True
-
     iFrames = 0
-
     usingMove = ""
     usingMoveTimer = 0
-
-    activeHitboxList = []
-
     boltShift = 0
     boltShiftCooldown = 0
-
     deathShrink = 20
-
     dragonPulseColour = 0
     hyperBeamColour = 0
-
     ironTailRotation = 0
-
     moveText = None
     damageIndicators = []
 
-    def __init__(self, x: float, y: float, image: pygame.Surface, moveset=[], name="",  size=60, health=300):
-        self.x = x
-        self.y = y
+    def __init__(self, x: float, y: float, image: pygame.Surface, moveset=[], name="", size=60, health=300):
+        super().__init__(x, y, size, size)
         self.startingX = x
         self.startingY = y
         self.size = size
         self.maxHealth = health
         self.health = self.maxHealth
-
         self.name = name
-
         self.moveset = moveset
-
         self.image = image
-
-        self.leftDetectBox = DetectBox(0, detectBoxWidth, detectBoxWidth, size - detectBoxWidth * 2)
-        self.rightDetectBox = DetectBox(size - detectBoxWidth, detectBoxWidth, detectBoxWidth, size - detectBoxWidth * 2)
-        self.upDetectBox = DetectBox(detectBoxWidth, 0, size - detectBoxWidth * 2, detectBoxWidth)
-        self.downDetectBox = DetectBox(detectBoxWidth, size - detectBoxWidth, size - detectBoxWidth * 2, detectBoxWidth)
-
-        self.healthBox = HealthBox(self.size // 2 - 25, 10, 50, 10)
-
+        self.healthBox = Rect(x + self.size / 2 - 25, y + 10, 50, 10)
         self.speed = charSpeed
-
         self.velStart()
-
         self.moveTimer = self.setMoveTimer()
+        self.checksCollision = True
 
-    def restart(self) -> None:
+    def update(self):
+        if self.alive:
+            super().update()
+
+            if self.iFrames > 0:
+                self.iFrames -= 1
+
+            if self.x > WINDOW_WIDTH or self.x < 0:
+                print(self.name, "had a woopsie on the x axis")
+                self.x = WINDOW_WIDTH//2
+            if self.y > WINDOW_HEIGHT or self.y < 0:
+                print(self.name, "had a woopsie on the y axis")
+                self.y = WINDOW_HEIGHT//2
+
+            self.useMove()
+
+    def draw(self):
+        rectImage = Rect((self.x-60, self.y-85, self.size, self.size))
+        g.window.blit(pygame.transform.flip(self.image, self.xVel > 0, False), rectImage)
+
+        healthRectRed = pygame.Rect(self.x + self.size / 2 - 25, self.y + 10, 50, 10)
+        healthPercentWidth = (self.health / 300) * 50
+        healthRectGreen = pygame.Rect(self.x + self.size / 2 - 25, self.y + 10, healthPercentWidth, 10)
+
+        pygame.draw.rect(g.window, (175,0,0), healthRectRed)
+        pygame.draw.rect(g.window, (0,175,0), healthRectGreen)
+
+    def restart(self):
         self.health = self.maxHealth
         self.velStart()
         self.alive = True
@@ -108,88 +114,49 @@ class Poke:
         self.speed = charSpeed
         self.x = self.startingX
         self.y = self.startingY
-        self.activeHitboxList = []
 
-    def setMoveTimer(self) -> int:
-        return 130 + random.randint(1, 200)
+    def setMoveTimer(self):
+        return 130 + random.randint(1,200)
 
-    def velStart(self) -> None:
-        self.xVel = round(random.uniform(-1, 1), 3)
-        self.yVel = round(1 - abs(self.xVel), 3) * random.choice([-1, 1])
+    def velStart(self):
+        self.xVel = round(random.uniform(-1,1)) * self.speed
+        self.yVel = round(1 - abs(self.xVel), 3) * random.choice([-1,1]) * self.speed
 
-    def move(self, speed=2) -> None:
-        self.x += self.xVel * speed
-        self.y += self.yVel * speed
-
-        if self.iFrames > 0:
-            self.iFrames -= 1
-
-    def collideBottom(self) -> None:
-        if random.choice(["normal", "normal", "random"]) == "normal":
-            self.yVel = self.yVel * -1
-            if self.xVel < 0:
-                self.xVel = round(1 - abs(self.yVel), 3) * -1
-            else:
-                self.xVel = round(1 - abs(self.yVel), 3)
-        else:
-            self.yVel = round(random.uniform(-1, 0), 3)
-            self.xVel = round(1 - abs(self.yVel), 3) * random.choice([-1, 1])
+    def collide(self, other, direction):
+        if isinstance(other, Move):
+            if self.iFrames == 0:
+                self.takeDamage(other.damage)
+                self.iFrames = 180
         if self.usingMove == "U Turn":
-            self.xVel = self.xVel * -1
-            self.yVel = self.yVel * -1
-
-    def collideTop(self) -> None:
-        if random.choice(["normal", "normal", "random"]) == "normal":
-            self.yVel = self.yVel * -1
-            if self.xVel < 0:
-                self.xVel = round(1 - abs(self.yVel), 3) * -1
-            else:
-                self.xVel = round(1 - abs(self.yVel), 3)
+            self.xVel *= -1
+            self.yVel *= -1
+        elif random.random() < 2/3:
+            if direction == "bottom" or direction == "top":
+                self.yVel *= -1
+                if self.xVel < 0:
+                    self.xVel = round(1 - abs(self.yVel), 3) * -self.speed
+                else:
+                    self.xVel = round(1 - abs(self.yVel), 3) * self.speed
+            elif direction == "left" or direction == "right":
+                self.xVel *= -1
+                if self.yVel < 0:
+                    self.yVel = round(1 - abs(self.xVel), 3) * -self.speed
+                else:
+                    self.yVel = round(1 - abs(self.xVel), 3) * self.speed
         else:
-            self.yVel = round(random.uniform(0, 1), 3)
-            self.xVel = round(1 - abs(self.yVel), 3) * random.choice([-1, 1])
-        if self.usingMove == "U Turn":
-            self.xVel = self.xVel * -1
-            self.yVel = self.yVel * -1
+            self.velStart()
 
-    def collideLeft(self) -> None:
-        if random.choice(["normal", "normal", "random"]) == "normal":
-            self.xVel = self.xVel * -1
-            if self.yVel < 0:
-                self.yVel = round(1 - abs(self.xVel), 3) * -1
-            else:
-                self.yVel = round(1 - abs(self.xVel), 3)
-        else:
-            self.xVel = round(random.uniform(0, 1), 3)
-            self.yVel = round(1 - abs(self.xVel), 3) * random.choice([-1, 1])
-        if self.usingMove == "U Turn":
-            self.xVel = self.xVel * -1
-            self.yVel = self.yVel * -1
-
-    def collideRight(self) -> None:
-        if random.choice(["normal", "normal", "random"]) == "normal":
-            self.xVel = self.xVel * -1
-            if self.yVel < 0:
-                self.yVel = round(1 - abs(self.xVel), 3) * -1
-            else:
-                self.yVel = round(1 - abs(self.xVel), 3)
-        else:
-            self.xVel = round(random.uniform(-1, 0), 3)
-            self.yVel = round(1 - abs(self.xVel), 3) * random.choice([-1, 1])
-        if self.usingMove == "U Turn":
-            self.xVel = self.xVel * -1
-            self.yVel = self.yVel * -1
-
-    def takeDamage(self, damage) -> None:
+    def takeDamage(self, damage):
         self.health -= damage
         self.damageIndicators.append(DamageIndicator(self.x, self.y, damage))
 
         if self.health <= 0:
             self.alive = False
 
-    def useMove(self) -> None:
+    def useMove(self):
         if self.moveTimer <= 0:
             self.moveTimer = self.setMoveTimer()
+            self.velStart()
             self.usingMove = random.choice(self.moveset)
 
         else:

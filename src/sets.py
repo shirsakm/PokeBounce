@@ -110,7 +110,7 @@ class Sets:
     }
 
     @staticmethod
-    def get(set_id) -> Poke:
+    def get(set_id: str) -> Poke:
         if (set_id not in Sets.sets.keys()):
             raise ValueError(f"Invalid set id '{set_id}' referenced!")
 
