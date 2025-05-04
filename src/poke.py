@@ -1,5 +1,6 @@
 import random
 import pygame.transform
+from math import sqrt
 from pygame import Rect
 from src.moves import Moves, Move
 from src import physics
@@ -7,7 +8,7 @@ from src.constants import WINDOW_HEIGHT, WINDOW_WIDTH
 from src.globals import g
 from src.debug import showCollisionBoxes
 
-charSpeed = 0.4
+charSpeed = 0.8
 
 def chooseChars(charList, charNum):
 	chars = []
@@ -68,6 +69,11 @@ class Poke(physics.PhysicsObject):
 	
 	def update(self):
 		if self.alive:
+			if self.xVel != 0 or self.yVel != 0: #update velocity based on speed
+				speed = sqrt(self.xVel**2 + self.yVel**2)
+				direction = (self.xVel/speed, self.yVel/speed)
+				self.xVel = direction[0] * self.speed
+				self.yVel = direction[1] * self.speed
 			super().update()
 
 			if self.iFrames > 0:
@@ -126,13 +132,29 @@ class Poke(physics.PhysicsObject):
 			self.xVel *= -1
 			self.yVel *= -1
 		elif random.random() < 2/3:
-			if direction == "bottom" or direction == "top":
+			if direction == "top":
+				self.y -= other.getCollider().clip(self.getCollider()).height
 				self.yVel *= -1
 				if self.xVel < 0:
 					self.xVel = round(1 - abs(self.yVel), 3) * -self.speed
 				else:
 					self.xVel = round(1 - abs(self.yVel), 3) * self.speed
-			elif direction == "left" or direction == "right":
+			if direction == "bottom":
+				self.y += other.getCollider().clip(self.getCollider()).height
+				self.yVel *= -1
+				if self.xVel < 0:
+					self.xVel = round(1 - abs(self.yVel), 3) * -self.speed
+				else:
+					self.xVel = round(1 - abs(self.yVel), 3) * self.speed
+			elif direction == "left":
+				self.x += other.getCollider().clip(self.getCollider()).width
+				self.xVel *= -1
+				if self.yVel < 0:
+					self.yVel = round(1 - abs(self.xVel), 3) * -self.speed
+				else:
+					self.yVel = round(1 - abs(self.xVel), 3) * self.speed
+			elif direction == "right":
+				self.x -= other.getCollider().clip(self.getCollider()).width
 				self.xVel *= -1
 				if self.yVel < 0:
 					self.yVel = round(1 - abs(self.xVel), 3) * -self.speed

@@ -80,7 +80,7 @@ def physicsUpdate():
     rects = [obj.getCollider() for obj in allObjects]
     for obj in [obj for obj in allObjects if obj.checksCollision]:
         for ind in obj.getCollider().collidelistall(rects):
-            other = list(filter(lambda x: x.getCollider() == rects[ind], allObjects))[0]
+            other = allObjects[ind]
             if other is obj: continue
             diffX = obj.x - other.x
             diffY = obj.y - other.y

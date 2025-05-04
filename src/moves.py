@@ -36,7 +36,7 @@ class Move(physics.PhysicsObject):
 	def __init__(self, poke):
 		self.x = poke.x
 		self.y = poke.y
-		super().__init__(self.x, self.y, self.size, self.size)
+		super().__init__(self.x, self.y, self.size, self.size, False)
 		self.ttl = 0
 		self.rotate = 0
 		self.rotSpeed = 0
@@ -110,7 +110,7 @@ class QuickAttack(Move):
 			poke.moveText = MoveText(poke.x, poke.y, poke.usingMove)
 		if poke.usingMoveTimer == 120:
 			poke.previousSpeed = poke.speed
-			poke.speed = 16
+			poke.speed *= 4
 		elif poke.usingMoveTimer == 1:
 			poke.speed = poke.previousSpeed
 		QuickAttack(poke)
@@ -144,7 +144,7 @@ class BraveBird(Move):
 			poke.moveText = MoveText(poke.x, poke.y, poke.usingMove)
 		if poke.usingMoveTimer == 90:
 			poke.previousSpeed = poke.speed
-			poke.speed = 12
+			poke.speed *= 3
 		elif poke.usingMoveTimer == 1:
 			poke.speed = poke.previousSpeed
 		BraveBird(poke)
@@ -176,7 +176,7 @@ class IronHead(Move):
 			poke.moveText = MoveText(poke.x, poke.y, poke.usingMove)
 		if poke.usingMoveTimer == 30:
 			poke.previousSpeed = poke.speed
-			poke.speed = 12
+			poke.speed *= 3
 		elif poke.usingMoveTimer == 1:
 			poke.speed = poke.previousSpeed
 		IronHead(poke)
@@ -208,7 +208,7 @@ class ZenHeadbutt(Move):
 			poke.moveText = MoveText(poke.x, poke.y, poke.usingMove)
 		if poke.usingMoveTimer == 60:
 			poke.previousSpeed = poke.speed
-			poke.speed = 11
+			poke.speed *= 3
 		elif poke.usingMoveTimer == 1:
 			poke.speed = poke.previousSpeed
 		ZenHeadbutt(poke)
@@ -239,7 +239,7 @@ class Waterfall(Move):
 			poke.moveText = MoveText(poke.x, poke.y, poke.usingMove)
 		if poke.usingMoveTimer == 50:
 			poke.previousSpeed = poke.speed
-			poke.speed = 8
+			poke.speed *= 2
 		elif poke.usingMoveTimer == 1:
 			poke.speed = poke.previousSpeed
 		Waterfall(poke)
@@ -304,7 +304,7 @@ class DarkPulse(Move):
 		if poke.usingMoveTimer == 60:
 			poke.moveText = MoveText(poke.x, poke.y, poke.usingMove)
 			poke.previousSpeed = poke.speed
-			poke.speed = 0.25
+			poke.speed *= 0.05
 		if poke.usingMoveTimer % 20 == 0:
 			DarkPulse(poke)
 
@@ -336,7 +336,7 @@ class Sandstorm(Move):
 		if poke.usingMoveTimer == 20:
 			poke.moveText = MoveText(poke.x, poke.y, poke.usingMove)
 			poke.previousSpeed = poke.speed
-			poke.speed = 0.25
+			poke.speed *= 0.05
 			Sandstorm(poke)
 		elif poke.usingMoveTimer == 1:
 			poke.speed = poke.previousSpeed
@@ -370,7 +370,7 @@ class Earthquake(Move):
 		if poke.usingMoveTimer == 60:
 			poke.moveText = MoveText(poke.x, poke.y, poke.usingMove)
 			poke.previousSpeed = poke.speed
-			poke.speed = 0.1
+			poke.speed *= 0.01
 		if poke.usingMoveTimer % 20 == 0:
 			Earthquake(poke)
 
@@ -404,7 +404,7 @@ class DazzlingGleam(Move):
 		if poke.usingMoveTimer == 60:
 			poke.moveText = MoveText(poke.x, poke.y, poke.usingMove)
 			poke.previousSpeed = poke.speed
-			poke.speed = 0.25
+			poke.speed *= 0.05
 		if poke.usingMoveTimer == 60:
 			DazzlingGleam(poke)
 
