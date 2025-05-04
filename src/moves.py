@@ -40,6 +40,7 @@ class Move(physics.PhysicsObject):
 		self.ttl = 0
 		self.rotate = 0
 		self.rotSpeed = 0
+		self.poke = poke
 	
 	def update(self):
 		self.move()

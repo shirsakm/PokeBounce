@@ -38,6 +38,9 @@ class Game:
                 self.charList.append(Sets.get(set))
         else: 
             self.charList = chooseChars(self.charList, random.randint(3,10))
+
+        for char in self.charList:
+            char.restart()
         
         self.id = random.randint(10000, 99999)
 
@@ -106,9 +109,6 @@ class Game:
 
             self.result = ""
             self.winner = ""
-
-            for char in self.charList:
-                char.restart()
 
         else:
             if self.gambling:

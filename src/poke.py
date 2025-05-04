@@ -5,8 +5,9 @@ from src.moves import Moves, Move
 from src import physics
 from src.constants import WINDOW_HEIGHT, WINDOW_WIDTH
 from src.globals import g
+from src.debug import showCollisionBoxes
 
-charSpeed = 4
+charSpeed = 0.4
 
 def chooseChars(charList, charNum):
 	chars = []
@@ -37,7 +38,7 @@ class DamageIndicator:
 
 
 class Poke(physics.PhysicsObject):
-	alive = True
+	alive = False
 	iFrames = 0
 	usingMove = ""
 	usingMoveTimer = 0
@@ -56,15 +57,14 @@ class Poke(physics.PhysicsObject):
 		self.startingY = y
 		self.size = size
 		self.maxHealth = health
-		self.health = self.maxHealth
+		self.health = 0
 		self.name = name
 		self.moveset = moveset
 		self.image = image
 		self.healthBox = Rect(x + self.size / 2 - 25, y + 10, 50, 10)
 		self.speed = charSpeed
-		self.velStart()
 		self.moveTimer = self.setMoveTimer()
-		self.checksCollision = True
+		self.checksCollision = False
 	
 	def update(self):
 		if self.alive:
@@ -83,20 +83,24 @@ class Poke(physics.PhysicsObject):
 			self.useMove()
 	
 	def draw(self):
-		rectImage = Rect((self.x-60, self.y-85, self.size, self.size))
-		g.window.blit(pygame.transform.flip(self.image, self.xVel > 0, False), rectImage)
+		if self.alive:
+			if showCollisionBoxes:
+				pygame.draw.rect(g.window, (200, 0, 0, 50), self.getCollider())
+			rectImage = Rect((self.x-60, self.y-85, self.size, self.size))
+			g.window.blit(pygame.transform.flip(self.image, self.xVel > 0, False), rectImage)
 
-		healthRectRed = pygame.Rect(self.x + self.size / 2 - 25, self.y + 10, 50, 10)
-		healthPercentWidth = (self.health / 300) * 50
-		healthRectGreen = pygame.Rect(self.x + self.size / 2 - 25, self.y + 10, healthPercentWidth, 10)
+			healthRectRed = pygame.Rect(self.x + self.size / 2 - 25, self.y + 10, 50, 10)
+			healthPercentWidth = (self.health / 300) * 50
+			healthRectGreen = pygame.Rect(self.x + self.size / 2 - 25, self.y + 10, healthPercentWidth, 10)
 
-		pygame.draw.rect(g.window, (175,0,0), healthRectRed)
-		pygame.draw.rect(g.window, (0,175,0), healthRectGreen)
+			pygame.draw.rect(g.window, (175,0,0), healthRectRed)
+			pygame.draw.rect(g.window, (0,175,0), healthRectGreen)
 
 	def restart(self):
 		self.health = self.maxHealth
 		self.velStart()
 		self.alive = True
+		self.checksCollision = True
 		self.setMoveTimer()
 		self.usingMoveTimer = 0
 		self.usingMove = ""
@@ -114,9 +118,10 @@ class Poke(physics.PhysicsObject):
 	
 	def collide(self, other, direction):
 		if isinstance(other, Move):
-			if self.iFrames == 0:
+			if self.iFrames == 0 and other.poke != self:
 				self.takeDamage(other.damage)
 				self.iFrames = 180
+			return
 		if self.usingMove == "U Turn":
 			self.xVel *= -1
 			self.yVel *= -1
@@ -142,6 +147,7 @@ class Poke(physics.PhysicsObject):
 
 		if self.health <= 0:
 			self.alive = False
+			self.checksCollision = False
 
 	def useMove(self):
 		if self.moveTimer <= 0:

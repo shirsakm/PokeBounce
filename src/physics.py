@@ -24,8 +24,8 @@ class PhysicsObject:
         allObjects.append(self)
     
     def update(self):
-        self.x += self.xVel / 60
-        self.y += self.yVel / 60
+        self.x += self.xVel
+        self.y += self.yVel
     
     def draw(self):
         pass
@@ -79,9 +79,9 @@ def physicsUpdate():
         obj.update()
     rects = [obj.getCollider() for obj in allObjects]
     for obj in [obj for obj in allObjects if obj.checksCollision]:
-        rects.remove(obj.getCollider())
         for ind in obj.getCollider().collidelistall(rects):
             other = list(filter(lambda x: x.getCollider() == rects[ind], allObjects))[0]
+            if other is obj: continue
             diffX = obj.x - other.x
             diffY = obj.y - other.y
             direction = ""
