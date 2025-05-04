@@ -1,4 +1,6 @@
-import pygame, sys, random
+import pygame
+import sys
+import random
 import pygame.freetype
 import pygame.locals
 import requests
@@ -9,6 +11,7 @@ from src.globals import g
 from src.poke import chooseChars
 from src.sprite_loader import INSTANCE as sprites
 from src.sets import Sets
+
 
 class Game:
     def __init__(self):
@@ -47,11 +50,11 @@ class Game:
 
         self.id = random.randint(10000, 99999)
 
-        if API: requests.post(self.url + "/setfighters", json = {"fighters" : [char.name for char in self.charList]})
-        if API: requests.post(self.url + "/setgameid", json = {"id" : self.id})
+        if API: requests.post(self.url + "/setfighters", json = {"fighters": [char.name for char in self.charList]})
+        if API: requests.post(self.url + "/setgameid", json = {"id": self.id})
 
         self.gambling = True
-        if API: requests.post(self.url + "/setgambling", json = {"openGambling" : self.gambling})
+        if API: requests.post(self.url + "/setgambling", json = {"openGambling": self.gambling})
         self.initialized = True
 
     def displayResult(self):
@@ -128,7 +131,7 @@ class Game:
         else:
             if self.gambling:
                 self.gambling = False
-                if API: requests.post(self.url + "/setgambling", json = {"openGambling" : self.gambling})
+                if API: requests.post(self.url + "/setgambling", json = {"openGambling": self.gambling})
 
             if self.wallModifier < self.wallMaxSize:
                 self.wallModifier += self.wallGrowth
@@ -158,14 +161,27 @@ class Game:
                     for nestedChar in self.charList:
                         if nestedChar.alive:
                             if nestedChar != char:
-                                otherChars.append(pygame.Rect((nestedChar.x, nestedChar.y, nestedChar.size, nestedChar.size)))
+                                otherChars.append(pygame.Rect((nestedChar.x, nestedChar.y,
+                                    nestedChar.size, nestedChar.size)))
 
                     obstacleList = self.walls + otherChars
 
-                    charLeftBox = pygame.Rect((char.x + char.leftDetectBox.xOffset, char.y + char.leftDetectBox.yOffset, char.leftDetectBox.width, char.leftDetectBox.height))
-                    charRightBox = pygame.Rect((char.x + char.rightDetectBox.xOffset, char.y + char.rightDetectBox.yOffset, char.rightDetectBox.width, char.rightDetectBox.height))
-                    charUpBox = pygame.Rect((char.x + char.upDetectBox.xOffset, char.y + char.upDetectBox.yOffset, char.upDetectBox.width, char.upDetectBox.height))
-                    charDownBox = pygame.Rect((char.x + char.downDetectBox.xOffset, char.y + char.downDetectBox.yOffset, char.downDetectBox.width, char.downDetectBox.height))
+                    charLeftBox = pygame.Rect((char.x + char.leftDetectBox.xOffset,
+                        char.y + char.leftDetectBox.yOffset,
+                        char.leftDetectBox.width,
+                        char.leftDetectBox.height))
+                    charRightBox = pygame.Rect((char.x + char.rightDetectBox.xOffset,
+                        char.y + char.rightDetectBox.yOffset,
+                        char.rightDetectBox.width,
+                        char.rightDetectBox.height))
+                    charUpBox = pygame.Rect((char.x + char.upDetectBox.xOffset,
+                        char.y + char.upDetectBox.yOffset,
+                        char.upDetectBox.width,
+                        char.upDetectBox.height))
+                    charDownBox = pygame.Rect((char.x + char.downDetectBox.xOffset,
+                        char.y + char.downDetectBox.yOffset,
+                        char.downDetectBox.width,
+                        char.downDetectBox.height))
 
                     if showCollisionBoxes:
                         pygame.draw.rect(g.window, (255,0,0), charLeftBox)
@@ -184,11 +200,16 @@ class Game:
 
                     char.useMove()
 
-                    healthRectRed = pygame.Rect((char.healthBox.xOffset + char.x, char.y - char.healthBox.yOffset, char.healthBox.width, char.healthBox.height))
+                    healthRectRed = pygame.Rect((char.healthBox.xOffset + char.x,
+                        char.y - char.healthBox.yOffset,
+                        char.healthBox.width,
+                        char.healthBox.height))
 
                     healthPercentWidth = (char.health / 300) * char.healthBox.width
 
-                    healthRectGreen = pygame.Rect((char.healthBox.xOffset + char.x, char.y - char.healthBox.yOffset, healthPercentWidth, char.healthBox.height))
+                    healthRectGreen = pygame.Rect((char.healthBox.xOffset + char.x,
+                        char.y - char.healthBox.yOffset, healthPercentWidth,
+                        char.healthBox.height))
                     pygame.draw.rect(g.window, (175,0,0), healthRectRed)
                     pygame.draw.rect(g.window, (0,175,0), healthRectGreen)
 
@@ -265,9 +286,9 @@ class Game:
             if self.gameOverCountdown == 0:
                 if len(self.alivelist) == 0:
                     self.result = "draw"
-                    if API: requests.post(self.url + "/setwinner", json = {"winner" : "Nobody"})
+                    if API: requests.post(self.url + "/setwinner", json = {"winner": "Nobody"})
                 if len(self.alivelist) == 1:
                     self.result = "win"
                     self.winner = self.alivelist[0]
-                    if API: requests.post(self.url + "/setwinner", json = {"winner" : self.winner})
+                    if API: requests.post(self.url + "/setwinner", json = {"winner": self.winner})
                 self.endScreenCountdown = 240
