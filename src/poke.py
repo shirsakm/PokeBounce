@@ -180,7 +180,6 @@ class Poke:
             self.xVel = self.xVel * -1
             self.yVel = self.yVel * -1
 
-
     def takeDamage(self, damage) -> None:
         self.health -= damage
         self.damageIndicators.append(DamageIndicator(self.x, self.y, damage))

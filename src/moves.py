@@ -791,9 +791,9 @@ class IceBeam(Move):
             poke.moveText = MoveText(poke.x, poke.y, poke.usingMove)
         speed = 40
         size = 40
-        ttl = 90  - (60 - poke.usingMoveTimer)
+        ttl = 90 - (60 - poke.usingMoveTimer)
         if poke.boltShift == 0 and poke.boltShiftCooldown == 0:
-            poke.boltShift = random.choice([0, 0, 0, 0, 0, 3,-3])
+            poke.boltShift = random.choice([0, 0, 0, 0, 0, 3, -3])
 
         if poke.usingMoveTimer == 60:
             bolt = IceBeam(poke.x, poke.y, poke.xVel, poke.yVel, poke.size, size, ttl, True)

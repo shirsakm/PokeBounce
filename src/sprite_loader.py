@@ -62,4 +62,5 @@ class Sprites:
         for img in arr:
             self.moves[img] = self._load_move(img)
 
+
 INSTANCE = Sprites()

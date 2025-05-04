@@ -137,7 +137,8 @@ class Game:
         else:
             if self.gambling:
                 self.gambling = False
-                if API: requests.post(self.url + "/setgambling", json={"openGambling": self.gambling})
+                if API:
+                    requests.post(self.url + "/setgambling", json={"openGambling": self.gambling})
 
             if self.wallModifier < self.wallMaxSize:
                 self.wallModifier += self.wallGrowth

@@ -1,6 +1,7 @@
 from src.sprite_loader import INSTANCE as sprites
 from src.poke import Poke
 
+
 class Sets:
     sets = {
         "pikachu": Poke(
