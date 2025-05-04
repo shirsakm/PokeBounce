@@ -5,8 +5,8 @@ from src.constants import WINDOW_HEIGHT, WINDOW_WIDTH, battler_sprites, move_spr
 
 class Sprites:
     base_dir = "img"
-    battler_dir = base_dir+"/battlers"
-    move_dir = base_dir+"/moves"
+    battler_dir = f"{base_dir}/battlers"
+    move_dir = f"{base_dir}/moves"
 
     battlers: dict[str, pygame.Surface] = {}
     moves: dict[str, pygame.Surface] = {}
@@ -15,7 +15,7 @@ class Sprites:
     _WINDOW_HEIGHT = None
 
     def __init__(self):
-        print("Loading images from '"+self.base_dir+"/*'...")
+        print(f"Loading images from '{self.base_dir}/*'...")
         print("Arena...")
         self.get_arena()
         print("Battlers...")
@@ -35,7 +35,7 @@ class Sprites:
 
     def get_arena(self) -> pygame.Surface:
         if (self.arena is None):
-            self.arena = self._load_img(Sprites.base_dir+"/arena.png", WINDOW_WIDTH, WINDOW_HEIGHT)
+            self.arena = self._load_img(f"{Sprites.base_dir}/arena.png", WINDOW_WIDTH, WINDOW_HEIGHT)
         return self.arena
 
     def _load_img(self, file_path: str, x_scale: int, y_scale: int) -> pygame.Surface:
@@ -47,13 +47,13 @@ class Sprites:
         return pygame.transform.scale(img, (x_scale, y_scale))
 
     def _load_battler(self, battler_id: str) -> pygame.Surface:
-        return self._load_img(self.battler_dir+"/"+battler_id+".png", 204, 168)
+        return self._load_img(f"{self.battler_dir}/{battler_id}.png", 204, 168)
 
     def _load_move(self, move_id: str) -> pygame.Surface:
         scale = 100
         if move_id == "poison":
             scale = 10
-        return self._load_img(self.move_dir+"/"+move_id+".png", scale, scale)
+        return self._load_img(f"{self.move_dir}/{move_id}.png", scale, scale)
 
     def _load_battlers(self, arr: list[str]) -> None:
         for img in arr:
