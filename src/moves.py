@@ -1,26 +1,30 @@
-import math, random
+import math
+import random
 import pygame.draw
 from src import physics
 from src.debug import showHitboxes
 from src.globals import g
 from src.sprite_loader import INSTANCE as sprites
 
+
 class MoveText:
-	ttl = 60
-	alpha = 0
-	def __init__(self, x, y, text):
-		self.x = x 
-		self.y = y 
-		self.text = text
+    ttl = 60
+    alpha = 0
 
-	def tick(self):
-		self.ttl -= 1
-		self.y -= 0.50
+    def __init__(self, x, y, text):
+        self.x = x
+        self.y = y
+        self.text = text
 
-		if self.ttl >= 50 and self.alpha < 230:
-			self.alpha += 20
-		elif self.ttl <= 20 and self.alpha > 15:
-			self.alpha -= 10
+    def tick(self):
+        self.ttl -= 1
+        self.y -= 0.50
+
+        if self.ttl >= 50 and self.alpha < 230:
+            self.alpha += 20
+        elif self.ttl <= 20 and self.alpha > 15:
+            self.alpha -= 10
+
 
 class Move(physics.PhysicsObject):
 	type = "bird"
@@ -411,32 +415,33 @@ class DazzlingGleam(Move):
 			poke.usingMove = ""
 
 class IronTail(Move):
-	type = "steel"
-	colour = (185, 224, 239)
-	damage = 30
-	graphic = "image"
+    type = "steel"
+    colour = (185, 224, 239)
+    damage = 30
+    graphic = "image"
 
-	image = "irontail"
-	usingTime = 90
+    image = "irontail"
+    usingTime = 90
 
-	def __init__(self, poke):
-		self.size = poke.size + 110
-		super().__init__(poke)
-		self.ttl = 2
-		self.rotate = poke.ironTailRotation
+    def __init__(self, poke):
+        self.size = poke.size + 110
+        super().__init__(poke)
+        self.ttl = 2
+        self.rotate = poke.ironTailRotation
 
-	@staticmethod
-	def use(poke):
-		if poke.usingMoveTimer == 90:
-			poke.moveText = MoveText(poke.x, poke.y, poke.usingMove)
-			poke.ironTailRotation = 0
-			poke.iFrames = 60
-		IronTail(poke)
-		poke.ironTailRotation += 20
-		
-		poke.usingMoveTimer -= 1
-		if poke.usingMoveTimer == 0:
-			poke.usingMove = ""
+    @staticmethod
+    def use(poke):
+        if poke.usingMoveTimer == 90:
+            poke.moveText = MoveText(poke.x, poke.y, poke.usingMove)
+            poke.ironTailRotation = 0
+            poke.iFrames = 60
+        IronTail(poke)
+        poke.ironTailRotation += 20
+
+        poke.usingMoveTimer -= 1
+        if poke.usingMoveTimer == 0:
+            poke.usingMove = ""
+
 
 class UTurn(Move):
 	type = "bug"
@@ -658,220 +663,219 @@ class ShadowBall(Move):
 
 
 class StoneEdge(Move):
-	type = "rock"
-	spread = 0.2
-	damage = 40
-	colour = (255, 20, 200, 30)
-	graphic = "image"
-	image = "stone"
-	usingTime = 30
+    type = "rock"
+    spread = 0.2
+    damage = 40
+    colour = (255, 20, 200, 30)
+    graphic = "image"
+    image = "stone"
+    usingTime = 30
 
-	def __init__(self, poke):
-		self.size = 40
-		self.xVel = (poke.xVel + round(random.uniform(0 - self.spread, self.spread),3)) * 2 / poke.speed
-		self.yVel = (poke.yVel + round(random.uniform(0 - self.spread, self.spread),3)) * 2 / poke.speed
-		super().__init__(poke)
-		self.ttl = 300
-		self.rotate = math.atan2(self.xVel, self.yVel) * 180/3.14 + 180
+    def __init__(self, poke):
+        self.size = 40
+        self.xVel = (poke.xVel + round(random.uniform(0 - self.spread, self.spread),3)) * 2 / poke.speed
+        self.yVel = (poke.yVel + round(random.uniform(0 - self.spread, self.spread),3)) * 2 / poke.speed
+        super().__init__(poke)
+        self.ttl = 300
+        self.rotate = math.atan2(self.xVel, self.yVel) * 180/3.14 + 180
 
-	@staticmethod
-	def use(poke):
-		if poke.usingMoveTimer == 30:
-			poke.moveText = MoveText(poke.x, poke.y, poke.usingMove)
-		poke.usingMoveTimer -= 1
-		if poke.usingMoveTimer == 29:
-			[StoneEdge(poke) for _ in range(5)]
-		if poke.usingMoveTimer == 0:
-			poke.usingMove = ""
+    @staticmethod
+    def use(poke):
+        if poke.usingMoveTimer == 30:
+            poke.moveText = MoveText(poke.x, poke.y, poke.usingMove)
+        poke.usingMoveTimer -= 1
+        if poke.usingMoveTimer == 29:
+            [StoneEdge(poke) for _ in range(5)]
+        if poke.usingMoveTimer == 0:
+            poke.usingMove = ""
 
 
 class PoisonSting(Move):
-	type = "poison"
-	spread = 0.1
-	damage = 30
-	colour = (255, 20, 200, 30)
-	graphic = "image"
-	image = "poison"
+    type = "poison"
+    spread = 0.1
+    damage = 30
+    colour = (255, 20, 200, 30)
+    graphic = "image"
+    image = "poison"
 
-	usingTime = 30
+    usingTime = 30
 
-	def __init__(self, poke):
-		self.size = 20
-		self.xVel = (poke.xVel + round(random.uniform(0 - self.spread, self.spread),3)) * 2 / poke.speed
-		self.yVel = (poke.yVel + round(random.uniform(0 - self.spread, self.spread),3)) * 2 / poke.speed
-		super().__init__(poke)
-		self.ttl = 14
-		self.rotate = math.atan2(self.xVel, self.yVel) * 180/3.14 + 180
-	
-	@staticmethod
-	def use(poke):
-		if poke.usingMoveTimer == 30:
-			poke.moveText = MoveText(poke.x, poke.y, poke.usingMove)
-		poke.usingMoveTimer -= 1
-		if poke.usingMoveTimer % 5 == 0:
-			PoisonSting(poke)
-		if poke.usingMoveTimer == 0:
-			poke.usingMove = ""
+    def __init__(self, poke):
+        self.size = 20
+        self.xVel = (poke.xVel + round(random.uniform(0 - self.spread, self.spread),3)) * 2 / poke.speed
+        self.yVel = (poke.yVel + round(random.uniform(0 - self.spread, self.spread),3)) * 2 / poke.speed
+        super().__init__(poke)
+        self.ttl = 14
+        self.rotate = math.atan2(self.xVel, self.yVel) * 180/3.14 + 180
+
+    @staticmethod
+    def use(poke):
+        if poke.usingMoveTimer == 30:
+            poke.moveText = MoveText(poke.x, poke.y, poke.usingMove)
+        poke.usingMoveTimer -= 1
+        if poke.usingMoveTimer % 5 == 0:
+            PoisonSting(poke)
+        if poke.usingMoveTimer == 0:
+            poke.usingMove = ""
 
 
 class Flame(Move):
-	type = "fire"
-	spread = 0.1
-	growth = 1.02
-	acceleration = 0.98
-	damage = 20
-	colour = (255, 102, 0, 30)
-	graphic = "image"
-	usingTime = 60
+    type = "fire"
+    spread = 0.1
+    growth = 1.02
+    acceleration = 0.98
+    damage = 20
+    colour = (255, 102, 0, 30)
+    graphic = "image"
+    usingTime = 60
 
-	imageList = ["fire1", "fire2", "fire3", "fire4", "fire5", "fire6", "fire7", "fire8"]
-	image = imageList[0]
-	imageCounter = 0
-	imagePointer = 0
+    imageList = ["fire1", "fire2", "fire3", "fire4", "fire5", "fire6", "fire7", "fire8"]
+    image = imageList[0]
+    imageCounter = 0
+    imagePointer = 0
 
+    def __init__(self, poke):
+        self.size = 20
+        super().__init__(poke)
+        self.xVel = (poke.xVel + round(random.uniform(0 - self.spread, self.spread),3)) * 2 / poke.speed
+        self.yVel = (poke.yVel + round(random.uniform(0 - self.spread, self.spread),3)) * 2 / poke.speed
+        self.ttl = 16
 
+    def move(self):
+        super().move()
+        self.imageCounter += 1
+        if self.imageCounter == 5:
+            self.imageCounter = 0
+            self.imagePointer += 1
 
-	def __init__(self, poke):
-		self.size = 20
-		super().__init__(poke)
-		self.xVel = (poke.xVel + round(random.uniform(0 - self.spread, self.spread),3)) * 2 / poke.speed
-		self.yVel = (poke.yVel + round(random.uniform(0 - self.spread, self.spread),3)) * 2 / poke.speed
-		self.ttl = 16
+        if self.imagePointer == len(self.imageList):
+            self.imagePointer = 0
+        self.image = self.imageList[self.imagePointer]
 
-	def move(self):
-		super().move()
-		self.imageCounter += 1
-		if self.imageCounter == 5:
-			self.imageCounter = 0
-			self.imagePointer += 1
+    @staticmethod
+    def use(poke):
+        if poke.usingMoveTimer == 60:
+            poke.moveText = MoveText(poke.x, poke.y, poke.usingMove)
+        poke.usingMoveTimer -= 1
+        if poke.usingMoveTimer % 5 == 0:
+            Flame(poke)
+        if poke.usingMoveTimer == 0:
+            poke.usingMove = ""
 
-		if self.imagePointer == len(self.imageList):
-			self.imagePointer = 0
-		self.image = self.imageList[self.imagePointer]
-
-	@staticmethod
-	def use(poke):
-		if poke.usingMoveTimer == 60:
-			poke.moveText = MoveText(poke.x, poke.y, poke.usingMove)
-		poke.usingMoveTimer -= 1
-		if poke.usingMoveTimer % 5 == 0:
-			Flame(poke)
-		if poke.usingMoveTimer == 0:
-			poke.usingMove = ""
 
 class Bubble(Move):
-	type = "water"
-	spread = 0.15
-	growth = 1.01
-	acceleration = 0.97
-	damage = 20
-	colour = (20, 50, 250, 30)
-	graphic = "image"
+    type = "water"
+    spread = 0.15
+    growth = 1.01
+    acceleration = 0.97
+    damage = 20
+    colour = (20, 50, 250, 30)
+    graphic = "image"
 
-	usingTime = 45
+    usingTime = 45
 
-	image = "bubble"
+    image = "bubble"
 
+    def __init__(self, poke):
+        self.size = 20
+        super().__init__(poke)
+        self.xVel = (poke.xVel + round(random.uniform(0 - self.spread, self.spread),3)) * 2 / poke.speed
+        self.yVel = (poke.yVel + round(random.uniform(0 - self.spread, self.spread),3)) * 2 / poke.speed
+        self.ttl = 120
 
-	def __init__(self, poke):
-		self.size = 20
-		super().__init__(poke)
-		self.xVel = (poke.xVel + round(random.uniform(0 - self.spread, self.spread),3)) * 2 / poke.speed
-		self.yVel = (poke.yVel + round(random.uniform(0 - self.spread, self.spread),3)) * 2 / poke.speed
-		self.ttl = 120
+    @staticmethod
+    def use(poke):
+        if poke.usingMoveTimer == 45:
+            poke.moveText = MoveText(poke.x, poke.y, poke.usingMove)
+        poke.usingMoveTimer -= 1
+        if poke.usingMoveTimer % 5 == 0:
+            Bubble(poke)
+        if poke.usingMoveTimer == 0:
+            poke.usingMove = ""
 
-	@staticmethod
-	def use(poke):
-		if poke.usingMoveTimer == 45:
-			poke.moveText = MoveText(poke.x, poke.y, poke.usingMove)
-		poke.usingMoveTimer -= 1
-		if poke.usingMoveTimer % 5 == 0:
-			Bubble(poke)
-		if poke.usingMoveTimer == 0:
-			poke.usingMove = ""
 
 class RazorLeaf(Move):
-	type = "grass"
-	spread = 0.2
-	damage = 35
-	colour = (50, 250, 100)
-	graphic = "image"
+    type = "grass"
+    spread = 0.2
+    damage = 35
+    colour = (50, 250, 100)
+    graphic = "image"
 
-	usingTime = 45
+    usingTime = 45
 
-	image = "leaf"
+    image = "leaf"
 
-	def __init__(self, poke):
-		self.size = 30
-		super().__init__(poke)
-		self.xVel = (poke.xVel + round(random.uniform(0 - self.spread, self.spread),3)) * 20 / poke.speed
-		self.yVel = (poke.yVel + round(random.uniform(0 - self.spread, self.spread),3)) * 20 / poke.speed
-		self.ttl = 120
-		self.rotSpeed = 20
+    def __init__(self, poke):
+        self.size = 30
+        super().__init__(poke)
+        self.xVel = (poke.xVel + round(random.uniform(0 - self.spread, self.spread),3)) * 20 / poke.speed
+        self.yVel = (poke.yVel + round(random.uniform(0 - self.spread, self.spread),3)) * 20 / poke.speed
+        self.ttl = 120
+        self.rotSpeed = 20
 
-	@staticmethod
-	def use(poke):
-		if poke.usingMoveTimer == 45:
-			poke.moveText = MoveText(poke.x, poke.y, poke.usingMove)
-		poke.usingMoveTimer -= 1
-		if poke.usingMoveTimer % 7 == 0:
-			RazorLeaf(poke)
-		if poke.usingMoveTimer == 0:
-			poke.usingMove = ""
+    @staticmethod
+    def use(poke):
+        if poke.usingMoveTimer == 45:
+            poke.moveText = MoveText(poke.x, poke.y, poke.usingMove)
+        poke.usingMoveTimer -= 1
+        if poke.usingMoveTimer % 7 == 0:
+            RazorLeaf(poke)
+        if poke.usingMoveTimer == 0:
+            poke.usingMove = ""
 
 
 class Bonemerang(Move):
-	type = "ground"
-	damage = 35
-	colour = (50, 250, 100)
-	graphic = "image"
+    type = "ground"
+    damage = 35
+    colour = (50, 250, 100)
+    graphic = "image"
 
-	image = "bone"
+    image = "bone"
 
-	usingTime = 120
+    usingTime = 120
 
-	def __init__(self, poke):
-		self.size = 60
-		super().__init__(poke)
-		self.ttl = 240
-		self.xVel = poke.xVel * 10
-		self.yVel = poke.yVel * 10
-		self.rotSpeed = 20
-		self.linearAcceleration = -0.1
+    def __init__(self, poke):
+        self.size = 60
+        super().__init__(poke)
+        self.ttl = 240
+        self.xVel = poke.xVel * 10
+        self.yVel = poke.yVel * 10
+        self.rotSpeed = 20
+        self.linearAcceleration = -0.1
 
-	@staticmethod
-	def use(poke):
-		if poke.usingMoveTimer == 120:
-			poke.moveText = MoveText(poke.x, poke.y, poke.usingMove)
-		poke.usingMoveTimer -= 1
-		if poke.usingMoveTimer == 119:
-			Bonemerang(poke)
-		if poke.usingMoveTimer == 0:
-			poke.usingMove = ""
+    @staticmethod
+    def use(poke):
+        if poke.usingMoveTimer == 120:
+            poke.moveText = MoveText(poke.x, poke.y, poke.usingMove)
+        poke.usingMoveTimer -= 1
+        if poke.usingMoveTimer == 119:
+            Bonemerang(poke)
+        if poke.usingMoveTimer == 0:
+            poke.usingMove = ""
 
-class Moves:
-	list = {
-		"Thunderbolt": Bolt,
-		"Quick Attack": QuickAttack,
-		"Flamethrower": Flame,
-		"Shadow Ball": ShadowBall,
-		"Razor Leaf": RazorLeaf,
-		"Bubble Beam": Bubble,
-		"U Turn": UTurn,
-		"Ice Beam": IceBeam,
-		"Dragon Pulse": DragonPulse,
-		"Brave Bird": BraveBird,
-		"Stone Edge": StoneEdge,
-		"Dazzling Gleam": DazzlingGleam,
-		"Close Combat": CloseCombat,
-		"Poison Sting": PoisonSting,
-		"Dark Pulse": DarkPulse,
-		"Iron Tail": IronTail,
-		"Iron Head": IronHead,
-		"Earthquake": Earthquake,
-		"Bonemerang": Bonemerang,
-		"Zen Headbutt": ZenHeadbutt,
-		"Waterfall": Waterfall,
-		"Sandstorm": Sandstorm,
-		"Hyper Beam": HyperBeam
-	}
+
+MOVES: dict[str, type[Move]] = {
+        "Thunderbolt": Bolt,
+        "Quick Attack": QuickAttack,
+        "Flamethrower": Flame,
+        "Shadow Ball": ShadowBall,
+        "Razor Leaf": RazorLeaf,
+        "Bubble Beam": Bubble,
+        "U Turn": UTurn,
+        "Ice Beam": IceBeam,
+        "Dragon Pulse": DragonPulse,
+        "Brave Bird": BraveBird,
+        "Stone Edge": StoneEdge,
+        "Dazzling Gleam": DazzlingGleam,
+        "Close Combat": CloseCombat,
+        "Poison Sting": PoisonSting,
+        "Dark Pulse": DarkPulse,
+        "Iron Tail": IronTail,
+        "Iron Head": IronHead,
+        "Earthquake": Earthquake,
+        "Bonemerang": Bonemerang,
+        "Zen Headbutt": ZenHeadbutt,
+        "Waterfall": Waterfall,
+        "Sandstorm": Sandstorm,
+        "Hyper Beam": HyperBeam
+    }

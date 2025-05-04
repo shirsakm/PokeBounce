@@ -1,6 +1,7 @@
 from pygame import Rect, draw
 from src.globals import g
 
+
 class PhysicsObject:
     collider: Rect
     x: float
@@ -22,7 +23,7 @@ class PhysicsObject:
             self.x -= self.width / 2
             self.y -= self.height / 2
         allObjects.append(self)
-    
+
     def update(self):
         self.x += self.xVel
         self.y += self.yVel
@@ -36,17 +37,18 @@ class PhysicsObject:
     
     def draw(self):
         pass
-    
+
     def getCollider(self):
         return Rect(self.x, self.y, self.width, self.height)
-    
+
     def collide(self, other, direction):
         pass
+
 
 class Wall(PhysicsObject):
     wallGrowth = 0.01
     maxSize = 300
-    color = (20,10,20)
+    color = (20, 10, 20)
     def __init__(self, direction):
         self.direction = direction
         match self.direction:
@@ -59,7 +61,7 @@ class Wall(PhysicsObject):
             case "bottom":
                 super().__init__(0, 750, 1450, 50, False)
         self.wallModifier = 0
-    
+
     def update(self):
         if self.wallModifier < self.maxSize:
             self.wallModifier += self.wallGrowth
@@ -74,12 +76,13 @@ class Wall(PhysicsObject):
                 case "bottom":
                     self.y -= self.wallGrowth
                     self.height += self.wallGrowth
-    
+
     def draw(self):
         draw.rect(g.window, self.color, self.getCollider())
 
 
 allObjects: list[PhysicsObject] = []
+
 
 def physicsUpdate():
     for obj in allObjects:

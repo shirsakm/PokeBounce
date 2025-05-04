@@ -2,14 +2,15 @@ import pygame, sys, random
 import pygame.freetype
 from pygame.locals import *
 import requests
-from src.debug import *
-from src.constants import *
+from src.debug import overrideBattlers, battlerOverride
+from src.constants import WINDOW_HEIGHT, WINDOW_WIDTH, BACKGROUND, API, startTimer
 from src.globals import g
 from src.poke import chooseChars
 from src.sprite_loader import INSTANCE as sprites
 from src.sets import Sets
 from src.resource_path import resource_path
 from src import physics
+
 
 class Game:
     def __init__(self):
@@ -36,23 +37,25 @@ class Game:
 
         if overrideBattlers:
             self.charList = []
-            for set in battlerOverride:
-                self.charList.append(Sets.get(set))
-        else: 
-            self.charList = chooseChars(self.charList, random.randint(3,10))
+            for set_id in battlerOverride:
+                self.charList.append(Sets.get(set_id))
+        else:
+            self.charList = chooseChars(self.charList, random.randint(3, 10))
 
         for char in self.charList:
             char.restart()
         
         self.id = random.randint(10000, 99999)
 
-        if API: requests.post(self.url + "/setfighters", json = {"fighters" : [char.name for char in self.charList]})
-        if API: requests.post(self.url + "/setgameid", json = {"id" : self.id})
+        if API:
+            requests.post(self.url + "/setfighters", json={"fighters": [char.name for char in self.charList]})
+        if API:
+            requests.post(self.url + "/setgameid", json={"id": self.id})
 
         self.gambling = True
-        if API: requests.post(self.url + "/setgambling", json = {"openGambling" : self.gambling})
+        if API:
+            requests.post(self.url + "/setgambling", json={"openGambling": self.gambling})
         self.initialized = True
-
 
     def displayResult(self):
         if self.result == "draw":
@@ -61,7 +64,7 @@ class Game:
         elif self.result == "win":
             text_surf2, text_rect2 = self.fontStart.render(self.winner.upper() + " WINS!", (0, 0, 0))
             g.window.blit(text_surf2, (WINDOW_WIDTH/2 - 450, WINDOW_HEIGHT/2 - 75))
-        
+
     def render(self):
         # Render elements of the game
         g.window.fill(BACKGROUND)
@@ -86,11 +89,13 @@ class Game:
                 self.newGame()
 
             for char in self.charList:
-                charrect = pygame.Rect((char.x, char.y, char.size, char.size))
                 charrectImage = pygame.Rect((char.x-60, char.y-85, char.size, char.size))
 
                 g.window.blit(pygame.transform.flip(char.image, False, False), charrectImage)
-            text_surf2, text_rect2 = self.fontStart.render("Place Your Bets. Starting in " + str(self.startCountdown//60), (0, 0, 0))
+            text_surf2, text_rect2 = self.fontStart.render(
+                "Place Your Bets. Starting in " + str(self.startCountdown//60),
+                (0, 0, 0)
+            )
             g.window.blit(text_surf2, (WINDOW_WIDTH/2 - 450, WINDOW_HEIGHT/2 - 75))
 
         elif self.endScreenCountdown != 0:
@@ -115,7 +120,8 @@ class Game:
         else:
             if self.gambling:
                 self.gambling = False
-                if API: requests.post(self.url + "/setgambling", json = {"openGambling" : self.gambling})
+                if API:
+                    requests.post(self.url + "/setgambling", json={"openGambling": self.gambling})
 
             physics.physicsUpdate()
             self.alivelist = [poke for poke in self.charList if poke.alive]
@@ -145,9 +151,11 @@ class Game:
             if self.gameOverCountdown == 0:
                 if len(self.alivelist) == 0:
                     self.result = "draw"
-                    if API: requests.post(self.url + "/setwinner", json = {"winner" : "Nobody"})
+                    if API:
+                        requests.post(self.url + "/setwinner", json={"winner": "Nobody"})
                 if len(self.alivelist) == 1:
                     self.result = "win"
                     self.winner = self.alivelist[0].name
-                    if API: requests.post(self.url + "/setwinner", json = {"winner" : self.winner})
+                    if API:
+                        requests.post(self.url + "/setwinner", json = {"winner" : self.winner})
                 self.endScreenCountdown = 240

@@ -2,7 +2,7 @@ import random
 import pygame.transform
 from math import sqrt
 from pygame import Rect
-from src.moves import Moves, Move
+from src.moves import MOVES, Move
 from src import physics
 from src.constants import WINDOW_HEIGHT, WINDOW_WIDTH
 from src.globals import g
@@ -10,32 +10,37 @@ from src.debug import showCollisionBoxes
 
 charSpeed = 0.8
 
-def chooseChars(charList, charNum):
-	chars = []
-	charList = charList + []
-	while charNum > 0:
-		pick = random.randint(0, len(charList) - 1)
-		chars.append(charList[pick])
-		charList.pop(pick)
-		charNum -= 1
-	return chars
+def chooseChars(charList: list[Poke], charNum: int) -> list[Poke]:
+    chars = []
+    charList = charList + []
+    while charNum > 0:
+        pick = random.randint(0, len(charList) - 1)
+        chars.append(charList[pick])
+        charList.pop(pick)
+        charNum -= 1
+    return char
 
 class DamageIndicator:
-	ttl = 120
-	alpha = 0
+  ttl = 120
+  alpha = 0
 	def __init__(self, x, y, damage):
 		self.x = x
 		self.y = y
 		self.damage = "-"+str(damage)
 
-	def move(self):
-		self.y -= 0.25
-		self.ttl -= 1
+    def __init__(self, x: float, y: float, damage: int):
+        self.x = x
+        self.y = y
+        self.damage = "-"+str(damage)
 
-		if self.ttl >= 100 and self.alpha < 230:
-			self.alpha += 10
-		elif self.ttl <= 40 and self.alpha > 25:
-			self.alpha -= 5
+    def move(self) -> None:
+        self.y -= 0.25
+        self.ttl -= 1
+
+        if self.ttl >= 100 and self.alpha < 230:
+            self.alpha += 10
+        elif self.ttl <= 40 and self.alpha > 25:
+            self.alpha -= 5
 
 
 class Poke(physics.PhysicsObject):
@@ -52,7 +57,7 @@ class Poke(physics.PhysicsObject):
 	moveText = ""
 	damageIndicators = []
 
-	def __init__(self, x, y, image = "", moveset = [], name = "", size = 60, health = 300):
+	def __init__(self, x: float, y: float, image: pygame.Surface, moveset=[], name="", size=60, health=300):
 		super().__init__(x, y, size, size)
 		self.prevBeam = None
 		self.startingX = x
