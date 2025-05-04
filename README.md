@@ -20,3 +20,5 @@ PS C:\game_folder> py .\main.py
 ### Linux 
 
 If you use Linux, you should already know how to run a Python file, I will add the steps in later.
+
+Icon by [ChocoFoxColin](https://www.weasyl.com/~chocofoxcolin/submissions/1411066/pokemon-icon-dragonite).
