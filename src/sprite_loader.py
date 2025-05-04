@@ -2,6 +2,7 @@ import pygame
 import pygame.locals
 from src.constants import WINDOW_HEIGHT, WINDOW_WIDTH, battler_sprites, move_sprites
 
+
 class Sprites:
     base_dir = "img"
     battler_dir = base_dir+"/battlers"
