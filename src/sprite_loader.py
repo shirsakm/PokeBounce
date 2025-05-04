@@ -13,7 +13,6 @@ class Sprites:
     _WINDOW_WIDTH = None
     _WINDOW_HEIGHT = None
 
-
     def __init__(self):
         print("Loading images from '"+self.base_dir+"/*'...")
         print("Arena...")
@@ -23,25 +22,19 @@ class Sprites:
         print("Moves...")
         self._load_moves(move_sprites)
 
-
     def get_battler(self, battler_id) -> pygame.Surface:
         if (battler_id not in self.battlers.keys()):
             self.battlers[battler_id] = self._load_battler(battler_id)
-
         return self.battlers[battler_id]
-
 
     def get_move(self, move_id) -> pygame.Surface:
         if (move_id not in self.moves.keys()):
             self._load_move(move_id)
-
         return self.moves[move_id]
-
 
     def get_arena(self) -> pygame.Surface:
         if (self.arena is None):
             self.arena = self._load_img(Sprites.base_dir+"/arena.png", WINDOW_WIDTH, WINDOW_HEIGHT)
-
         return self.arena
 
     def _load_img(self, file_path, x_scale, y_scale) -> pygame.Surface:
@@ -52,7 +45,6 @@ class Sprites:
             y_scale = img.get_height()
         return pygame.transform.scale(img, (x_scale, y_scale))
 
-
     def _load_battler(self, battler_id) -> pygame.Surface:
         return self._load_img(self.battler_dir+"/"+battler_id+".png", 204, 168)
 
@@ -61,7 +53,6 @@ class Sprites:
         if move_id == "poison":
             scale = 10
         return self._load_img(self.move_dir+"/"+move_id+".png", scale, scale)
-
 
     def _load_battlers(self, arr) -> None:
         for img in arr:
