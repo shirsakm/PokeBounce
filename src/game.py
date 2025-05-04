@@ -50,11 +50,14 @@ class Game:
 
         self.id = random.randint(10000, 99999)
 
-        if API: requests.post(self.url + "/setfighters", json={"fighters": [char.name for char in self.charList]})
-        if API: requests.post(self.url + "/setgameid", json={"id": self.id})
+        if API:
+            requests.post(self.url + "/setfighters", json={"fighters": [char.name for char in self.charList]})
+        if API:
+            requests.post(self.url + "/setgameid", json={"id": self.id})
 
         self.gambling = True
-        if API: requests.post(self.url + "/setgambling", json={"openGambling": self.gambling})
+        if API:
+            requests.post(self.url + "/setgambling", json={"openGambling": self.gambling})
         self.initialized = True
 
     def displayResult(self):
@@ -103,7 +106,10 @@ class Game:
                 charrectImage = pygame.Rect((char.x-60, char.y-85, char.size, char.size))
 
                 g.window.blit(pygame.transform.flip(char.image, False, False), charrectImage)
-            text_surf2, text_rect2 = self.fontStart.render("Place Your Bets. Starting in " + str(self.startCountdown//60), (0, 0, 0))
+            text_surf2, text_rect2 = self.fontStart.render(
+                "Place Your Bets. Starting in " + str(self.startCountdown//60),
+                (0, 0, 0)
+            )
             g.window.blit(text_surf2, (WINDOW_WIDTH/2 - 450, WINDOW_HEIGHT/2 - 75))
 
         elif self.endScreenCountdown != 0:
@@ -226,9 +232,13 @@ class Game:
 
                     healthPercentWidth = (char.health / 300) * char.healthBox.width
 
-                    healthRectGreen = pygame.Rect((char.healthBox.xOffset + char.x,
-                        char.y - char.healthBox.yOffset, healthPercentWidth,
-                        char.healthBox.height))
+                    healthRectGreen = pygame.Rect(
+                        (
+                            char.healthBox.xOffset + char.x,
+                            char.y - char.healthBox.yOffset, healthPercentWidth,
+                            char.healthBox.height
+                        )
+                    )
                     pygame.draw.rect(g.window, (175, 0, 0), healthRectRed)
                     pygame.draw.rect(g.window, (0, 175, 0), healthRectGreen)
 
@@ -274,7 +284,7 @@ class Game:
                     rotatedImage = pygame.transform.rotate(moveImage, moveRect[1].rotate)
 
                     new_rect = rotatedImage.get_rect(
-                        center = moveImage.get_rect(
+                        center=moveImage.get_rect(
                             center=(
                                 moveRect[1].x + moveRect[1].size/2,
                                 moveRect[1].y + moveRect[1].size/2
@@ -312,9 +322,11 @@ class Game:
             if self.gameOverCountdown == 0:
                 if len(self.alivelist) == 0:
                     self.result = "draw"
-                    if API: requests.post(self.url + "/setwinner", json={"winner": "Nobody"})
+                    if API:
+                        requests.post(self.url + "/setwinner", json={"winner": "Nobody"})
                 if len(self.alivelist) == 1:
                     self.result = "win"
                     self.winner = self.alivelist[0]
-                    if API: requests.post(self.url + "/setwinner", json={"winner": self.winner})
+                    if API:
+                        requests.post(self.url + "/setwinner", json={"winner": self.winner})
                 self.endScreenCountdown = 240
