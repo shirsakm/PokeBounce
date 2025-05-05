@@ -31,17 +31,7 @@ You should only have to do the following one time, when first setting up the pro
 > ```
 2. Run the `install` script
 > ```bash
-> sudo apt-get update
-> sudo apt-get install python python-pip python-venv
-> ```
-3. Create a virtual python environment and activate it
-> ```bash
-> python -m venv .venv
-> source .venv/bin/activate
-> ```
-4. Install the project's dependencies
-> ```bash
-> pip install -r requirements.txt
+> sudo ./install
 > ```
 
 ### Updating
