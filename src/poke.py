@@ -13,10 +13,6 @@ charSpeed = 0.8
 class DamageIndicator:
     ttl = 120
     alpha = 0
-    def __init__(self, x, y, damage):
-        self.x = x
-        self.y = y
-        self.damage = "-"+str(damage)
 
     def __init__(self, x: float, y: float, damage: int):
         self.x = x
@@ -44,7 +40,7 @@ class Poke(physics.PhysicsObject):
     dragonPulseColour = 0
     hyperBeamColour = 0
     ironTailRotation = 0
-    moveText = ""
+    moveText = None
     damageIndicators = []
 
     def __init__(self, x: float, y: float, image: pygame.Surface, moveset=[], name="", size=60, health=300):
@@ -178,9 +174,10 @@ class Poke(physics.PhysicsObject):
 
         if self.usingMove != "":
             move = MOVES.get(self.usingMove)
-            if self.usingMoveTimer <= 0:
-                self.usingMoveTimer = move.usingTime
-            move.use(self)
+            if move is not None:
+                if self.usingMoveTimer <= 0:
+                    self.usingMoveTimer = move.usingTime
+                move.use(self)
 
 def chooseChars(charList: list[Poke], charNum: int) -> list[Poke]:
     chars = []

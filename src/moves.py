@@ -37,6 +37,8 @@ class Move(physics.PhysicsObject):
     growth = 1
     linearGrowth = 0
 
+    image: str
+
     def __init__(self, poke):
         self.x = poke.x + poke.size / 2
         self.y = poke.y + poke.size / 2
@@ -77,6 +79,8 @@ class Move(physics.PhysicsObject):
             pygame.draw.rect(g.window, self.colour, self.getCollider())
         if self.graphic == "image":
             moveImage = sprites.moves.get(self.image)
+            if moveImage is None:
+                raise Exception(f"Move image is <None>! {self.image}")
             moveImage = pygame.transform.scale(moveImage,(self.size,self.size))
             if moveImage is None:
                 print("Move image is <None>! "+self.image)
