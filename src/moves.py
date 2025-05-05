@@ -268,12 +268,12 @@ class CloseCombat(Move):
 
     image = "fist"
     def __init__(self, poke):
-        self.size = poke.size + 15
+        self.size = 15
         super().__init__(poke)
         self.x = poke.x + random.randint(-80, 80) + poke.xVel * 70
         self.y = poke.y + random.randint(-80, 80) + poke.yVel * 70
         self.ttl = 45
-        self.linearGrowth = 5
+        self.linearGrowth = 4
 
     def move(self):
         super().move()
@@ -458,8 +458,8 @@ class UTurn(Move):
         self.size = poke.size + 25
         super().__init__(poke)
         self.ttl = 20
-        self.xVel = 2 * poke.xVel
-        self.yVel = 2 * poke.yVel
+        self.xVel = -2 * poke.xVel
+        self.yVel = -2 * poke.yVel
         self.growth = 0.95
 
     @staticmethod
@@ -497,8 +497,8 @@ class Bolt(Move):
             poke.beamYVel = poke.yVel
         else:
             lastHitbox = poke.prevBeam
-            self.x = lastHitbox.x + poke.beamXVel * 40
-            self.y = lastHitbox.y + poke.beamYVel * 40
+            self.x = lastHitbox.x + poke.beamXVel * 10
+            self.y = lastHitbox.y + poke.beamYVel * 10
         poke.prevBeam = self
 
     def move(self):
@@ -532,8 +532,8 @@ class DragonPulse(Move):
             poke.beamYVel = poke.yVel
         else:
             lastHitbox = poke.prevBeam
-            self.x = lastHitbox.x + poke.beamXVel * 25
-            self.y = lastHitbox.y + poke.beamYVel * 25
+            self.x = lastHitbox.x + poke.beamXVel * 5
+            self.y = lastHitbox.y + poke.beamYVel * 5
         poke.prevBeam = self
         self.colour = self.colours[poke.dragonPulseColour]
 
@@ -571,8 +571,8 @@ class HyperBeam(Move):
             poke.beamYVel = poke.yVel
         else:
             lastHitbox = poke.prevBeam
-            self.x = lastHitbox.x + poke.beamXVel * 40
-            self.y = lastHitbox.y + poke.beamYVel * 40
+            self.x = lastHitbox.x + poke.beamXVel * 10
+            self.y = lastHitbox.y + poke.beamYVel * 10
         poke.prevBeam = self
         self.colour = self.colours[poke.dragonPulseColour]
 
@@ -615,8 +615,8 @@ class IceBeam(Move):
             poke.beamYVel = poke.yVel
         else:
             lastHitbox = poke.prevBeam
-            self.x = lastHitbox.x + poke.beamXVel * 25
-            self.y = lastHitbox.y + poke.beamYVel * 25
+            self.x = lastHitbox.x + poke.beamXVel * 5
+            self.y = lastHitbox.y + poke.beamYVel * 5
         poke.prevBeam = self
 
     def move(self):
@@ -703,9 +703,9 @@ class PoisonSting(Move):
     usingTime = 30
 
     def __init__(self, poke):
-        self.size = 20
-        self.xVel = (poke.xVel + round(random.uniform(0 - self.spread, self.spread), 3)) * 2 / poke.speed
-        self.yVel = (poke.yVel + round(random.uniform(0 - self.spread, self.spread), 3)) * 2 / poke.speed
+        self.size = 30
+        self.xVel = (poke.xVel + round(random.uniform(0 - self.spread, self.spread), 3)) * 8 / poke.speed
+        self.yVel = (poke.yVel + round(random.uniform(0 - self.spread, self.spread), 3)) * 8 / poke.speed
         super().__init__(poke)
         self.ttl = 14
         self.rotate = math.atan2(self.xVel, self.yVel) * 180/3.14 + 180
@@ -725,7 +725,7 @@ class Flame(Move):
     type = "fire"
     spread = 0.1
     growth = 1.02
-    acceleration = 0.98
+    acceleration = 0.99
     damage = 20
     colour = (255, 102, 0, 30)
     graphic = "image"
@@ -737,10 +737,10 @@ class Flame(Move):
     imagePointer = 0
 
     def __init__(self, poke):
-        self.size = 20
+        self.size = 30
         super().__init__(poke)
-        self.xVel = (poke.xVel + round(random.uniform(0 - self.spread, self.spread), 3)) * 2 / poke.speed
-        self.yVel = (poke.yVel + round(random.uniform(0 - self.spread, self.spread), 3)) * 2 / poke.speed
+        self.xVel = (poke.xVel + round(random.uniform(0 - self.spread, self.spread), 3)) * 8 / poke.speed
+        self.yVel = (poke.yVel + round(random.uniform(0 - self.spread, self.spread), 3)) * 8 / poke.speed
         self.ttl = 16
 
     def move(self):
@@ -769,7 +769,7 @@ class Bubble(Move):
     type = "water"
     spread = 0.15
     growth = 1.01
-    acceleration = 0.97
+    acceleration = 0.98
     damage = 20
     colour = (20, 50, 250, 30)
     graphic = "image"
@@ -779,10 +779,10 @@ class Bubble(Move):
     image = "bubble"
 
     def __init__(self, poke):
-        self.size = 20
+        self.size = 30
         super().__init__(poke)
-        self.xVel = (poke.xVel + round(random.uniform(0 - self.spread, self.spread), 3)) * 2 / poke.speed
-        self.yVel = (poke.yVel + round(random.uniform(0 - self.spread, self.spread), 3)) * 2 / poke.speed
+        self.xVel = (poke.xVel + round(random.uniform(0 - self.spread, self.spread), 3)) * 8 / poke.speed
+        self.yVel = (poke.yVel + round(random.uniform(0 - self.spread, self.spread), 3)) * 8 / poke.speed
         self.ttl = 120
 
     @staticmethod

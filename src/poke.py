@@ -129,12 +129,12 @@ class Poke(physics.PhysicsObject):
             self.xVel *= -1
             self.yVel *= -1
             return
-        
+        if random.randint(0, 2) == 0:
+            self.velStart()
+            return
         contact = self.getCollider().clip(other.getCollider())
         diffX = self.getCollider().centerx - contact.centerx
         diffY = self.getCollider().centery - contact.centery
-        if other.drawPriority == 1:
-            print(self.name, "collided with", other.name)
 
         speed = sqrt(self.xVel**2 + self.yVel**2)
         if speed == 0:
@@ -143,14 +143,14 @@ class Poke(physics.PhysicsObject):
         if abs(diffX) < abs(diffY): # used to be a 1/3 chance to random bounce, let's add it back in later
             if diffY > 0: # collider above
                 self.y += contact.height
-                self.yVel *= -1
+                self.yVel = abs(self.yVel)
                 if self.xVel < 0:
                     self.xVel = -speed * round(1 - abs(direction[1]), 3)
                 else:
                     self.xVel = speed * round(1 - abs(direction[1]), 3)
             else: # collider below
                 self.y -= contact.height
-                self.yVel *= -1
+                self.yVel = -abs(self.yVel)
                 if self.xVel < 0:
                     self.xVel = -speed * round(1 - abs(direction[1]), 3)
                 else:
@@ -158,14 +158,14 @@ class Poke(physics.PhysicsObject):
         else:
             if diffX > 0: # collider to the left
                 self.x += contact.width
-                self.xVel *= -1
+                self.xVel = abs(self.xVel)
                 if self.yVel < 0:
                     self.yVel = -speed * round(1 - abs(direction[0]), 3)
                 else:
                     self.yVel = speed * round(1 - abs(direction[0]), 3)
             else: # collider to the right
                 self.x -= contact.width
-                self.xVel *= -1
+                self.xVel = -abs(self.xVel)
                 if self.yVel < 0:
                     self.yVel = -speed * round(1 - abs(direction[0]), 3)
                 else:

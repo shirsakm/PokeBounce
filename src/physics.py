@@ -92,11 +92,13 @@ def physicsUpdate():
     for pri in priorities:
         for obj in filter(lambda o: o.drawPriority == pri, allObjects):
             obj.draw()
-    for obj in allObjects:
+
+    frameObjList = allObjects.copy()
+    for obj in frameObjList:
         obj.update()
-    rects = [obj.getCollider() for obj in allObjects]
-    for obj in [obj for obj in allObjects if obj.checksCollision]:
+    rects = [obj.getCollider() for obj in frameObjList]
+    for obj in [obj for obj in frameObjList if obj.checksCollision]:
         for ind in obj.getCollider().collidelistall(rects):
-            other = allObjects[ind]
+            other = frameObjList[ind]
             if other is obj: continue
             obj.collide(other)
