@@ -12,6 +12,7 @@ class PhysicsObject:
     yVel: float = 0
     centered: bool = True
     checksCollision: bool = False
+    drawPriority: int = 0
 
     def __init__(self, x, y, width, height, centered=True):
         self.centered = centered
@@ -41,7 +42,7 @@ class PhysicsObject:
     def getCollider(self):
         return Rect(self.x, self.y, self.width, self.height)
 
-    def collide(self, other, direction):
+    def collide(self, other):
         pass
 
 
@@ -49,17 +50,21 @@ class Wall(PhysicsObject):
     wallGrowth = 0.01
     maxSize = 300
     color = (20, 10, 20)
+    drawPriority = 2
+    
     def __init__(self, direction):
         self.direction = direction
+    
+    def reset(self):
         match self.direction:
             case "left":
                 super().__init__(0, 0, 50, 800, False)
             case "right":
-                super().__init__(1400, 0, 50, 800, False)
+                super().__init__(1400, 0, 51, 800, False)
             case "top":
                 super().__init__(0, 0, 1450, 50, False)
             case "bottom":
-                super().__init__(0, 750, 1450, 50, False)
+                super().__init__(0, 750, 1450, 51, False)
         self.wallModifier = 0
 
     def update(self):
@@ -80,11 +85,13 @@ class Wall(PhysicsObject):
     def draw(self):
         draw.rect(g.window, self.color, self.getCollider())
 
-
 allObjects: list[PhysicsObject] = []
 
-
 def physicsUpdate():
+    priorities = [0,1,2]
+    for pri in priorities:
+        for obj in filter(lambda o: o.drawPriority == pri, allObjects):
+            obj.draw()
     for obj in allObjects:
         obj.update()
     rects = [obj.getCollider() for obj in allObjects]
@@ -92,19 +99,4 @@ def physicsUpdate():
         for ind in obj.getCollider().collidelistall(rects):
             other = allObjects[ind]
             if other is obj: continue
-            diffX = obj.x - other.x
-            diffY = obj.y - other.y
-            direction = ""
-            if abs(diffX) < abs(diffY):
-                if diffX > 0:
-                    direction = "left"
-                else:
-                    direction = "right"
-            else:
-                if diffY > 0:
-                    direction = "bottom"
-                else:
-                    direction = "top"
-            obj.collide(other, direction)
-    for obj in allObjects:
-        obj.draw()
+            obj.collide(other)

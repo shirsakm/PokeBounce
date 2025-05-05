@@ -63,7 +63,8 @@ class Move(physics.PhysicsObject):
 		self.size *= self.growth
 
 		if self.size < 1:
-			self.size = 1
+			physics.allObjects.remove(self)
+			return
 
 		self.resize(self.size, self.size)
 		self.rotate += self.rotSpeed
@@ -453,8 +454,8 @@ class UTurn(Move):
 		self.size = poke.size + 25
 		super().__init__(poke)
 		self.ttl = 20
-		self.xVel = 2 * poke.xVel
-		self.yVel = 2 * poke.yVel
+		self.xVel = -2 * poke.xVel
+		self.yVel = -2 * poke.yVel
 		self.growth = 0.95
 
 	@staticmethod
@@ -487,7 +488,7 @@ class Bolt(Move):
 		super().__init__(poke)
 		self.ttl = 90 - (60 - poke.usingMoveTimer)
 
-		if poke.usingMoveTimer == 60 or poke.prevBeam is None:
+		if poke.usingMoveTimer == 60:
 			poke.beamXVel = poke.xVel
 			poke.beamYVel = poke.yVel
 		else:
@@ -505,9 +506,9 @@ class Bolt(Move):
 	def use(poke):
 		if poke.usingMoveTimer == 60:
 			poke.moveText = MoveText(poke.x, poke.y, poke.usingMove)
-		poke.usingMoveTimer -= 1
 		if poke.usingMoveTimer > 0:
 			Bolt(poke)
+		poke.usingMoveTimer -= 1
 		if poke.usingMoveTimer == 0:
 			poke.usingMove = ""
 
@@ -522,7 +523,7 @@ class DragonPulse(Move):
 		self.size = 40 + (60 - poke.usingMoveTimer)
 		super().__init__(poke)
 		self.ttl = 90 - (60 - poke.usingMoveTimer)
-		if poke.usingMoveTimer == 60 or poke.prevBeam is None:
+		if poke.usingMoveTimer == 60:
 			poke.beamXVel = poke.xVel
 			poke.beamYVel = poke.yVel
 		else:
@@ -561,7 +562,7 @@ class HyperBeam(Move):
 		self.size = 40 + ((60 - poke.usingMoveTimer) * 2)
 		super().__init__(poke)
 		self.ttl = 90 - (60 - poke.usingMoveTimer)
-		if poke.usingMoveTimer == 60 or poke.prevBeam is None:
+		if poke.usingMoveTimer == 60:
 			poke.beamXVel = poke.xVel
 			poke.beamYVel = poke.yVel
 		else:
@@ -581,7 +582,7 @@ class HyperBeam(Move):
 		if poke.usingMoveTimer == 60:
 			poke.moveText = MoveText(poke.x, poke.y, poke.usingMove)
 			poke.previousSpeed = poke.speed
-			poke.speed = 0
+			poke.speed = 0.001
 		if poke.usingMoveTimer > 0:
 			HyperBeam(poke)
 		poke.dragonPulseColour = (poke.dragonPulseColour + 1) % 2
@@ -605,7 +606,7 @@ class IceBeam(Move):
 		super().__init__(poke)
 		self.ttl = 90 - (60 - poke.usingMoveTimer)
 
-		if poke.usingMoveTimer == 60 or poke.prevBeam is None:
+		if poke.usingMoveTimer == 60:
 			poke.beamXVel = poke.xVel
 			poke.beamYVel = poke.yVel
 		else:
@@ -633,8 +634,7 @@ class IceBeam(Move):
 
 class ShadowBall(Move):
 	type = "ghost"
-	spread = 0.0
-	linearGrowth = 1
+	linearGrowth = 0.1
 	acceleration = 1.005
 	damage = 55
 	colour = (255, 20, 200, 30)
