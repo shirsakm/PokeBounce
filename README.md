@@ -50,6 +50,9 @@ If you want to update the project before running it, you can do so without the `
 ```bash
 ./run -u
 ```
+---
+## Mac
+I don't own any Apple products, but if someone wants to figure out the steps to run it, feel free to do a PR :)  
 
 # Credits
 This project is far better than it otherwise would be, thanks to these fine folks 💜
