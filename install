@@ -1,0 +1,72 @@
+#!/bin/bash
+source bashutils/log.bashrc
+set_log_file "install.log"
+set_logger_name "install"
+backup_log_file
+
+if [[ $EUID > 0 ]]; then
+    log "ERROR: Due to this script running apt, it requires root! Please run it with sudo"
+    exit 1
+fi
+
+log "Installing dependencies from apt..."
+aptdeps=("python3" "python3-pip")
+for dep in ${aptdeps[@]}; do
+    if [[ "$(which $dep)" == "" ]]; then
+        log "Installing $dep"
+        log_output apt install $dep
+    else
+        log "$dep already installed!"
+    fi
+done
+log "Installing python packages..."
+pydeps=("venv")
+for dep in ${pydeps[@]}; do
+    python3 -m $dep --help >> /dev/null
+    if [[ $? > 0 ]]; then
+        log "Installing $dep"
+        log_output apt install python3-$dep
+    else
+        log "$dep already installed!"
+    fi
+done
+aptexit=$?
+
+log "Checking that venv installation succeeded..."
+python -m venv -h >> /dev/null
+if [[ $? == 1 ]]; then
+    log "ERROR: venv failed to install. Did you accept the install prompt? (apt exit code: $aptexit)"
+    exit 2
+fi
+
+venvexit="?"
+if [[ -d ".venv" ]]; then
+    log "Virtual environment already exists in this directory! Skipping creation..."
+else
+    log "Creating python virtual environment..."
+    log_output python -m venv .venv
+    venvexit=$?
+fi
+
+log "Entering virtual environment..."
+source .venv/bin/activate
+
+if [[ "$(which pip)" != "$PWD/.venv/bin/pip" ]]; then
+    log "Virtual environment activation failed! (venv exit code: $venvexit)"
+    log "See previous log outputs for details, and leave a report at https://github.com/kd8lvt/PokeBounce/issues"
+    exit 3
+fi
+
+log "Installing python dependencies..."
+log_output pip install -r requirements.txt
+pipexit=$?
+
+if [[ $pipexit > 0 ]]; then
+    log "Dependency installation failed! (pip exit code $pipexit)"
+    log "See previous log output for details, and leave a report at https://github.com/kd8lvt/PokeBounce/isses"
+    exit 4
+fi
+
+log "You should be ready to go! Enjoy :D"
+log "You can use ./run to start the program, and ./update to update it when things change."
+echo "1" > .venv/._installed
