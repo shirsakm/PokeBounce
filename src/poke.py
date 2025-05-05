@@ -13,10 +13,6 @@ charSpeed = 2
 class DamageIndicator:
     ttl = 120
     alpha = 0
-    def __init__(self, x, y, damage):
-        self.x = x
-        self.y = y
-        self.damage = "-"+str(damage)
 
     def __init__(self, x: float, y: float, damage: int):
         self.x = x
@@ -45,7 +41,7 @@ class Poke(physics.PhysicsObject):
     dragonPulseColour = 0
     hyperBeamColour = 0
     ironTailRotation = 0
-    moveText = ""
+    moveText = None
     damageIndicators = []
     checksCollision = True
 
@@ -64,7 +60,8 @@ class Poke(physics.PhysicsObject):
         self.healthBox = Rect(x + self.size / 2 - 25, y + 10, 50, 10)
         self.speed = charSpeed
         self.moveTimer = self.setMoveTimer()
-    
+        self.checksCollision = False
+
     def update(self):
         if self.alive:
             if self.xVel != 0 or self.yVel != 0: #update velocity based on speed
@@ -76,16 +73,16 @@ class Poke(physics.PhysicsObject):
 
             if self.iFrames > 0:
                 self.iFrames -= 1
-            
+
             if self.x > WINDOW_WIDTH or self.x < 0:
                 print(self.name, "had a woopsie on the x axis")
                 self.x = WINDOW_WIDTH//2
             if self.y > WINDOW_HEIGHT or self.y < 0:
                 print(self.name, "had a woopsie on the y axis")
                 self.y = WINDOW_HEIGHT//2
-        
+
             self.useMove()
-    
+
     def draw(self):
         if self.alive:
             if showCollisionBoxes:
@@ -97,8 +94,8 @@ class Poke(physics.PhysicsObject):
             healthPercentWidth = (self.health / 300) * 50
             healthRectGreen = pygame.Rect(self.x + self.size / 2 - 25, self.y + 10, healthPercentWidth, 10)
 
-            pygame.draw.rect(g.window, (175,0,0), healthRectRed)
-            pygame.draw.rect(g.window, (0,175,0), healthRectGreen)
+            pygame.draw.rect(g.window, (175, 0, 0), healthRectRed)
+            pygame.draw.rect(g.window, (0, 175, 0), healthRectGreen)
 
     def revive(self):
         self.health = self.maxHealth
@@ -115,12 +112,12 @@ class Poke(physics.PhysicsObject):
         self.y = self.startingY
 
     def setMoveTimer(self):
-        return 130 + random.randint(1,200)
+        return 130 + random.randint(1, 200)
 
     def velStart(self):
-        self.xVel = round(random.uniform(-1,1)) * self.speed
-        self.yVel = round(1 - abs(self.xVel), 3) * random.choice([-1,1]) * self.speed
-    
+        self.xVel = round(random.uniform(-1, 1)) * self.speed
+        self.yVel = round(1 - abs(self.xVel), 3) * random.choice([-1, 1]) * self.speed
+
     def collide(self, other):
         if isinstance(other, Move):
             if self.iFrames == 0 and other.poke != self:
@@ -190,15 +187,17 @@ class Poke(physics.PhysicsObject):
             self.moveTimer = self.setMoveTimer()
             self.velStart()
             self.usingMove = random.choice(self.moveset)
-            
+
+
         else:
             self.moveTimer -= 1
 
         if self.usingMove != "":
             move = MOVES.get(self.usingMove)
-            if self.usingMoveTimer <= 0:
-                self.usingMoveTimer = move.usingTime
-            move.use(self)
+            if move is not None:
+                if self.usingMoveTimer <= 0:
+                    self.usingMoveTimer = move.usingTime
+                move.use(self)
 
 def chooseChars(charList: list[Poke], charNum: int) -> list[Poke]:
     chars = []

@@ -152,13 +152,14 @@ class Game:
                 self.gameOverCountdown -= 1
 
             if self.gameOverCountdown == 0:
-                if API:
-                    if len(self.alivelist) == 0:
-                        self.result = "draw"
+                if len(self.alivelist) == 0:
+                    self.result = "draw"
+                    if API:
                         requests.post(self.url + "/setwinner", json={"winner": "Nobody"})
-                    if len(self.alivelist) == 1:
-                        self.result = "win"
-                        self.winner = self.alivelist[0].name
-                        self.alivelist[0].takeDamage(100000000)
-                        requests.post(self.url + "/setwinner", json = {"winner" : self.winner})
+                elif len(self.alivelist) == 1:
+                    self.result = "win"
+                    self.winner = self.alivelist[0].name
+                    self.alivelist[0].kill()
+                    if API:
+                        requests.post(self.url + "/setwinner", json={"winner": self.winner})
                 self.endScreenCountdown = 240
