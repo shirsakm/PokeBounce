@@ -65,7 +65,8 @@ class Move(physics.PhysicsObject):
         self.size *= self.growth
 
         if self.size < 1:
-            self.size = 1
+            physics.allObjects.remove(self)
+            return
 
         self.resize(self.size, self.size)
         self.rotate += self.rotSpeed
@@ -633,8 +634,6 @@ class IceBeam(Move):
         if poke.usingMoveTimer == 0:
             poke.usingMove = ""
 
-
-
 class ShadowBall(Move):
     type = "ghost"
     spread = 0.0
@@ -664,7 +663,6 @@ class ShadowBall(Move):
             ShadowBall(poke)
         if poke.usingMoveTimer == 0:
             poke.usingMove = ""
-
 
 class StoneEdge(Move):
     type = "rock"

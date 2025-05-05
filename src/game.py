@@ -42,9 +42,12 @@ class Game:
         else:
             self.charList = chooseChars(self.charList, random.randint(3, 10))
 
+        for wall in self.walls:
+            wall.reset()
+        
         for char in self.charList:
-            char.restart()
-
+            char.revive()
+        
         self.id = random.randint(10000, 99999)
 
         if API:
@@ -107,7 +110,7 @@ class Game:
 
             self.startCountdown = startTimer
 
-            self.gameInitialized = False
+            self.initialized = False
 
             self.gameOver = False
             self.gameOverCountdown = 30
@@ -153,9 +156,10 @@ class Game:
                     self.result = "draw"
                     if API:
                         requests.post(self.url + "/setwinner", json={"winner": "Nobody"})
-                if len(self.alivelist) == 1:
+                elif len(self.alivelist) == 1:
                     self.result = "win"
                     self.winner = self.alivelist[0].name
+                    self.alivelist[0].kill()
                     if API:
                         requests.post(self.url + "/setwinner", json={"winner": self.winner})
                 self.endScreenCountdown = 240

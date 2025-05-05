@@ -1,14 +1,14 @@
 import random
 import pygame.transform
 from math import sqrt
-from pygame import Rect
+from pygame import Rect, draw
 from src.moves import MOVES, Move
 from src import physics
 from src.constants import WINDOW_HEIGHT, WINDOW_WIDTH
 from src.globals import g
 from src.debug import showCollisionBoxes
 
-charSpeed = 0.8
+charSpeed = 2
 
 class DamageIndicator:
     ttl = 120
@@ -30,6 +30,7 @@ class DamageIndicator:
 
 
 class Poke(physics.PhysicsObject):
+    drawPriority = 1
     alive = False
     iFrames = 0
     usingMove = ""
@@ -42,9 +43,11 @@ class Poke(physics.PhysicsObject):
     ironTailRotation = 0
     moveText = None
     damageIndicators = []
+    checksCollision = True
 
     def __init__(self, x: float, y: float, image: pygame.Surface, moveset=[], name="", size=60, health=300):
         super().__init__(x, y, size, size)
+        physics.allObjects.remove(self)
         self.prevBeam = None
         self.startingX = x
         self.startingY = y
@@ -94,10 +97,11 @@ class Poke(physics.PhysicsObject):
             pygame.draw.rect(g.window, (175, 0, 0), healthRectRed)
             pygame.draw.rect(g.window, (0, 175, 0), healthRectGreen)
 
-    def restart(self):
+    def revive(self):
         self.health = self.maxHealth
         self.velStart()
         self.alive = True
+        physics.allObjects.append(self)
         self.checksCollision = True
         self.setMoveTimer()
         self.usingMoveTimer = 0
@@ -114,60 +118,76 @@ class Poke(physics.PhysicsObject):
         self.xVel = round(random.uniform(-1, 1)) * self.speed
         self.yVel = round(1 - abs(self.xVel), 3) * random.choice([-1, 1]) * self.speed
 
-    def collide(self, other, direction):
+    def collide(self, other):
         if isinstance(other, Move):
             if self.iFrames == 0 and other.poke != self:
                 self.takeDamage(other.damage)
                 self.iFrames = 180
             return
+
         if self.usingMove == "U Turn":
             self.xVel *= -1
             self.yVel *= -1
-        elif random.random() < 2/3:
-            if direction == "top":
-                self.y -= other.getCollider().clip(self.getCollider()).height
+            return
+        
+        contact = self.getCollider().clip(other.getCollider())
+        diffX = self.getCollider().centerx - contact.centerx
+        diffY = self.getCollider().centery - contact.centery
+        if other.drawPriority == 1:
+            print(self.name, "collided with", other.name)
+
+        speed = sqrt(self.xVel**2 + self.yVel**2)
+        if speed == 0:
+            return # TODO this normally...
+        direction = (self.xVel/speed, self.yVel/speed)
+        if abs(diffX) < abs(diffY): # used to be a 1/3 chance to random bounce, let's add it back in later
+            if diffY > 0: # collider above
+                self.y += contact.height
                 self.yVel *= -1
                 if self.xVel < 0:
-                    self.xVel = round(1 - abs(self.yVel), 3) * -self.speed
+                    self.xVel = -speed * round(1 - abs(direction[1]), 3)
                 else:
-                    self.xVel = round(1 - abs(self.yVel), 3) * self.speed
-            if direction == "bottom":
-                self.y += other.getCollider().clip(self.getCollider()).height
+                    self.xVel = speed * round(1 - abs(direction[1]), 3)
+            else: # collider below
+                self.y -= contact.height
                 self.yVel *= -1
                 if self.xVel < 0:
-                    self.xVel = round(1 - abs(self.yVel), 3) * -self.speed
+                    self.xVel = -speed * round(1 - abs(direction[1]), 3)
                 else:
-                    self.xVel = round(1 - abs(self.yVel), 3) * self.speed
-            elif direction == "left":
-                self.x += other.getCollider().clip(self.getCollider()).width
-                self.xVel *= -1
-                if self.yVel < 0:
-                    self.yVel = round(1 - abs(self.xVel), 3) * -self.speed
-                else:
-                    self.yVel = round(1 - abs(self.xVel), 3) * self.speed
-            elif direction == "right":
-                self.x -= other.getCollider().clip(self.getCollider()).width
-                self.xVel *= -1
-                if self.yVel < 0:
-                    self.yVel = round(1 - abs(self.xVel), 3) * -self.speed
-                else:
-                    self.yVel = round(1 - abs(self.xVel), 3) * self.speed
+                    self.xVel = speed * round(1 - abs(direction[1]), 3)
         else:
-            self.velStart()
+            if diffX > 0: # collider to the left
+                self.x += contact.width
+                self.xVel *= -1
+                if self.yVel < 0:
+                    self.yVel = -speed * round(1 - abs(direction[0]), 3)
+                else:
+                    self.yVel = speed * round(1 - abs(direction[0]), 3)
+            else: # collider to the right
+                self.x -= contact.width
+                self.xVel *= -1
+                if self.yVel < 0:
+                    self.yVel = -speed * round(1 - abs(direction[0]), 3)
+                else:
+                    self.yVel = speed * round(1 - abs(direction[0]), 3)
 
     def takeDamage(self, damage):
         self.health -= damage
         self.damageIndicators.append(DamageIndicator(self.x, self.y, damage))
 
         if self.health <= 0:
-            self.alive = False
-            self.checksCollision = False
+            self.kill()
+
+    def kill(self):
+        self.alive = False
+        physics.allObjects.remove(self)
 
     def useMove(self):
         if self.moveTimer <= 0:
             self.moveTimer = self.setMoveTimer()
             self.velStart()
             self.usingMove = random.choice(self.moveset)
+
 
         else:
             self.moveTimer -= 1
