@@ -91,8 +91,8 @@ class Poke(physics.PhysicsObject):
             healthPercentWidth = (self.health / 300) * 50
             healthRectGreen = pygame.Rect(self.x + self.size / 2 - 25, self.y + 10, healthPercentWidth, 10)
 
-            pygame.draw.rect(g.window, (175,0,0), healthRectRed)
-            pygame.draw.rect(g.window, (0,175,0), healthRectGreen)
+            pygame.draw.rect(g.window, (175, 0, 0), healthRectRed)
+            pygame.draw.rect(g.window, (0, 175, 0), healthRectGreen)
 
     def restart(self):
         self.health = self.maxHealth
@@ -108,11 +108,11 @@ class Poke(physics.PhysicsObject):
         self.y = self.startingY
 
     def setMoveTimer(self):
-        return 130 + random.randint(1,200)
+        return 130 + random.randint(1, 200)
 
     def velStart(self):
-        self.xVel = round(random.uniform(-1,1)) * self.speed
-        self.yVel = round(1 - abs(self.xVel), 3) * random.choice([-1,1]) * self.speed
+        self.xVel = round(random.uniform(-1, 1)) * self.speed
+        self.yVel = round(1 - abs(self.xVel), 3) * random.choice([-1, 1]) * self.speed
 
     def collide(self, other, direction):
         if isinstance(other, Move):

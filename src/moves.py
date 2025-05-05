@@ -81,13 +81,13 @@ class Move(physics.PhysicsObject):
             moveImage = sprites.moves.get(self.image)
             if moveImage is None:
                 raise Exception(f"Move image is <None>! {self.image}")
-            moveImage = pygame.transform.scale(moveImage,(self.size,self.size))
+            moveImage = pygame.transform.scale(moveImage, (self.size, self.size))
             if moveImage is None:
                 print("Move image is <None>! "+self.image)
 
             rotatedImage = pygame.transform.rotate(moveImage, self.rotate)
 
-            new_rect = rotatedImage.get_rect(center = moveImage.get_rect(center = (self.x + self.size/2, self.y + self.size/2)).center)
+            new_rect = rotatedImage.get_rect(center=moveImage.get_rect(center=(self.x + self.size/2, self.y + self.size/2)).center)
             g.window.blit(rotatedImage, new_rect)
         elif self.graphic == "rect":
             pygame.draw.rect(g.window, self.colour, self.getCollider())
@@ -367,7 +367,7 @@ class Earthquake(Move):
         self.ttl = 60
         self.linearGrowth = 2.5
 
-    def move(self, speed = 1):
+    def move(self, speed=1):
         super().move()
         self.damage -= 1
 
@@ -677,8 +677,8 @@ class StoneEdge(Move):
 
     def __init__(self, poke):
         self.size = 40
-        self.xVel = (poke.xVel + round(random.uniform(0 - self.spread, self.spread),3)) * 2 / poke.speed
-        self.yVel = (poke.yVel + round(random.uniform(0 - self.spread, self.spread),3)) * 2 / poke.speed
+        self.xVel = (poke.xVel + round(random.uniform(0 - self.spread, self.spread), 3)) * 2 / poke.speed
+        self.yVel = (poke.yVel + round(random.uniform(0 - self.spread, self.spread), 3)) * 2 / poke.speed
         super().__init__(poke)
         self.ttl = 300
         self.rotate = math.atan2(self.xVel, self.yVel) * 180/3.14 + 180
@@ -706,8 +706,8 @@ class PoisonSting(Move):
 
     def __init__(self, poke):
         self.size = 20
-        self.xVel = (poke.xVel + round(random.uniform(0 - self.spread, self.spread),3)) * 2 / poke.speed
-        self.yVel = (poke.yVel + round(random.uniform(0 - self.spread, self.spread),3)) * 2 / poke.speed
+        self.xVel = (poke.xVel + round(random.uniform(0 - self.spread, self.spread), 3)) * 2 / poke.speed
+        self.yVel = (poke.yVel + round(random.uniform(0 - self.spread, self.spread), 3)) * 2 / poke.speed
         super().__init__(poke)
         self.ttl = 14
         self.rotate = math.atan2(self.xVel, self.yVel) * 180/3.14 + 180
@@ -741,8 +741,8 @@ class Flame(Move):
     def __init__(self, poke):
         self.size = 20
         super().__init__(poke)
-        self.xVel = (poke.xVel + round(random.uniform(0 - self.spread, self.spread),3)) * 2 / poke.speed
-        self.yVel = (poke.yVel + round(random.uniform(0 - self.spread, self.spread),3)) * 2 / poke.speed
+        self.xVel = (poke.xVel + round(random.uniform(0 - self.spread, self.spread), 3)) * 2 / poke.speed
+        self.yVel = (poke.yVel + round(random.uniform(0 - self.spread, self.spread), 3)) * 2 / poke.speed
         self.ttl = 16
 
     def move(self):
@@ -783,8 +783,8 @@ class Bubble(Move):
     def __init__(self, poke):
         self.size = 20
         super().__init__(poke)
-        self.xVel = (poke.xVel + round(random.uniform(0 - self.spread, self.spread),3)) * 2 / poke.speed
-        self.yVel = (poke.yVel + round(random.uniform(0 - self.spread, self.spread),3)) * 2 / poke.speed
+        self.xVel = (poke.xVel + round(random.uniform(0 - self.spread, self.spread), 3)) * 2 / poke.speed
+        self.yVel = (poke.yVel + round(random.uniform(0 - self.spread, self.spread), 3)) * 2 / poke.speed
         self.ttl = 120
 
     @staticmethod
@@ -812,8 +812,8 @@ class RazorLeaf(Move):
     def __init__(self, poke):
         self.size = 30
         super().__init__(poke)
-        self.xVel = (poke.xVel + round(random.uniform(0 - self.spread, self.spread),3)) * 20 / poke.speed
-        self.yVel = (poke.yVel + round(random.uniform(0 - self.spread, self.spread),3)) * 20 / poke.speed
+        self.xVel = (poke.xVel + round(random.uniform(0 - self.spread, self.spread), 3)) * 20 / poke.speed
+        self.yVel = (poke.yVel + round(random.uniform(0 - self.spread, self.spread), 3)) * 20 / poke.speed
         self.ttl = 120
         self.rotSpeed = 20
 

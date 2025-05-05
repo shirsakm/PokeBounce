@@ -44,7 +44,7 @@ class Game:
 
         for char in self.charList:
             char.restart()
-        
+
         self.id = random.randint(10000, 99999)
 
         if API:
@@ -157,5 +157,5 @@ class Game:
                     self.result = "win"
                     self.winner = self.alivelist[0].name
                     if API:
-                        requests.post(self.url + "/setwinner", json = {"winner" : self.winner})
+                        requests.post(self.url + "/setwinner", json={"winner": self.winner})
                 self.endScreenCountdown = 240
