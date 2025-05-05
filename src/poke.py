@@ -1,7 +1,7 @@
 import random
 import pygame.transform
 from math import sqrt
-from pygame import Rect, draw
+from pygame import Rect
 from src.moves import MOVES, Move
 from src import physics
 from src.constants import WINDOW_HEIGHT, WINDOW_WIDTH
