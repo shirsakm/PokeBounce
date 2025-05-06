@@ -1,0 +1,16 @@
+#!/bin/bash
+source bashutils/log.bashrc
+set_logger_name "update"
+set_log_file "$PWD/update.log"
+backup_log_file
+
+if [ "$(which git)" == '' ]; then
+    log "Please install git!"
+    exit 1
+fi
+
+log "Beginning update attempt..."
+
+log_output git pull --all
+
+log "Done!"

@@ -1,0 +1,50 @@
+#!/bin/bash
+source bashutils/log.bashrc
+set_log_file "run.log"
+set_logger_name "run"
+backup_log_file
+
+if [[ -f ".venv/._installed" ]]; then
+    1+1 #dunno why, my bash doesn't like this if being empty
+else
+    log "Detected uninstalled environment! Attempting to install..."
+    ./install
+    exitcode=$?
+    while read line; do
+        echo "$line" >> "run.log"
+    done < install.log
+    if [[ $exitcode > 0 ]]; then
+        log "Failed to properly install! Exit code: $exitcode"
+        log "Please run 'sudo ./install' to install dependencies before running this script."
+        exit $exitcode
+    fi
+fi
+
+if [[ "$(which pip)" != "$PWD/.venv/bin/pip" ]]; then
+    log "Activating venv..."
+    source .venv/bin/activate
+fi
+
+function do_update {
+    log "Performing requested update..."
+    ./update
+    while read line; do
+        echo "$line" >> "run.log"
+    done < update.log
+    set_log_file "run.log"
+
+    code=$?
+    if [[ $code > 0 ]]; then
+        echo "Update failed. (Exit code: $code)"
+        exit $code
+    fi
+}
+
+if [[ "$1" == "-u" ]]; then
+    do_update
+elif [[ "$1" == "--update" ]]; then
+    do_update
+fi
+
+
+log_output python main.py
