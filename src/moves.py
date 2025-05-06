@@ -509,9 +509,9 @@ class Bolt(Move):
     def use(poke):
         if poke.usingMoveTimer == 60:
             poke.moveText = MoveText(poke.x, poke.y, poke.usingMove)
-        poke.usingMoveTimer -= 1
         if poke.usingMoveTimer > 0:
             Bolt(poke)
+        poke.usingMoveTimer -= 1
         if poke.usingMoveTimer == 0:
             poke.usingMove = ""
 
@@ -585,7 +585,7 @@ class HyperBeam(Move):
         if poke.usingMoveTimer == 60:
             poke.moveText = MoveText(poke.x, poke.y, poke.usingMove)
             poke.previousSpeed = poke.speed
-            poke.speed = 0
+            poke.speed = 0.001
         if poke.usingMoveTimer > 0:
             HyperBeam(poke)
         poke.dragonPulseColour = (poke.dragonPulseColour + 1) % 2

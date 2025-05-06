@@ -2,14 +2,13 @@ import pygame, sys, random
 import pygame.freetype
 from pygame.locals import *
 import requests
-from src.debug import overrideBattlers, battlerOverride
+from src.debug import overrideBattlers, battlerOverride, testMoves
 from src.constants import WINDOW_HEIGHT, WINDOW_WIDTH, BACKGROUND, API, startTimer
 from src.globals import g
-from src.poke import chooseChars
 from src.sprite_loader import INSTANCE as sprites
-from src.sets import Sets
 from src.resource_path import resource_path
-from src import physics
+from src.moves import MOVES
+from src import physics, poke
 
 
 class Game:
@@ -29,18 +28,27 @@ class Game:
         self.id = 0
         self.timer = 0
         self.walls = [physics.Wall("right"), physics.Wall("left"), physics.Wall("top"), physics.Wall("bottom")]
+        self.charList = []
+
+    def moveTest(self):
+        sprite = sprites.get_battler("smeargle")
+        charList = []
+        posList = [(x, y) for x in range(100, WINDOW_WIDTH - 99, 150) for y in range(100, WINDOW_HEIGHT - 99, 150)]
+        moveNames = list(MOVES.keys())
+        for i in range(len(MOVES)):
+            charList.append(poke.Poke(posList[i][0], posList[i][1], sprite, [moveNames[i]], moveNames[i]+" Test"))
+        return charList
 
     def newGame(self):
-        self.charList = []
-        for char in Sets.sets.keys():
-            self.charList.append(Sets.get(char))
-
         if overrideBattlers:
-            self.charList = []
-            for set_id in battlerOverride:
-                self.charList.append(Sets.get(set_id))
+            try:
+                self.charList = [poke.allPokemon[i] for i in battlerOverride]
+            except KeyError:
+                print("invalid battler override settings.")
+        elif testMoves:
+            self.charList = self.moveTest()
         else:
-            self.charList = chooseChars(self.charList, random.randint(3, 10))
+            self.charList = poke.chooseChars(list(poke.allPokemon.values()), random.randint(3, 10))
 
         for wall in self.walls:
             wall.reset()
@@ -163,3 +171,4 @@ class Game:
                     if API:
                         requests.post(self.url + "/setwinner", json={"winner": self.winner})
                 self.endScreenCountdown = 240
+
