@@ -1,7 +1,7 @@
 import random
 import pygame.transform
 from math import sqrt
-from pygame import Rect, draw
+from pygame import Rect
 from src.moves import MOVES, Move
 from src import physics
 from src.constants import WINDOW_HEIGHT, WINDOW_WIDTH
@@ -194,10 +194,11 @@ class Poke(physics.PhysicsObject):
 
         if self.usingMove != "":
             move = MOVES.get(self.usingMove)
-            if move is not None:
-                if self.usingMoveTimer <= 0:
-                    self.usingMoveTimer = move.usingTime
-                move.use(self)
+            if move is None:
+                raise ValueError(f"Move {self.usingMove} not found in MOVES dictionary.")
+            if self.usingMoveTimer <= 0:
+                self.usingMoveTimer = move.usingTime
+            move.use(self)
 
 def chooseChars(charList: list[Poke], charNum: int) -> list[Poke]:
     chars = []

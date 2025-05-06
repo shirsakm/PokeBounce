@@ -83,8 +83,6 @@ class Move(physics.PhysicsObject):
             if moveImage is None:
                 raise Exception(f"Move image is <None>! {self.image}")
             moveImage = pygame.transform.scale(moveImage, (self.size, self.size))
-            if moveImage is None:
-                print("Move image is <None>! "+self.image)
 
             rotatedImage = pygame.transform.rotate(moveImage, self.rotate)
 
