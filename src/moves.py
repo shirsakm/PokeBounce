@@ -2,7 +2,7 @@ import math
 import random
 import pygame.draw
 from src import physics
-from src.debug import showHitboxes
+from src.config import config
 from src.globals import g
 from src.sprite_loader import INSTANCE as sprites
 
@@ -76,7 +76,7 @@ class Move(physics.PhysicsObject):
             physics.allObjects.remove(self)
 
     def draw(self):
-        if showHitboxes:
+        if config["Debug"]["showHitboxes"]:
             pygame.draw.rect(g.window, self.colour, self.getCollider())
         if self.graphic == "image":
             moveImage = sprites.moves.get(self.image)

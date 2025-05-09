@@ -2,7 +2,7 @@ import pygame, sys, random
 import pygame.freetype
 from pygame.locals import *
 import requests
-from src.debug import overrideBattlers, battlerOverride, testMoves
+from src.config import config
 from src.constants import WINDOW_HEIGHT, WINDOW_WIDTH, BACKGROUND, API, startTimer
 from src.globals import g
 from src.sprite_loader import INSTANCE as sprites
@@ -40,12 +40,14 @@ class Game:
         return charList
 
     def newGame(self):
-        if overrideBattlers:
+        if config["Debug"]["overrideBattlers"]:
+            battlerOverride = config["Debug"]["battlerOverride"]
             try:
-                self.charList = [poke.allPokemon[i] for i in battlerOverride]
+                self.charList = [poke.allPokemon[i.lower()] for i in battlerOverride]
             except KeyError:
-                print("invalid battler override settings.")
-        elif testMoves:
+                print("Invalid battler override settings.")
+                exit(1)
+        elif config["Debug"]["testMoves"]:
             self.charList = self.moveTest()
         else:
             self.charList = poke.chooseChars(list(poke.allPokemon.values()), random.randint(3, 10))

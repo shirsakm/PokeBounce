@@ -1,0 +1,6 @@
+[Debug]
+overrideBattlers = true
+testMoves = false
+battlerOverride = ["Quagsire", "nidoking", "smeargle"]
+showHitboxes = false
+showCollisionBoxes = false

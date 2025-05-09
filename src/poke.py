@@ -6,7 +6,7 @@ from src.moves import MOVES, Move
 from src import physics
 from src.constants import WINDOW_HEIGHT, WINDOW_WIDTH
 from src.globals import g
-from src.debug import showCollisionBoxes
+from src.config import config
 from src.sprite_loader import INSTANCE as sprites
 
 charSpeed = 2
@@ -86,7 +86,7 @@ class Poke(physics.PhysicsObject):
 
     def draw(self):
         if self.alive:
-            if showCollisionBoxes:
+            if config["Debug"]["showCollisionBoxes"]:
                 pygame.draw.rect(g.window, (200, 0, 0, 50), self.getCollider())
             rectImage = Rect((self.x-60, self.y-85, self.size, self.size))
             g.window.blit(pygame.transform.flip(self.image, self.xVel > 0, False), rectImage)
