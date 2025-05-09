@@ -63,7 +63,7 @@ pipexit=$?
 
 if [[ $pipexit > 0 ]]; then
     log "Dependency installation failed! (pip exit code $pipexit)"
-    log "See previous log output for details, and leave a report at https://github.com/kd8lvt/PokeBounce/isses"
+    log "See previous log output for details, and leave a report at https://github.com/kd8lvt/PokeBounce/issues"
     exit 4
 fi
 
