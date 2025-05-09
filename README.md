@@ -16,48 +16,61 @@ PS C:\game_folder> py -m pip install -r .\requirements.txt
 ```
 PS C:\game_folder> py .\main.py
 ```
----
+
 ### Linux 
-Requirements: A basic understanding of how to use a terminal emulator, and access to root privileges.  
-> All of the following commands assume a Ubuntu-based distribution using the `bash` shell. Your experience may vary.
 
-### Initial setup
-You should only have to do the following one time, when first setting up the project.
+### Debian-based distributions
 
-1. Clone the repository (you may need to install `git` via your package manager)
-> ```bash
-> git clone https://github.com/kd8lvt/PokeBounce.git
-> cd PokeBounce
-> ```
-2. Run the `install` script
-> ```bash
-> sudo ./install
-> ```
+> [!WARNING]
+> All of the following commands were run on a Ubuntu-based distribution using the `bash` shell. Your experience may vary.
 
-### Updating
----
-If you want to update the project to the latest codebase, simply run the `update` script
+Requirements: A basic understanding of how to use a terminal emulator, and access to root privileges.
+
+#### Initial setup
+
+Install `git` if not already installed,
 ```bash
-./update
+sudo apt install git-all
 ```
----
-### Running
+1. Clone the repository,
+```bash
+git clone https://github.com/kd8lvt/PokeBounce.git
+cd PokeBounce
+```
+2. Run the `install` script,
+```bash
+./install
+```
+
+> [!NOTE]
+> You should only have to do the setup once, when setting up the project for the first time.
+
+#### Running
 Run the `run` script :)
 ```bash
 ./run
 ```
-If you want to update the project before running it, you can do so without the `./update` script.
+
+If you want to update the project before running it, you can do so with the `-u` or `--update` flag,
 ```bash
 ./run -u
 ```
----
-## Mac
-I don't own any Apple products, but if someone wants to figure out the steps to run it, feel free to do a PR :)  
 
-# Credits
+#### Updating
+
+If you want to update the project to the latest codebase, simply run the `update` script,
+```bash
+./update
+```
+
+### Mac
+I don't own any Apple products, but if someone wants to figure out the steps to run it, feel free to contribute and open a PR :)  
+
+##  Credits
 This project is far better than it otherwise would be, thanks to these fine folks 💜
 - Original concept and codebase, for which this wouldn't exist without: [KingTheLuck](https://www.youtube.com/watch?v=1HLjGrxrzmo)
-- Major overhauls & actually knowing python: [anonezumi](https://github.com/anonezumi/PokeBounce)
+- Major codebase overhaul: [anonezumi](https://github.com/anonezumi/PokeBounce)
+- Refactoring and significant contributions: [kd8lvt](https://github.com/kd8lvt/PokeBounce)
 - Dragonite Icon: [ChocoFoxColin](https://www.weasyl.com/~chocofoxcolin/submissions/1411066/pokemon-icon-dragonite).
 - All these fine folks - Join us!  
 [![](https://dcbadge.limes.pink/api/server/z2F7HQ2Nk5?style=flat)](https://discord.gg/z2F7HQ2Nk5)
