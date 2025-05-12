@@ -374,7 +374,7 @@ allPokemon = {
 allPokemon["kangaskhan"] = Poke(
     300,
     100,
-    sprites.get_battler("kangaskhan", 0.7, offset_y=10),
+    sprites.get_battler("kangaskhan", 0.75, offset_y=10),
     ["Earthquake", "Iron Tail", "Hyper Beam"],
     "Kangaskhan",
 )
@@ -385,4 +385,12 @@ allPokemon["muk"] = Poke(
     sprites.get_battler("muk"),
     ["Poison Sting", "Earthquake", "Sandstorm"],
     "Muk",
+)
+
+allPokemon["greninja"] = Poke(
+    300,
+    300,
+    sprites.get_battler("greninja", offset_y=-7),
+    ["Waterfall", "Ice Beam", "Dark Pulse"],
+    "Greninja",
 )

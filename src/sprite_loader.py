@@ -17,14 +17,14 @@ class Sprites:
         self.arena = None
 
         # Preload assets
-        print(f"Loading images from '{self.base_dir}/*'...")
-        print("Arena...")
+        print(f"Loading assets from '{self.base_dir}/*'")
+        print("Loading arena...")
         self.get_arena()
-        print("Battlers...")
+        print("Loading battler images...")
         for bid in battler_sprites:
             # default factor=1, offsets=0 -> populates both cache and self.battlers
             self.get_battler(bid)
-        print("Moves...")
+        print("Loading move images...")
         for mid in move_sprites:
             # default factor=1, offsets=0 -> populates both cache and self.moves
             self.get_move(mid)

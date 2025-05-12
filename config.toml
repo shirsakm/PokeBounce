@@ -1,6 +1,6 @@
 [Debug]
-overrideBattlers = true
+overrideBattlers = false
 testMoves = false
-battlerOverride = ["Quagsire", "Muk", "Kangaskhan"]
-showHitboxes = true
-showCollisionBoxes = true
+battlerOverride = ["Greninja", "Muk", "Kangaskhan"]
+showHitboxes = false
+showCollisionBoxes = false
