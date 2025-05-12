@@ -1,0 +1,4 @@
+[tool.pygbag]
+title = "Auto Arena"
+window = { width = 1450, height = 800 }
+fullscreen = false

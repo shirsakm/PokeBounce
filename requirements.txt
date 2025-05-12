@@ -1,4 +1,5 @@
 black
 pyinstaller
 pygame
+pygbag
 requests
