@@ -11,6 +11,7 @@ from src.sprite_loader import INSTANCE as sprites
 
 charSpeed = 2
 
+
 class DamageIndicator:
     ttl = 120
     alpha = 0
@@ -18,7 +19,7 @@ class DamageIndicator:
     def __init__(self, x: float, y: float, damage: int):
         self.x = x
         self.y = y
-        self.damage = "-"+str(damage)
+        self.damage = "-" + str(damage)
 
     def move(self) -> None:
         self.y -= 0.25
@@ -46,7 +47,16 @@ class Poke(physics.PhysicsObject):
     damageIndicators = []
     checksCollision = True
 
-    def __init__(self, x: float, y: float, image: pygame.Surface, moveset=[], name="", size=60, health=300):
+    def __init__(
+        self,
+        x: float,
+        y: float,
+        image: pygame.Surface,
+        moveset=[],
+        name="",
+        size=60,
+        health=300,
+    ):
         super().__init__(x, y, size, size)
         physics.allObjects.remove(self)
         self.prevBeam = None
@@ -65,9 +75,9 @@ class Poke(physics.PhysicsObject):
 
     def update(self):
         if self.alive:
-            if self.xVel != 0 or self.yVel != 0: #update velocity based on speed
+            if self.xVel != 0 or self.yVel != 0:  # update velocity based on speed
                 speed = sqrt(self.xVel**2 + self.yVel**2)
-                direction = (self.xVel/speed, self.yVel/speed)
+                direction = (self.xVel / speed, self.yVel / speed)
                 self.xVel = direction[0] * self.speed
                 self.yVel = direction[1] * self.speed
             super().update()
@@ -77,10 +87,10 @@ class Poke(physics.PhysicsObject):
 
             if self.x > WINDOW_WIDTH or self.x < 0:
                 print(self.name, "had a woopsie on the x axis")
-                self.x = WINDOW_WIDTH//2
+                self.x = WINDOW_WIDTH // 2
             if self.y > WINDOW_HEIGHT or self.y < 0:
                 print(self.name, "had a woopsie on the y axis")
-                self.y = WINDOW_HEIGHT//2
+                self.y = WINDOW_HEIGHT // 2
 
             self.useMove()
 
@@ -88,12 +98,18 @@ class Poke(physics.PhysicsObject):
         if self.alive:
             if config["Debug"]["showCollisionBoxes"]:
                 pygame.draw.rect(g.window, (200, 0, 0, 50), self.getCollider())
-            rectImage = Rect((self.x-60, self.y-85, self.size, self.size))
-            g.window.blit(pygame.transform.flip(self.image, self.xVel > 0, False), rectImage)
+            rectImage = Rect((self.x - 60, self.y - 85, self.size, self.size))
+            g.window.blit(
+                pygame.transform.flip(self.image, self.xVel > 0, False), rectImage
+            )
 
-            healthRectRed = pygame.Rect(self.x + self.size / 2 - 25, self.y + 10, 50, 10)
+            healthRectRed = pygame.Rect(
+                self.x + self.size / 2 - 25, self.y + 10, 50, 10
+            )
             healthPercentWidth = (self.health / 300) * 50
-            healthRectGreen = pygame.Rect(self.x + self.size / 2 - 25, self.y + 10, healthPercentWidth, 10)
+            healthRectGreen = pygame.Rect(
+                self.x + self.size / 2 - 25, self.y + 10, healthPercentWidth, 10
+            )
 
             pygame.draw.rect(g.window, (175, 0, 0), healthRectRed)
             pygame.draw.rect(g.window, (0, 175, 0), healthRectGreen)
@@ -139,17 +155,19 @@ class Poke(physics.PhysicsObject):
 
         speed = sqrt(self.xVel**2 + self.yVel**2)
         if speed == 0:
-            return # TODO this normally...
-        direction = (self.xVel/speed, self.yVel/speed)
-        if abs(diffX) < abs(diffY): # used to be a 1/3 chance to random bounce, let's add it back in later
-            if diffY > 0: # collider above
+            return  # TODO this normally...
+        direction = (self.xVel / speed, self.yVel / speed)
+        if abs(diffX) < abs(
+            diffY
+        ):  # used to be a 1/3 chance to random bounce, let's add it back in later
+            if diffY > 0:  # collider above
                 self.y += contact.height
                 self.yVel = abs(self.yVel)
                 if self.xVel < 0:
                     self.xVel = -speed * round(1 - abs(direction[1]), 3)
                 else:
                     self.xVel = speed * round(1 - abs(direction[1]), 3)
-            else: # collider below
+            else:  # collider below
                 self.y -= contact.height
                 self.yVel = -abs(self.yVel)
                 if self.xVel < 0:
@@ -157,14 +175,14 @@ class Poke(physics.PhysicsObject):
                 else:
                     self.xVel = speed * round(1 - abs(direction[1]), 3)
         else:
-            if diffX > 0: # collider to the left
+            if diffX > 0:  # collider to the left
                 self.x += contact.width
                 self.xVel = abs(self.xVel)
                 if self.yVel < 0:
                     self.yVel = -speed * round(1 - abs(direction[0]), 3)
                 else:
                     self.yVel = speed * round(1 - abs(direction[0]), 3)
-            else: # collider to the right
+            else:  # collider to the right
                 self.x -= contact.width
                 self.xVel = -abs(self.xVel)
                 if self.yVel < 0:
@@ -189,17 +207,19 @@ class Poke(physics.PhysicsObject):
             self.velStart()
             self.usingMove = random.choice(self.moveset)
 
-
         else:
             self.moveTimer -= 1
 
         if self.usingMove != "":
             move = MOVES.get(self.usingMove)
             if move is None:
-                raise ValueError(f"Move {self.usingMove} not found in MOVES dictionary.")
+                raise ValueError(
+                    f"Move {self.usingMove} not found in MOVES dictionary."
+                )
             if self.usingMoveTimer <= 0:
                 self.usingMoveTimer = move.usingTime
             move.use(self)
+
 
 def chooseChars(charList: list[Poke], charNum: int) -> list[Poke]:
     chars = []
@@ -211,122 +231,158 @@ def chooseChars(charList: list[Poke], charNum: int) -> list[Poke]:
         charNum -= 1
     return chars
 
+
 allPokemon = {
     "pikachu": Poke(
-        75, 450,
+        75,
+        450,
         sprites.get_battler("pikachu"),
         ["Thunderbolt", "Quick Attack", "Iron Tail"],
-        "Pikachu"
+        "Pikachu",
     ),
     "staraptor": Poke(
-        600, 450,
+        600,
+        450,
         sprites.get_battler("staraptor"),
         ["Quick Attack", "Brave Bird", "Close Combat"],
-        "Staraptor"
+        "Staraptor",
     ),
     "infernape": Poke(
-        600, 75,
+        600,
+        75,
         sprites.get_battler("infernape"),
         ["Flamethrower", "Stone Edge", "Close Combat"],
-        "Infernape"
+        "Infernape",
     ),
     "umbreon": Poke(
-        75, 75,
+        75,
+        75,
         sprites.get_battler("umbreon"),
         ["Quick Attack", "Dark Pulse", "Shadow Ball"],
-        "Umbreon"
+        "Umbreon",
     ),
     "mamoswine": Poke(
-        700, 500,
+        700,
+        500,
         sprites.get_battler("mamoswine"),
         ["Ice Beam", "Stone Edge", "Iron Head"],
-        "Mamoswine"
+        "Mamoswine",
     ),
     "nidoking": Poke(
-        1000, 200,
+        1000,
+        200,
         sprites.get_battler("nidoking"),
         ["Bubble Beam", "Stone Edge", "Poison Sting"],
-        "Nidoking"
+        "Nidoking",
     ),
     "scizor": Poke(
-        1000, 400,
+        1000,
+        400,
         sprites.get_battler("scizor"),
         ["U Turn", "Iron Head", "Close Combat"],
-        "Scizor"
+        "Scizor",
     ),
     "wigglytuff": Poke(
-        1200, 300,
+        1200,
+        300,
         sprites.get_battler("wigglytuff"),
         ["Dazzling Gleam", "Flamethrower", "Thunderbolt"],
-        "Wigglytuff"
+        "Wigglytuff",
     ),
     "decidueye": Poke(
-        1200, 150,
+        1200,
+        150,
         sprites.get_battler("decidueye"),
         ["Razor Leaf", "Brave Bird", "Shadow Ball"],
-        "Decidueye"
+        "Decidueye",
     ),
     "kingdra": Poke(
-        1200, 650,
+        1200,
+        650,
         sprites.get_battler("kingdra"),
         ["Dragon Pulse", "Ice Beam", "Bubble Beam"],
-        "Kingdra"
+        "Kingdra",
     ),
     "smeargle": Poke(
-        700, 100,
+        700,
+        100,
         sprites.get_battler("smeargle"),
         [
-            "Thunderbolt", "Quick Attack", "Flamethrower", "Shadow Ball",
-            "Razor Leaf", "Bubble Beam", "U Turn", "Ice Beam", "Dragon Pulse",
-            "Brave Bird", "Stone Edge", "Dazzling Gleam", "Close Combat",
-            "Poison Sting", "Dark Pulse", "Iron Tail", "Iron Head",
-            "Earthquake", "Sandstorm", "Waterfall", "Zen Headbutt",
-            "Bonemerang", "Hyper Beam"
+            "Thunderbolt",
+            "Quick Attack",
+            "Flamethrower",
+            "Shadow Ball",
+            "Razor Leaf",
+            "Bubble Beam",
+            "U Turn",
+            "Ice Beam",
+            "Dragon Pulse",
+            "Brave Bird",
+            "Stone Edge",
+            "Dazzling Gleam",
+            "Close Combat",
+            "Poison Sting",
+            "Dark Pulse",
+            "Iron Tail",
+            "Iron Head",
+            "Earthquake",
+            "Sandstorm",
+            "Waterfall",
+            "Zen Headbutt",
+            "Bonemerang",
+            "Hyper Beam",
         ],
-        "Smeargle"
+        "Smeargle",
     ),
     "marowak": Poke(
-        700, 650,
+        700,
+        650,
         sprites.get_battler("marowak"),
         ["Bonemerang", "Flamethrower", "Shadow Ball"],
-        "Marowak"
+        "Marowak",
     ),
     "quagsire": Poke(
-        300, 650,
+        300,
+        650,
         sprites.get_battler("quagsire"),
         ["Earthquake", "Poison Sting", "Waterfall"],
-        "Quagsire"
+        "Quagsire",
     ),
     "porygonz": Poke(
-        1000, 650,
+        1000,
+        650,
         sprites.get_battler("porygonz"),
         ["Hyper Beam", "Thunderbolt", "Ice Beam"],
-        "Porygon-Z"
+        "Porygon-Z",
     ),
     "tyranitar": Poke(
-        850, 500,
+        850,
+        500,
         sprites.get_battler("tyranitar"),
         ["Sandstorm", "Dark Pulse", "Stone Edge"],
-        "Tyranitar"
+        "Tyranitar",
     ),
     "metagross": Poke(
-        850, 100,
+        850,
+        100,
         sprites.get_battler("metagross"),
         ["Earthquake", "Zen Headbutt", "Iron Head"],
-        "Metagross"
+        "Metagross",
     ),
 }
 
 allPokemon["kangaskhan"] = Poke(
-    300, 100,
+    300,
+    100,
     sprites.get_battler("kangaskhan", 0.7, offset_y=10),
     ["Earthquake", "Iron Tail", "Hyper Beam"],
-    "Kangaskhan"
+    "Kangaskhan",
 )
 
 allPokemon["muk"] = Poke(
-    300, 500,
+    300,
+    500,
     sprites.get_battler("muk"),
     ["Poison Sting", "Earthquake", "Sandstorm"],
-    "Muk"
+    "Muk",
 )

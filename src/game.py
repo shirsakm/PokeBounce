@@ -13,8 +13,12 @@ from src import physics, poke
 
 class Game:
     def __init__(self):
-        self.fontStart = pygame.freetype.Font(resource_path('assets/font/PixeloidSans.ttf'), 50)
-        self.font = pygame.freetype.Font(resource_path('assets/font/PixeloidSans.ttf'), 25)
+        self.fontStart = pygame.freetype.Font(
+            resource_path("assets/font/PixeloidSans.ttf"), 50
+        )
+        self.font = pygame.freetype.Font(
+            resource_path("assets/font/PixeloidSans.ttf"), 25
+        )
         self.url = "http://127.0.0.1:5000"
         self.gameStart = False
         self.startCountdown = startTimer
@@ -27,16 +31,33 @@ class Game:
         self.gambling = False
         self.id = 0
         self.timer = 0
-        self.walls = [physics.Wall("right"), physics.Wall("left"), physics.Wall("top"), physics.Wall("bottom")]
+        self.walls = [
+            physics.Wall("right"),
+            physics.Wall("left"),
+            physics.Wall("top"),
+            physics.Wall("bottom"),
+        ]
         self.charList = []
 
     def moveTest(self):
         sprite = sprites.get_battler("smeargle")
         charList = []
-        posList = [(x, y) for x in range(100, WINDOW_WIDTH - 99, 150) for y in range(100, WINDOW_HEIGHT - 99, 150)]
+        posList = [
+            (x, y)
+            for x in range(100, WINDOW_WIDTH - 99, 150)
+            for y in range(100, WINDOW_HEIGHT - 99, 150)
+        ]
         moveNames = list(MOVES.keys())
         for i in range(len(MOVES)):
-            charList.append(poke.Poke(posList[i][0], posList[i][1], sprite, [moveNames[i]], moveNames[i]+" Test"))
+            charList.append(
+                poke.Poke(
+                    posList[i][0],
+                    posList[i][1],
+                    sprite,
+                    [moveNames[i]],
+                    moveNames[i] + " Test",
+                )
+            )
         return charList
 
     def newGame(self):
@@ -50,33 +71,42 @@ class Game:
         elif config["Debug"]["testMoves"]:
             self.charList = self.moveTest()
         else:
-            self.charList = poke.chooseChars(list(poke.allPokemon.values()), random.randint(3, 10))
+            self.charList = poke.chooseChars(
+                list(poke.allPokemon.values()), random.randint(3, 10)
+            )
 
         for wall in self.walls:
             wall.reset()
-        
+
         for char in self.charList:
             char.revive()
-        
+
         self.id = random.randint(10000, 99999)
 
         if API:
-            requests.post(self.url + "/setfighters", json={"fighters": [char.name for char in self.charList]})
+            requests.post(
+                self.url + "/setfighters",
+                json={"fighters": [char.name for char in self.charList]},
+            )
         if API:
             requests.post(self.url + "/setgameid", json={"id": self.id})
 
         self.gambling = True
         if API:
-            requests.post(self.url + "/setgambling", json={"openGambling": self.gambling})
+            requests.post(
+                self.url + "/setgambling", json={"openGambling": self.gambling}
+            )
         self.initialized = True
 
     def displayResult(self):
         if self.result == "draw":
             text_surf2, text_rect2 = self.fontStart.render("DRAW!", (0, 0, 0))
-            g.window.blit(text_surf2, (WINDOW_WIDTH/2 - 450, WINDOW_HEIGHT/2 - 75))
+            g.window.blit(text_surf2, (WINDOW_WIDTH / 2 - 450, WINDOW_HEIGHT / 2 - 75))
         elif self.result == "win":
-            text_surf2, text_rect2 = self.fontStart.render(self.winner.upper() + " WINS!", (0, 0, 0))
-            g.window.blit(text_surf2, (WINDOW_WIDTH/2 - 450, WINDOW_HEIGHT/2 - 75))
+            text_surf2, text_rect2 = self.fontStart.render(
+                self.winner.upper() + " WINS!", (0, 0, 0)
+            )
+            g.window.blit(text_surf2, (WINDOW_WIDTH / 2 - 450, WINDOW_HEIGHT / 2 - 75))
 
     def render(self):
         # Render elements of the game
@@ -102,14 +132,18 @@ class Game:
                 self.newGame()
 
             for char in self.charList:
-                charrectImage = pygame.Rect((char.x-60, char.y-85, char.size, char.size))
+                charrectImage = pygame.Rect(
+                    (char.x - 60, char.y - 85, char.size, char.size)
+                )
 
-                g.window.blit(pygame.transform.flip(char.image, False, False), charrectImage)
+                g.window.blit(
+                    pygame.transform.flip(char.image, False, False), charrectImage
+                )
             text_surf2, text_rect2 = self.fontStart.render(
-                "Place Your Bets. Starting in " + str(self.startCountdown//60),
-                (0, 0, 0)
+                "Place Your Bets. Starting in " + str(self.startCountdown // 60),
+                (0, 0, 0),
             )
-            g.window.blit(text_surf2, (WINDOW_WIDTH/2 - 450, WINDOW_HEIGHT/2 - 75))
+            g.window.blit(text_surf2, (WINDOW_WIDTH / 2 - 450, WINDOW_HEIGHT / 2 - 75))
 
         elif self.endScreenCountdown != 0:
             self.endScreenCountdown -= 1
@@ -134,7 +168,9 @@ class Game:
             if self.gambling:
                 self.gambling = False
                 if API:
-                    requests.post(self.url + "/setgambling", json={"openGambling": self.gambling})
+                    requests.post(
+                        self.url + "/setgambling", json={"openGambling": self.gambling}
+                    )
 
             physics.physicsUpdate()
             self.alivelist = [poke for poke in self.charList if poke.alive]
@@ -144,15 +180,25 @@ class Game:
             for char in self.charList:
                 if char.moveText:
                     if char.moveText.ttl > 0:
-                        text_surf2, text_rect2 = self.font.render(char.moveText.text, (0, 0, 0, char.moveText.alpha))
-                        g.window.blit(text_surf2, (char.moveText.x - 48, char.moveText.y - 8))
-                        text_surf2, text_rect2 = self.font.render(char.moveText.text, (255, 255, 255, char.moveText.alpha))
-                        g.window.blit(text_surf2, (char.moveText.x - 50, char.moveText.y - 10))
+                        text_surf2, text_rect2 = self.font.render(
+                            char.moveText.text, (0, 0, 0, char.moveText.alpha)
+                        )
+                        g.window.blit(
+                            text_surf2, (char.moveText.x - 48, char.moveText.y - 8)
+                        )
+                        text_surf2, text_rect2 = self.font.render(
+                            char.moveText.text, (255, 255, 255, char.moveText.alpha)
+                        )
+                        g.window.blit(
+                            text_surf2, (char.moveText.x - 50, char.moveText.y - 10)
+                        )
                     char.moveText.tick()
                 newDamageIndictators = []
                 for indic in char.damageIndicators:
                     indic.move()
-                    text_surf2, text_rect2 = self.font.render(indic.damage, (255, 0, 0, indic.alpha))
+                    text_surf2, text_rect2 = self.font.render(
+                        indic.damage, (255, 0, 0, indic.alpha)
+                    )
                     g.window.blit(text_surf2, (indic.x, indic.y + 10))
                     if indic.ttl >= 0:
                         newDamageIndictators.append(indic)
@@ -165,12 +211,15 @@ class Game:
                 if len(self.alivelist) == 0:
                     self.result = "draw"
                     if API:
-                        requests.post(self.url + "/setwinner", json={"winner": "Nobody"})
+                        requests.post(
+                            self.url + "/setwinner", json={"winner": "Nobody"}
+                        )
                 elif len(self.alivelist) == 1:
                     self.result = "win"
                     self.winner = self.alivelist[0].name
                     self.alivelist[0].kill()
                     if API:
-                        requests.post(self.url + "/setwinner", json={"winner": self.winner})
+                        requests.post(
+                            self.url + "/setwinner", json={"winner": self.winner}
+                        )
                 self.endScreenCountdown = 240
-

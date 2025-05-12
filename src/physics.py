@@ -28,14 +28,14 @@ class PhysicsObject:
     def update(self):
         self.x += self.xVel
         self.y += self.yVel
-    
+
     def resize(self, width, height):
         if self.centered:
             self.x -= (width - self.width) / 2
             self.y -= (height - self.height) / 2
         self.width = width
         self.height = height
-    
+
     def draw(self):
         pass
 
@@ -51,10 +51,10 @@ class Wall(PhysicsObject):
     maxSize = 300
     color = (20, 10, 20)
     drawPriority = 2
-    
+
     def __init__(self, direction):
         self.direction = direction
-    
+
     def reset(self):
         match self.direction:
             case "left":
@@ -85,10 +85,12 @@ class Wall(PhysicsObject):
     def draw(self):
         draw.rect(g.window, self.color, self.getCollider())
 
+
 allObjects: list[PhysicsObject] = []
 
+
 def physicsUpdate():
-    priorities = [0,1,2]
+    priorities = [0, 1, 2]
     for pri in priorities:
         for obj in filter(lambda o: o.drawPriority == pri, allObjects):
             obj.draw()
@@ -100,5 +102,6 @@ def physicsUpdate():
     for obj in [obj for obj in frameObjList if obj.checksCollision]:
         for ind in obj.getCollider().collidelistall(rects):
             other = frameObjList[ind]
-            if other is obj: continue
+            if other is obj:
+                continue
             obj.collide(other)

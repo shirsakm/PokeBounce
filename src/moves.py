@@ -86,12 +86,18 @@ class Move(physics.PhysicsObject):
 
             rotatedImage = pygame.transform.rotate(moveImage, self.rotate)
 
-            new_rect = rotatedImage.get_rect(center=moveImage.get_rect(center=(self.x + self.size/2, self.y + self.size/2)).center)
+            new_rect = rotatedImage.get_rect(
+                center=moveImage.get_rect(
+                    center=(self.x + self.size / 2, self.y + self.size / 2)
+                ).center
+            )
             g.window.blit(rotatedImage, new_rect)
         elif self.graphic == "rect":
             pygame.draw.rect(g.window, self.colour, self.getCollider())
         elif self.graphic == "circle":
-            pygame.draw.circle(g.window, self.colour, self.getCollider().center, self.size/2)
+            pygame.draw.circle(
+                g.window, self.colour, self.getCollider().center, self.size / 2
+            )
 
     @staticmethod
     def use(poke):
@@ -136,12 +142,13 @@ class BraveBird(Move):
     usingTime = 90
 
     image = "bravebird"
+
     def __init__(self, poke):
         self.size = poke.size + 80
         super().__init__(poke)
         self.x += poke.xVel * -4
         self.y += poke.yVel * -4
-        self.rotate = math.atan2(poke.xVel, poke.yVel) * 180/3.14 + 180
+        self.rotate = math.atan2(poke.xVel, poke.yVel) * 180 / 3.14 + 180
         self.ttl = 25
         self.xVel = 2
         self.yVel = 2
@@ -171,10 +178,11 @@ class IronHead(Move):
     usingTime = 30
 
     image = "ironhead"
+
     def __init__(self, poke):
         self.size = poke.size + 45
         super().__init__(poke)
-        self.rotate = math.atan2(poke.xVel, poke.yVel) * 180/3.14
+        self.rotate = math.atan2(poke.xVel, poke.yVel) * 180 / 3.14
         self.ttl = 2
         self.xVel = poke.xVel
         self.yVel = poke.yVel
@@ -203,10 +211,11 @@ class ZenHeadbutt(Move):
     usingTime = 60
 
     image = "zenheadbutt"
+
     def __init__(self, poke):
         self.size = poke.size + 45
         super().__init__(poke)
-        self.rotate = math.atan2(poke.xVel, poke.yVel) * 180/3.14
+        self.rotate = math.atan2(poke.xVel, poke.yVel) * 180 / 3.14
         self.ttl = 4
         self.xVel = poke.xVel * 2
         self.yVel = poke.yVel * 2
@@ -226,6 +235,7 @@ class ZenHeadbutt(Move):
         if poke.usingMoveTimer == 0:
             poke.usingMove = ""
 
+
 class Waterfall(Move):
     type = "water"
     colour = (185, 224, 239)
@@ -234,10 +244,11 @@ class Waterfall(Move):
     usingTime = 60
 
     image = "waterfall"
+
     def __init__(self, poke):
         self.size = poke.size + 45
         super().__init__(poke)
-        self.rotate = math.atan2(poke.xVel, poke.yVel) * 180/3.14
+        self.rotate = math.atan2(poke.xVel, poke.yVel) * 180 / 3.14
         self.ttl = 4
         self.xVel = poke.xVel * 2
         self.yVel = poke.yVel * 2
@@ -266,6 +277,7 @@ class CloseCombat(Move):
     usingTime = 45
 
     image = "fist"
+
     def __init__(self, poke):
         self.size = 15
         super().__init__(poke)
@@ -303,6 +315,7 @@ class DarkPulse(Move):
     usingTime = 60
 
     image = "dark"
+
     def __init__(self, poke):
         self.size = 25
         super().__init__(poke)
@@ -325,7 +338,6 @@ class DarkPulse(Move):
             poke.usingMove = ""
 
 
-
 class Sandstorm(Move):
     type = "rock"
     colour = (185, 224, 239)
@@ -334,6 +346,7 @@ class Sandstorm(Move):
     usingTime = 20
 
     image = "sandstorm"
+
     def __init__(self, poke):
         self.size = 25
         super().__init__(poke)
@@ -361,6 +374,7 @@ class Earthquake(Move):
     usingTime = 60
 
     image = "earthquake"
+
     def __init__(self, poke):
         self.size = 25
         super().__init__(poke)
@@ -395,6 +409,7 @@ class DazzlingGleam(Move):
     usingTime = 90
 
     image = "dazzling"
+
     def __init__(self, poke):
         self.size = 30
         super().__init__(poke)
@@ -417,6 +432,7 @@ class DazzlingGleam(Move):
         poke.usingMoveTimer -= 1
         if poke.usingMoveTimer == 0:
             poke.usingMove = ""
+
 
 class IronTail(Move):
     type = "steel"
@@ -453,6 +469,7 @@ class UTurn(Move):
     damage = 15
     graphic = "circle"
     usingTime = 120
+
     def __init__(self, poke):
         self.size = poke.size + 25
         super().__init__(poke)
@@ -477,6 +494,7 @@ class UTurn(Move):
         poke.usingMoveTimer -= 1
         if poke.usingMoveTimer == 0:
             poke.usingMove = ""
+
 
 class Bolt(Move):
     type = "electric"
@@ -514,6 +532,7 @@ class Bolt(Move):
         poke.usingMoveTimer -= 1
         if poke.usingMoveTimer == 0:
             poke.usingMove = ""
+
 
 class DragonPulse(Move):
     type = "dragon"
@@ -633,6 +652,7 @@ class IceBeam(Move):
         if poke.usingMoveTimer == 0:
             poke.usingMove = ""
 
+
 class ShadowBall(Move):
     type = "ghost"
     spread = 0.0
@@ -663,6 +683,7 @@ class ShadowBall(Move):
         if poke.usingMoveTimer == 0:
             poke.usingMove = ""
 
+
 class StoneEdge(Move):
     type = "rock"
     spread = 0.2
@@ -674,11 +695,19 @@ class StoneEdge(Move):
 
     def __init__(self, poke):
         self.size = 40
-        self.xVel = (poke.xVel + round(random.uniform(0 - self.spread, self.spread), 3)) * 2 / poke.speed
-        self.yVel = (poke.yVel + round(random.uniform(0 - self.spread, self.spread), 3)) * 2 / poke.speed
+        self.xVel = (
+            (poke.xVel + round(random.uniform(0 - self.spread, self.spread), 3))
+            * 2
+            / poke.speed
+        )
+        self.yVel = (
+            (poke.yVel + round(random.uniform(0 - self.spread, self.spread), 3))
+            * 2
+            / poke.speed
+        )
         super().__init__(poke)
         self.ttl = 300
-        self.rotate = math.atan2(self.xVel, self.yVel) * 180/3.14 + 180
+        self.rotate = math.atan2(self.xVel, self.yVel) * 180 / 3.14 + 180
 
     @staticmethod
     def use(poke):
@@ -703,11 +732,19 @@ class PoisonSting(Move):
 
     def __init__(self, poke):
         self.size = 30
-        self.xVel = (poke.xVel + round(random.uniform(0 - self.spread, self.spread), 3)) * 8 / poke.speed
-        self.yVel = (poke.yVel + round(random.uniform(0 - self.spread, self.spread), 3)) * 8 / poke.speed
+        self.xVel = (
+            (poke.xVel + round(random.uniform(0 - self.spread, self.spread), 3))
+            * 8
+            / poke.speed
+        )
+        self.yVel = (
+            (poke.yVel + round(random.uniform(0 - self.spread, self.spread), 3))
+            * 8
+            / poke.speed
+        )
         super().__init__(poke)
         self.ttl = 14
-        self.rotate = math.atan2(self.xVel, self.yVel) * 180/3.14 + 180
+        self.rotate = math.atan2(self.xVel, self.yVel) * 180 / 3.14 + 180
 
     @staticmethod
     def use(poke):
@@ -738,8 +775,16 @@ class Flame(Move):
     def __init__(self, poke):
         self.size = 30
         super().__init__(poke)
-        self.xVel = (poke.xVel + round(random.uniform(0 - self.spread, self.spread), 3)) * 8 / poke.speed
-        self.yVel = (poke.yVel + round(random.uniform(0 - self.spread, self.spread), 3)) * 8 / poke.speed
+        self.xVel = (
+            (poke.xVel + round(random.uniform(0 - self.spread, self.spread), 3))
+            * 8
+            / poke.speed
+        )
+        self.yVel = (
+            (poke.yVel + round(random.uniform(0 - self.spread, self.spread), 3))
+            * 8
+            / poke.speed
+        )
         self.ttl = 16
 
     def move(self):
@@ -780,8 +825,16 @@ class Bubble(Move):
     def __init__(self, poke):
         self.size = 30
         super().__init__(poke)
-        self.xVel = (poke.xVel + round(random.uniform(0 - self.spread, self.spread), 3)) * 8 / poke.speed
-        self.yVel = (poke.yVel + round(random.uniform(0 - self.spread, self.spread), 3)) * 8 / poke.speed
+        self.xVel = (
+            (poke.xVel + round(random.uniform(0 - self.spread, self.spread), 3))
+            * 8
+            / poke.speed
+        )
+        self.yVel = (
+            (poke.yVel + round(random.uniform(0 - self.spread, self.spread), 3))
+            * 8
+            / poke.speed
+        )
         self.ttl = 120
 
     @staticmethod
@@ -809,8 +862,16 @@ class RazorLeaf(Move):
     def __init__(self, poke):
         self.size = 30
         super().__init__(poke)
-        self.xVel = (poke.xVel + round(random.uniform(0 - self.spread, self.spread), 3)) * 20 / poke.speed
-        self.yVel = (poke.yVel + round(random.uniform(0 - self.spread, self.spread), 3)) * 20 / poke.speed
+        self.xVel = (
+            (poke.xVel + round(random.uniform(0 - self.spread, self.spread), 3))
+            * 20
+            / poke.speed
+        )
+        self.yVel = (
+            (poke.yVel + round(random.uniform(0 - self.spread, self.spread), 3))
+            * 20
+            / poke.speed
+        )
         self.ttl = 120
         self.rotSpeed = 20
 
@@ -856,27 +917,27 @@ class Bonemerang(Move):
 
 
 MOVES: dict[str, type[Move]] = {
-        "Thunderbolt": Bolt,
-        "Quick Attack": QuickAttack,
-        "Flamethrower": Flame,
-        "Shadow Ball": ShadowBall,
-        "Razor Leaf": RazorLeaf,
-        "Bubble Beam": Bubble,
-        "U Turn": UTurn,
-        "Ice Beam": IceBeam,
-        "Dragon Pulse": DragonPulse,
-        "Brave Bird": BraveBird,
-        "Stone Edge": StoneEdge,
-        "Dazzling Gleam": DazzlingGleam,
-        "Close Combat": CloseCombat,
-        "Poison Sting": PoisonSting,
-        "Dark Pulse": DarkPulse,
-        "Iron Tail": IronTail,
-        "Iron Head": IronHead,
-        "Earthquake": Earthquake,
-        "Bonemerang": Bonemerang,
-        "Zen Headbutt": ZenHeadbutt,
-        "Waterfall": Waterfall,
-        "Sandstorm": Sandstorm,
-        "Hyper Beam": HyperBeam
-    }
+    "Thunderbolt": Bolt,
+    "Quick Attack": QuickAttack,
+    "Flamethrower": Flame,
+    "Shadow Ball": ShadowBall,
+    "Razor Leaf": RazorLeaf,
+    "Bubble Beam": Bubble,
+    "U Turn": UTurn,
+    "Ice Beam": IceBeam,
+    "Dragon Pulse": DragonPulse,
+    "Brave Bird": BraveBird,
+    "Stone Edge": StoneEdge,
+    "Dazzling Gleam": DazzlingGleam,
+    "Close Combat": CloseCombat,
+    "Poison Sting": PoisonSting,
+    "Dark Pulse": DarkPulse,
+    "Iron Tail": IronTail,
+    "Iron Head": IronHead,
+    "Earthquake": Earthquake,
+    "Bonemerang": Bonemerang,
+    "Zen Headbutt": ZenHeadbutt,
+    "Waterfall": Waterfall,
+    "Sandstorm": Sandstorm,
+    "Hyper Beam": HyperBeam,
+}

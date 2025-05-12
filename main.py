@@ -7,7 +7,7 @@ FPS = 60
 fpsClock = pygame.time.Clock()
 g.window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.Surface.convert_alpha(g.window)
-pygame.display.set_caption('Auto Arena')
+pygame.display.set_caption("Auto Arena")
 
 from src.game import Game
 

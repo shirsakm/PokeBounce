@@ -32,24 +32,22 @@ class Sprites:
     def get_arena(self) -> pygame.Surface:
         if self.arena is None:
             self.arena = self._load_img(
-                f"{Sprites.base_dir}/arena.png",
-                WINDOW_WIDTH, WINDOW_HEIGHT
+                f"{Sprites.base_dir}/arena.png", WINDOW_WIDTH, WINDOW_HEIGHT
             )
         return self.arena
 
     def get_battler(
-        self,
-        battler_id: str,
-        factor: float = 1.0,
-        offset_x: int = 0,
-        offset_y: int = 0
+        self, battler_id: str, factor: float = 1.0, offset_x: int = 0, offset_y: int = 0
     ) -> pygame.Surface:
         key = (battler_id, factor, offset_x, offset_y)
         if key not in self._battler_cache:
             surf = self._load_img(
                 f"{self.battler_dir}/{battler_id}.png",
-                204, 168,
-                factor, offset_x, offset_y
+                204,
+                168,
+                factor,
+                offset_x,
+                offset_y,
             )
             self._battler_cache[key] = surf
 
@@ -59,11 +57,7 @@ class Sprites:
         return self._battler_cache[key]
 
     def get_move(
-        self,
-        move_id: str,
-        factor: float = 1.0,
-        offset_x: int = 0,
-        offset_y: int = 0
+        self, move_id: str, factor: float = 1.0, offset_x: int = 0, offset_y: int = 0
     ) -> pygame.Surface:
         key = (move_id, factor, offset_x, offset_y)
         if key not in self._move_cache:
@@ -71,8 +65,11 @@ class Sprites:
             scale = 100 if move_id != "poison" else 10
             surf = self._load_img(
                 f"{self.move_dir}/{move_id}.png",
-                scale, scale,
-                factor, offset_x, offset_y
+                scale,
+                scale,
+                factor,
+                offset_x,
+                offset_y,
             )
             self._move_cache[key] = surf
             # legacy direct mapping
@@ -87,7 +84,7 @@ class Sprites:
         y_scale: int | None,
         factor: float = 1.0,
         offset_x: int = 0,
-        offset_y: int = 0
+        offset_y: int = 0,
     ) -> pygame.Surface:
         # load source
         src = pygame.image.load(file_path).convert_alpha()
