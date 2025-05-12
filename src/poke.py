@@ -316,3 +316,17 @@ allPokemon = {
         "Metagross"
     ),
 }
+
+allPokemon["kangaskhan"] = Poke(
+    300, 100,
+    sprites.get_battler("kangaskhan", 0.7, offset_y=10),
+    ["Earthquake", "Iron Tail", "Hyper Beam"],
+    "Kangaskhan"
+)
+
+allPokemon["muk"] = Poke(
+    300, 500,
+    sprites.get_battler("muk"),
+    ["Poison Sting", "Earthquake", "Sandstorm"],
+    "Muk"
+)
