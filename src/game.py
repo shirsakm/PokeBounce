@@ -1,8 +1,10 @@
 import pygame, sys, random
 import pygame.freetype
 from pygame.locals import *
+
 try:
     import requests  # type: ignore
+
     _requests_available = True
 except Exception:
     print("[web] 'requests' module not available, disabling API features.")
@@ -20,12 +22,8 @@ from src import physics, poke
 class Game:
     def __init__(self):
         try:
-            self.fontStart = pygame.freetype.Font(
-                resource_path("assets/font/PixeloidSans.ttf"), 50
-            )
-            self.font = pygame.freetype.Font(
-                resource_path("assets/font/PixeloidSans.ttf"), 25
-            )
+            self.fontStart = pygame.freetype.Font(resource_path("assets/font/PixeloidSans.ttf"), 50)
+            self.font = pygame.freetype.Font(resource_path("assets/font/PixeloidSans.ttf"), 25)
             self.use_freetype = True
         except Exception as e:
             print(f"Failed to load custom font, using default: {e}")
@@ -33,7 +31,7 @@ class Game:
             self.fontStart = pygame.font.Font(None, 50)
             self.font = pygame.font.Font(None, 25)
             self.use_freetype = False
-            
+
         self.url = "http://127.0.0.1:5000"
         self.gameStart = False
         self.startCountdown = startTimer
@@ -114,9 +112,7 @@ class Game:
         self.gambling = True
         if API and _requests_available:
             try:
-                requests.post(
-                    self.url + "/setgambling", json={"openGambling": self.gambling}
-                )
+                requests.post(self.url + "/setgambling", json={"openGambling": self.gambling})
             except Exception as e:
                 print(f"[web] Failed to set gambling flag: {e}")
         self.initialized = True
@@ -126,9 +122,7 @@ class Game:
             text_surf2, text_rect2 = self.render_text(self.fontStart, "DRAW!", (0, 0, 0))
             g.window.blit(text_surf2, (WINDOW_WIDTH / 2 - 450, WINDOW_HEIGHT / 2 - 75))
         elif self.result == "win":
-            text_surf2, text_rect2 = self.render_text(
-                self.fontStart, self.winner.upper() + " WINS!", (0, 0, 0)
-            )
+            text_surf2, text_rect2 = self.render_text(self.fontStart, self.winner.upper() + " WINS!", (0, 0, 0))
             g.window.blit(text_surf2, (WINDOW_WIDTH / 2 - 450, WINDOW_HEIGHT / 2 - 75))
 
     def render(self):
@@ -139,17 +133,19 @@ class Game:
 
         g.window.blit(sprites.get_arena(), bgrect)
 
-    # The main game loop
-    def update(self):
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                pygame.quit()
-                sys.exit()
-
+    # The main game update (no event handling; dt in seconds)
+    def update(self, dt: float):
         self.render()
 
+        # Frame compensation if running below 60fps (wasm slowdown)
+        # baseline frame duration at 60fps ~ 0.0167s
+        if dt <= 0:
+            dt = 1/60
+        frame_equiv = max(1, int(round(dt / (1/60))))
+
         if self.startCountdown != 0:
-            self.startCountdown -= 1
+            # startCountdown stored in frames; decrement by frame_equiv
+            self.startCountdown = max(0, self.startCountdown - frame_equiv)
 
             if not self.initialized:
                 self.newGame()
@@ -159,9 +155,7 @@ class Game:
 
                 g.window.blit(pygame.transform.flip(char.image, False, False), charrectImage)
             text_surf2, text_rect2 = self.render_text(
-                self.fontStart, 
-                "Place Your Bets. Starting in " + str(self.startCountdown // 60),
-                (0, 0, 0)
+                self.fontStart, "Place Your Bets. Starting in " + str(self.startCountdown // 60), (0, 0, 0)
             )
             g.window.blit(text_surf2, (WINDOW_WIDTH / 2 - 450, WINDOW_HEIGHT / 2 - 75))
 
@@ -189,9 +183,7 @@ class Game:
                 self.gambling = False
                 if API and _requests_available:
                     try:
-                        requests.post(
-                            self.url + "/setgambling", json={"openGambling": self.gambling}
-                        )
+                        requests.post(self.url + "/setgambling", json={"openGambling": self.gambling})
                     except Exception as e:
                         print(f"[web] Failed to update gambling flag: {e}")
 
@@ -203,12 +195,8 @@ class Game:
             for char in self.charList:
                 if char.moveText:
                     if char.moveText.ttl > 0:
-                        text_surf2, text_rect2 = self.render_text(
-                            self.font, char.moveText.text, (0, 0, 0, char.moveText.alpha)
-                        )
-                        g.window.blit(
-                            text_surf2, (char.moveText.x - 48, char.moveText.y - 8)
-                        )
+                        text_surf2, text_rect2 = self.render_text(self.font, char.moveText.text, (0, 0, 0, char.moveText.alpha))
+                        g.window.blit(text_surf2, (char.moveText.x - 48, char.moveText.y - 8))
                         text_surf2, text_rect2 = self.render_text(
                             self.font, char.moveText.text, (255, 255, 255, char.moveText.alpha)
                         )
@@ -217,25 +205,22 @@ class Game:
                 newDamageIndictators = []
                 for indic in char.damageIndicators:
                     indic.move()
-                    text_surf2, text_rect2 = self.render_text(
-                        self.font, indic.damage, (255, 0, 0, indic.alpha)
-                    )
+                    text_surf2, text_rect2 = self.render_text(self.font, indic.damage, (255, 0, 0, indic.alpha))
                     g.window.blit(text_surf2, (indic.x, indic.y + 10))
                     if indic.ttl >= 0:
                         newDamageIndictators.append(indic)
                 char.damageIndicators = newDamageIndictators
 
             if self.gameOver:
-                self.gameOverCountdown -= 1
+                # gameOverCountdown also frame based
+                self.gameOverCountdown = max(0, self.gameOverCountdown - frame_equiv)
 
             if self.gameOverCountdown == 0:
                 if len(self.alivelist) == 0:
                     self.result = "draw"
                     if API and _requests_available:
                         try:
-                            requests.post(
-                                self.url + "/setwinner", json={"winner": "Nobody"}
-                            )
+                            requests.post(self.url + "/setwinner", json={"winner": "Nobody"})
                         except Exception as e:
                             print(f"[web] Failed to post winner (draw): {e}")
                 elif len(self.alivelist) == 1:
@@ -244,8 +229,6 @@ class Game:
                     self.alivelist[0].kill()
                     if API and _requests_available:
                         try:
-                            requests.post(
-                                self.url + "/setwinner", json={"winner": self.winner}
-                            )
+                            requests.post(self.url + "/setwinner", json={"winner": self.winner})
                         except Exception as e:
                             print(f"[web] Failed to post winner: {e}")

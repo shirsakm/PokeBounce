@@ -15,6 +15,6 @@ except Exception as e:
             "testMoves": False,
             "battlerOverride": ["Greninja", "Muk", "Kangaskhan"],
             "showHitboxes": False,
-            "showCollisionBoxes": False
+            "showCollisionBoxes": False,
         }
     }

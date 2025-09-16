@@ -18,18 +18,24 @@ async def main():
     game = Game()
     running = True
 
+    last_ticks = pygame.time.get_ticks()
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
 
-        game.update()
+        now = pygame.time.get_ticks()
+        dt_ms = now - last_ticks
+        last_ticks = now
+        dt = dt_ms / 1000.0
+
+        game.update(dt)
         pygame.display.flip()
 
         # yield to wasm handler - this is crucial for pygbag
         await asyncio.sleep(0)
 
-        clock.tick(FPS)
+        # Avoid double throttling: no clock.tick in async path
 
     pygame.quit()
 

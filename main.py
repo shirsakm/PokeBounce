@@ -31,7 +31,12 @@ else:
     from src.game import Game
 
     game = Game()
+    last_ticks = pygame.time.get_ticks()
     while True:
-        game.update()
+        now = pygame.time.get_ticks()
+        dt_ms = now - last_ticks
+        last_ticks = now
+        dt = dt_ms / 1000.0
+        game.update(dt)
         pygame.display.flip()
         fpsClock.tick(FPS)
