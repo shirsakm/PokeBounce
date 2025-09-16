@@ -31,14 +31,10 @@ class Sprites:
 
     def get_arena(self) -> pygame.Surface:
         if self.arena is None:
-            self.arena = self._load_img(
-                f"{Sprites.base_dir}/arena.png", WINDOW_WIDTH, WINDOW_HEIGHT
-            )
+            self.arena = self._load_img(f"{Sprites.base_dir}/arena.png", WINDOW_WIDTH, WINDOW_HEIGHT)
         return self.arena
 
-    def get_battler(
-        self, battler_id: str, factor: float = 1.0, offset_x: int = 0, offset_y: int = 0
-    ) -> pygame.Surface:
+    def get_battler(self, battler_id: str, factor: float = 1.0, offset_x: int = 0, offset_y: int = 0) -> pygame.Surface:
         key = (battler_id, factor, offset_x, offset_y)
         if key not in self._battler_cache:
             surf = self._load_img(
@@ -56,9 +52,7 @@ class Sprites:
                 self.battlers[battler_id] = surf
         return self._battler_cache[key]
 
-    def get_move(
-        self, move_id: str, factor: float = 1.0, offset_x: int = 0, offset_y: int = 0
-    ) -> pygame.Surface:
+    def get_move(self, move_id: str, factor: float = 1.0, offset_x: int = 0, offset_y: int = 0) -> pygame.Surface:
         key = (move_id, factor, offset_x, offset_y)
         if key not in self._move_cache:
             # determine base icon size

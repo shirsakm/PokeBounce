@@ -10,3 +10,19 @@ __pycache__/
 *.pyc
 *.log
 pyrightconfig.json
+# pygbag / web build caches
+build/web/
+build/web-cache/
+*.apk
+*.wasm
+*.data
+*.js.map
+*.tmp
+*.cache
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.orig

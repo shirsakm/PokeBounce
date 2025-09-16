@@ -99,17 +99,11 @@ class Poke(physics.PhysicsObject):
             if config["Debug"]["showCollisionBoxes"]:
                 pygame.draw.rect(g.window, (200, 0, 0, 50), self.getCollider())
             rectImage = Rect((self.x - 60, self.y - 85, self.size, self.size))
-            g.window.blit(
-                pygame.transform.flip(self.image, self.xVel > 0, False), rectImage
-            )
+            g.window.blit(pygame.transform.flip(self.image, self.xVel > 0, False), rectImage)
 
-            healthRectRed = pygame.Rect(
-                self.x + self.size / 2 - 25, self.y + 10, 50, 10
-            )
+            healthRectRed = pygame.Rect(self.x + self.size / 2 - 25, self.y + 10, 50, 10)
             healthPercentWidth = (self.health / 300) * 50
-            healthRectGreen = pygame.Rect(
-                self.x + self.size / 2 - 25, self.y + 10, healthPercentWidth, 10
-            )
+            healthRectGreen = pygame.Rect(self.x + self.size / 2 - 25, self.y + 10, healthPercentWidth, 10)
 
             pygame.draw.rect(g.window, (175, 0, 0), healthRectRed)
             pygame.draw.rect(g.window, (0, 175, 0), healthRectGreen)
@@ -157,9 +151,7 @@ class Poke(physics.PhysicsObject):
         if speed == 0:
             return  # TODO this normally...
         direction = (self.xVel / speed, self.yVel / speed)
-        if abs(diffX) < abs(
-            diffY
-        ):  # used to be a 1/3 chance to random bounce, let's add it back in later
+        if abs(diffX) < abs(diffY):  # used to be a 1/3 chance to random bounce, let's add it back in later
             if diffY > 0:  # collider above
                 self.y += contact.height
                 self.yVel = abs(self.yVel)
@@ -213,9 +205,7 @@ class Poke(physics.PhysicsObject):
         if self.usingMove != "":
             move = MOVES.get(self.usingMove)
             if move is None:
-                raise ValueError(
-                    f"Move {self.usingMove} not found in MOVES dictionary."
-                )
+                raise ValueError(f"Move {self.usingMove} not found in MOVES dictionary.")
             if self.usingMoveTimer <= 0:
                 self.usingMoveTimer = move.usingTime
             move.use(self)

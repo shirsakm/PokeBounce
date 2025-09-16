@@ -12,6 +12,7 @@ pygame.display.set_caption("Auto Arena")
 FPS = 60
 clock = pygame.time.Clock()
 
+
 # async main loop for pygbag
 async def main():
     game = Game()
@@ -31,6 +32,7 @@ async def main():
         clock.tick(FPS)
 
     pygame.quit()
+
 
 if __name__ == "__main__":
     asyncio.run(main())
