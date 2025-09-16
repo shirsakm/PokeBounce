@@ -2,3 +2,11 @@
 title = "Auto Arena"
 window = { width = 1450, height = 800 }
 fullscreen = false
+archive = false
+ume_block = false
+cdn = "https://pygame-web.github.io/archives/0.9/"
+template = "custom"
+name = "PokeBounce"
+author = "Shirsak Majumder"
+url = ""
+summary = "A Pokemon auto-battler built with pygame"
